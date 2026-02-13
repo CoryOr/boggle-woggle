@@ -1,2 +1,6 @@
+//base template
 .DS_Store
 *.zip
+//updated
+Thumbs.db
+*.log
