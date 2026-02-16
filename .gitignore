@@ -4,3 +4,11 @@
 //updated
 Thumbs.db
 *.log
+//Java
+*.class
+*.jar
+//Docker
+.env.prod
+//Gradle
+.gradle
+build
