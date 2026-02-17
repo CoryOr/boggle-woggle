@@ -1,22 +1,15 @@
-# Specification Document
-
-Please fill out this document to reflect your team's project. This is a living document and will need to be updated regularly. You may also remove any section to its own document (e.g. a separate standards and conventions document), however you must keep the header and provide a link to that other document under the header.
-
-Also, be sure to check out the Wiki for information on how to maintain your team's requirements.
-
-## TeamName
-
+## Boggle Game (Project_3c)
 <!--The name of your team.-->
 
 ### Project Abstract
 
+This project is a team-based effort to develop a real-time multiplayer Boggle application where users can compete against each other online. Our team is building a system that randomly shuffles and lays out letter dice to generate a unique board for each round, provides an interactive interface for players to submit words, and automatically validates and scores entries using a shared dictionary. At the end of each game, the app will display all players’ word lists, calculate scores, and highlight unique words. Beyond the core gameplay, we plan to explore additional features such as customizable game settings, user accounts with tracked statistics, AI opponents, and the ability to design and share custom boards.
+
 <!--A one paragraph summary of what the software will do.-->
 
-This is an example paragraph written in markdown. You can use *italics*, **bold**, and other formatting options. You can also <u>use inline html</u> to format your text. The example sections included in this document are not necessarily all the sections you will want, and it is possible that you won't use all the one's provided. It is your responsibility to create a document that adequately conveys all the information about your project specifications and requirements.
-
-Please view this file's source to see `<!--comments-->` with guidance on how you might use the different sections of this document. 
-
 ### Customer
+
+Generally, the customer for this software is a casual gamer that, in specific, likes to play word games/puzzles.
 
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
 
@@ -28,68 +21,12 @@ Please view this file's source to see `<!--comments-->` with guidance on how you
 
 <!--Included below are some sample diagrams, including some example tech stack diagrams.-->
 
-#### Technology Stack
-
-Here are some sample technology stacks that you can use for inspiration:
+#### Technology Stack (Finalized)
 
 ```mermaid
 flowchart RL
 subgraph Front End
-	A(Javascript: React)
-end
-	
-subgraph Back End
-	B(Python: Django with \nDjango Rest Framework)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|Django ORM| C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
-end
-	
-subgraph Back End
-	B(Python: Flask)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|SQLAlchemy| C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
-end
-	
-subgraph Back End
-	B(Javascript: Express)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <--> C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Static JS, CSS, HTML)
+	A(JavaScript: React)
 end
 	
 subgraph Back End
@@ -100,31 +37,11 @@ subgraph Database
 	C[(MySQL)]
 end
 
-A <-->|HTTP| B
+A <--> B
 B <--> C
 ```
 
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Mobile App)
-end
-	
-subgraph Back End
-	B(Python: Django)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|REST API| B
-B <-->|Django ORM| C
-```
-
-
-
-#### Database
+#### Database (Not fully thought out yet)
 
 ```mermaid
 ---
@@ -164,7 +81,7 @@ erDiagram
     }
 ```
 
-#### Class Diagram
+#### Class Diagram (Not fully thought out yet)
 
 ```mermaid
 ---
@@ -214,7 +131,7 @@ graph TD;
     Error_Message --> End;
 ```
 
-#### Behavior
+#### Behavior (Not fully thought out yet)
 
 ```mermaid
 ---
@@ -230,7 +147,7 @@ stateDiagram
     BeansLowError --> Ready : Refill Beans
 ```
 
-#### Sequence Diagram
+#### Sequence Diagram (Not fully thought out yet)
 
 ```mermaid
 sequenceDiagram
