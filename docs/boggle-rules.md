@@ -108,7 +108,7 @@ At end of round, show:
 
 ---
 
-## 9. Words Rejection Codes (quick definition, open to change down the line)
+## 8. Words Rejection Codes (quick definition, open to change down the line)
 
 When a word is rejected, the server returns a reason:
 
