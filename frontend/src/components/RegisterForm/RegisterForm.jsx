@@ -1,36 +1,45 @@
 import { useState } from "react";
-import "./LoginForm.css";
+import "./RegisterForm.css";
 
 /**
- * NOTE: This is a temporary login page and should be adjusted in the future to be our actual login page. This page
+ * NOTE: This is a temporary register page and should be adjusted in the future to be our actual login page. This page
  * and its corresponding css file are mostly ai generated just to be able to have something that doesn't look too
  * gross to the eye.
  */
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmitAsync = async (event) => {
     event.preventDefault();
+
+    if (password != confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
     const userData = {
       username: username,
       password: password
     };
 
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
+
+      console.log(response.status);
       
     if (response.ok) {
-      alert("Login Success");
+      alert("User created successfully");
     }
     else {
-      alert("Something Fail");
+      alert("Something went wrong with inserting user");
     }
   };
 
@@ -56,10 +65,20 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
+        <div>
+          <label htmlFor="confirm-password">Confirm Password</label>
+          <input
+            id="confirm-password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
         <button type="submit">Login</button>
       </form>
     </div>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
