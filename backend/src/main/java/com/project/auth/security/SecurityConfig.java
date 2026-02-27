@@ -1,6 +1,6 @@
-package com.example.demo.auth.security;
+package com.project.auth.security;
 
-import com.example.demo.auth.jwt.JwtAuthenticationFilter;
+import com.project.auth.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;

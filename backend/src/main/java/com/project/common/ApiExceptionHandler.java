@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.project.common;
 
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;

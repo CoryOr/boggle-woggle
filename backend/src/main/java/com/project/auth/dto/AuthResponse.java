@@ -1,4 +1,4 @@
-package com.example.demo.auth.dto;
+package com.project.auth.dto;
 
 public record AuthResponse(String accessToken, String tokenType) {
     public static AuthResponse bearer(String token) {

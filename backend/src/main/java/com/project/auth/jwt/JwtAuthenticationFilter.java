@@ -1,6 +1,6 @@
-package com.example.demo.auth.jwt;
+package com.project.auth.jwt;
 
-import com.example.demo.auth.security.CustomUserDetailsService;
+import com.project.auth.security.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;

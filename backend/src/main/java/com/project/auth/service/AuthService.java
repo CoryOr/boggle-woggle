@@ -1,9 +1,13 @@
-package com.example.demo.auth.service;
+package com.project.auth.service;
 
 import com.example.demo.auth.dto.*;
-import com.example.demo.auth.jwt.JwtService;
-import com.example.demo.auth.model.User;
-import com.example.demo.auth.repo.UserRepository;
+import com.project.auth.dto.AuthResponse;
+import com.project.auth.dto.LoginRequest;
+import com.project.auth.dto.MeResponse;
+import com.project.auth.dto.RegisterRequest;
+import com.project.auth.jwt.JwtService;
+import com.project.auth.model.User;
+import com.project.auth.repo.UserRepository;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

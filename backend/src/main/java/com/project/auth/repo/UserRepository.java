@@ -1,6 +1,6 @@
-package com.example.demo.auth.repo;
+package com.project.auth.repo;
 
-import com.example.demo.auth.model.User;
+import com.project.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

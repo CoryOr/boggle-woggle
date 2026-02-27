@@ -1,7 +1,7 @@
-package com.example.demo.auth.controller;
+package com.project.auth.controller;
 
-import com.example.demo.auth.dto.MeResponse;
-import com.example.demo.auth.repo.UserRepository;
+import com.project.auth.dto.MeResponse;
+import com.project.auth.repo.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 

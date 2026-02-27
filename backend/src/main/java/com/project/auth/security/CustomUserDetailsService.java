@@ -1,7 +1,7 @@
-package com.example.demo.auth.security;
+package com.project.auth.security;
 
-import com.example.demo.auth.model.User;
-import com.example.demo.auth.repo.UserRepository;
+import com.project.auth.model.User;
+import com.project.auth.repo.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
