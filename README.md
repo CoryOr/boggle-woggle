@@ -45,7 +45,7 @@ B <--> C
 
 ```mermaid
 ---
-title: Authentication/Authorization Flow Chart
+title: Sample Database ERD for an Order System
 ---
 erDiagram
     Customer ||--o{ Order : "placed by"
