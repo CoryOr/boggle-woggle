@@ -116,19 +116,38 @@ classDiagram
 
 ```mermaid
 ---
-title: Sample Program Flowchart
+title: Authentication & Authorization Flow (Spring Boot + JWT)
 ---
 graph TD;
-    Start([Start]) --> Input_Data[/Input Data/];
-    Input_Data --> Process_Data[Process Data];
-    Process_Data --> Validate_Data{Validate Data};
-    Validate_Data -->|Valid| Process_Valid_Data[Process Valid Data];
-    Validate_Data -->|Invalid| Error_Message[/Error Message/];
-    Process_Valid_Data --> Analyze_Data[Analyze Data];
-    Analyze_Data --> Generate_Output[Generate Output];
-    Generate_Output --> Display_Output[/Display Output/];
-    Display_Output --> End([End]);
-    Error_Message --> End;
+
+    Start([Start]) --> Login_Request[/User Submits Login (React)/];
+
+    Login_Request --> Send_To_Backend[Send Credentials to Spring Boot];
+    Send_To_Backend --> Load_User[Load User from Database];
+
+    Load_User --> Validate_Credentials{Credentials Valid?};
+
+    Validate_Credentials -->|No| Return_401[/Return 401 Unauthorized/];
+    
+    Validate_Credentials -->|Yes| Generate_JWT[Generate JWT Token];
+    Generate_JWT --> Return_Token[/Return JWT to Frontend/];
+
+    Return_Token --> Protected_Request[/User Requests Protected Endpoint (Bearer Token)/];
+    Protected_Request --> Validate_JWT{JWT Valid?};
+
+    Validate_JWT -->|No| Reject_Request[/Return 401 Unauthorized/];
+    
+    Validate_JWT -->|Yes| Check_Roles{Has Required Role?};
+
+    Check_Roles -->|No| Return_403[/Return 403 Forbidden/];
+    Check_Roles -->|Yes| Access_Resource[Access Protected Resource];
+
+    Access_Resource --> Send_Response[/Return Protected Data/];
+    Send_Response --> End([End]);
+
+    Return_401 --> End;
+    Reject_Request --> End;
+    Return_403 --> End;
 ```
 
 #### Behavior (Not fully thought out yet)
