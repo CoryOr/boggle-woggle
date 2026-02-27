@@ -37,15 +37,10 @@ public class User {
         this.password = password;
     }
 
-    /**
-     * Alias for getPassword() to match CustomUserDetailsService requirements.
-     * Ensure the 'password' field contains a BCrypt/Argon2 hash, not plain text.
-     */
     public String getPasswordHash() {
         return this.password;
     }
 
-    // Standard Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -65,6 +60,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    // ... other getters and setters for gamesPlayed, gamesWon, highScore
 }
