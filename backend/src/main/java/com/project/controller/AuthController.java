@@ -1,11 +1,10 @@
-package com.project.auth.controller;
+package com.project.controller;
 
-import com.example.demo.auth.dto.*;
-import com.project.auth.dto.AuthResponse;
-import com.project.auth.dto.LoginRequest;
-import com.project.auth.dto.MeResponse;
-import com.project.auth.dto.RegisterRequest;
-import com.project.auth.service.AuthService;
+import com.project.model.dto.AuthResponse;
+import com.project.model.dto.LoginRequest;
+import com.project.model.dto.MeResponse;
+import com.project.model.dto.RegisterRequest;
+import com.project.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

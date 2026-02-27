@@ -1,9 +1,12 @@
-package com.project.auth.controller;
+package com.project.controller;
 
-import com.project.auth.dto.MeResponse;
-import com.project.auth.repo.UserRepository;
+import com.project.model.dto.MeResponse;
+import com.project.model.entity.User;
+import com.project.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,7 +21,13 @@ public class UserController {
     @GetMapping("/me")
     public MeResponse me(Authentication auth) {
         String username = auth.getName();
-        var user = userRepository.findByUsernameIgnoreCase(username).orElseThrow();
+
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
         return new MeResponse(user.getId(), user.getUsername());
     }
 }

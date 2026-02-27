@@ -1,7 +1,7 @@
 package com.project.auth.security;
 
-import com.project.auth.model.User;
-import com.project.auth.repo.UserRepository;
+import com.project.model.entity.User;
+import com.project.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username);
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPasswordHash(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPasswordHash()) // Must be encoded (e.g., BCrypt)
+                .authorities(List.of(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
     }
 }

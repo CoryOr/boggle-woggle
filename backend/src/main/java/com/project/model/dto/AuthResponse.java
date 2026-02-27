@@ -1,4 +1,4 @@
-package com.project.auth.dto;
+package com.project.model.dto;
 
 public record AuthResponse(String accessToken, String tokenType) {
     public static AuthResponse bearer(String token) {

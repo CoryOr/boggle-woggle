@@ -1,13 +1,12 @@
-package com.project.auth.service;
+package com.project.service;
 
-import com.example.demo.auth.dto.*;
-import com.project.auth.dto.AuthResponse;
-import com.project.auth.dto.LoginRequest;
-import com.project.auth.dto.MeResponse;
-import com.project.auth.dto.RegisterRequest;
+import com.project.model.dto.AuthResponse;
+import com.project.model.dto.LoginRequest;
+import com.project.model.dto.MeResponse;
+import com.project.model.dto.RegisterRequest;
 import com.project.auth.jwt.JwtService;
-import com.project.auth.model.User;
-import com.project.auth.repo.UserRepository;
+import com.project.model.entity.User;
+import com.project.repository.UserRepository;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class AuthService {
     public MeResponse register(RegisterRequest req) {
         String username = req.username().trim();
 
-        if (userRepository.existsByUsernameIgnoreCase(username)) {
+        if (userRepository.findByUsername(username) != null) {
             throw new IllegalArgumentException("Username already taken");
         }
 
