@@ -4,12 +4,6 @@ import "./LoginForm.css";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-/**
- * NOTE: This is a temporary login page and should be adjusted in the future to be our actual login page. This page
- * and its corresponding css file are mostly ai generated just to be able to have something that doesn't look too
- * gross to the eye.
- */
-
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,8 +27,11 @@ const LoginForm = () => {
     if (response.ok) {
       alert("Login Success");
     } else {
-      alert("Something Fail");
+      alert("Login Failed");
     }
+
+    setUsername("");
+    setPassword("");
   };
 
   return (

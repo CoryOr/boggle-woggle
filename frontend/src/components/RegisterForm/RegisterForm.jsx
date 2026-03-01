@@ -4,12 +4,6 @@ import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-/**
- * NOTE: This is a temporary register page and should be adjusted in the future to be our actual login page. This page
- * and its corresponding css file are mostly ai generated just to be able to have something that doesn't look too
- * gross to the eye.
- */
-
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -36,8 +30,6 @@ const RegisterForm = () => {
         },
         body: JSON.stringify(userData),
       });
-
-      console.log(response.status);
       
     if (response.ok) {
       alert("User created successfully");
@@ -45,6 +37,10 @@ const RegisterForm = () => {
     else {
       alert("Something went wrong with inserting user");
     }
+
+    setUsername("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
