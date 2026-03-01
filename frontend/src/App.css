@@ -1,14 +1,9 @@
-:root {
-  --main-bg-color: #2d65d2;
-  --secondary-bg-color: #3a7bdb;
-  --input-color: #999;
-}
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 body {
@@ -22,4 +17,9 @@ body {
     var(--secondary-bg-color) 18vw,
     var(--secondary-bg-color) 20vw
   );
+}
+
+#app-logo {
+  aspect-ratio: 1/1;
+  width: 100%;
 }

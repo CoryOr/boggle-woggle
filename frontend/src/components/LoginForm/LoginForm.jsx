@@ -1,5 +1,8 @@
 import { useState } from "react";
+import Input from "../Input/Input";
 import "./LoginForm.css";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 /**
  * NOTE: This is a temporary login page and should be adjusted in the future to be our actual login page. This page
@@ -10,54 +13,55 @@ import "./LoginForm.css";
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmitAsync = async (event) => {
     event.preventDefault();
     const userData = {
       username: username,
-      password: password
+      password: password,
     };
 
     const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-      
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
     if (response.ok) {
       alert("Login Success");
-    }
-    else {
+    } else {
       alert("Something Fail");
     }
   };
 
   return (
     <div id="login-form-container">
+      <img id="app-logo" src="../../../LOGO.png" alt="Boggle Logo" />
       <form onSubmit={handleSubmitAsync}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Login</button>
+        <Input
+          type="Username"
+          value={username}
+          placeholder="USERNAME"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          type="Password"
+          value={password}
+          placeholder="PASSWORD"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button className="submit-btn" type="submit">LOG IN</Button>
       </form>
+
+      <a id="forgot-password-link">Forgot password?</a>
+
+      <div id="switch-to-registration">
+        <p>New Here?</p>
+        <a onClick={() => navigate("/register")}>Click Here to Sign Up!</a>
+      </div>
     </div>
   );
 };

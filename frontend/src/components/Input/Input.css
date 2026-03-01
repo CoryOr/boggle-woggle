@@ -1,15 +1,28 @@
-.username {
+.input-container {
+  position: relative;
+  width: 100%;
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+}
 
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--input-color);
 }
 
 .input {
-    background-color: transparent;
-    border-radius: 3px;
-    border: 2px solid var(--input-color);
-    padding: 0.5rem;
-    color: var(--input-color);
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+  border: 2px solid var(--input-color);
+  border-radius: 5px;
+  background-color: transparent;
+  color: var(--input-color);
 }
 
 .input::placeholder {
-    color: var(--input-color);
+  color: var(--input-color);
 }

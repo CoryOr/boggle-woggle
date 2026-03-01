@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react";
-import LoginForm from "./components/LoginForm/LoginForm";
-import RegisterForm from "./components/RegisterForm/RegisterForm";
-import Input from "./components/Input/Input";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage";
 import "./App.css";
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   return (
-    <div>
-      {/* <LoginForm />
-      <RegisterForm /> */}
-      <Input 
-        type="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <Input 
-        type="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-    </div>
+    <Routes>
+      <Route index path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegistrationPage />} />
+    </Routes>
   );
 };
 
