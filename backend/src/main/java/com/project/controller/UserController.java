@@ -1,0 +1,33 @@
+package com.project.controller;
+
+import com.project.model.dto.MeResponse;
+import com.project.model.entity.User;
+import com.project.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping("/me")
+    public MeResponse me(Authentication auth) {
+        String username = auth.getName();
+
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        return new MeResponse(user.getId(), user.getUsername());
+    }
+}
