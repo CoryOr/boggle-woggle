@@ -1,0 +1,15 @@
+.username {
+
+}
+
+.input {
+    background-color: transparent;
+    border-radius: 3px;
+    border: 2px solid var(--input-color);
+    padding: 0.5rem;
+    color: var(--input-color);
+}
+
+.input::placeholder {
+    color: var(--input-color);
+}
