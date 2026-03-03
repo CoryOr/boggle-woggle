@@ -3,4 +3,23 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background: repeating-linear-gradient(
+    45deg,
+    var(--main-bg-color) 0,
+    var(--main-bg-color) 18vw,
+    var(--secondary-bg-color) 18vw,
+    var(--secondary-bg-color) 20vw
+  );
+}
+
+#app-logo {
+  aspect-ratio: 1/1;
+  width: 100%;
 }

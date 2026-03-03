@@ -1,15 +1,15 @@
-import { useEffect } from "react";
-import LoginForm from "./components/LoginForm/LoginForm";
-import RegisterForm from "./components/RegisterForm/RegisterForm";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage";
 import "./App.css";
 
 const App = () => {
   return (
-    <div>
-      <LoginForm />
-      <RegisterForm />
-    </div>
+    <Routes>
+      <Route index path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegistrationPage />} />
+    </Routes>
   );
-}
+};
 
 export default App;
