@@ -4,6 +4,5 @@
     "http://checkstyle.sourceforge.net/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="AvoidStarImport"/>
     </module>
 </module>
