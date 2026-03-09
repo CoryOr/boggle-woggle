@@ -1,0 +1,33 @@
+#gameboard {
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--game-board-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    gap: 0.5rem;
+    width: fit-content;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+}
+
+.gameboard-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.letter-tile {
+    border-radius: 50%;
+    border: none;
+    background-color: #EEE;
+    color: #000;
+    width: 5rem;
+    height: 5rem;
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
