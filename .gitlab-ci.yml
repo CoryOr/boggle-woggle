@@ -1,0 +1,30 @@
+image: eclipse-temurin:21-jdk
+
+stages:
+  - build
+  - test
+  - lint
+
+before_script:
+  - cd backend
+  - chmod +x gradlew
+
+build_backend:
+  stage: build
+  script:
+    - ./gradlew clean assemble
+
+test_backend:
+  stage: test
+  script:
+    - ./gradlew test
+  artifacts:
+    when: always
+    reports:
+      junit: backend/build/test-results/test/**/TEST-*.xml
+
+lint_backend:
+  stage: lint
+  script:
+    - ./gradlew check
+  allow_failure: false

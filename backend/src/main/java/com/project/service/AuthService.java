@@ -7,7 +7,9 @@ import com.project.model.dto.RegisterRequest;
 import com.project.auth.jwt.JwtService;
 import com.project.model.entity.User;
 import com.project.repository.UserRepository;
-import org.springframework.security.authentication.*;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
