@@ -33,6 +33,8 @@
   border: none;
   padding: 0;
   transition: opacity 0.2s ease;
+  max-width: 100%;
+  padding: 2rem;
 }
 
 .stats-back-btn:hover {

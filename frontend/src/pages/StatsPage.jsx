@@ -11,7 +11,7 @@ export default function StatsPage() {
   }
 
   const titleStyle = {
-    fontFamily: 'Montserrat, sans-serif', // Use camelCase for the property name
+    fontFamily: 'Montserrat, sans-serif',
     fontWeight: '600'
 
   };
