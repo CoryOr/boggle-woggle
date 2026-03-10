@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --text-value: #005587;
+  --white: #FFFFFF;
+}
+
+.stats-wrapper {
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Back button */
+.stats-back-btn {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  margin-bottom: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.stats-back-btn:hover {
+  opacity: 0.75;
+}
+
+.stats-back-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2.5px solid var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 25px;
+  flex-shrink: 0;
+}
+
+/* Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 50px;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Row */
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 100px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.stats-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Label */
+.stats-label {
+  color: var(--white);
+  font-weight: 600;
+  font-size: clamp(15px, 2.5vw, 18px);
+  letter-spacing: 0.08em;
+  text-align: right;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Value pill */
+.stats-value-pill {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 14px 28px;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 3.5px solid #DDDDDD;
+  cursor: default;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-value-pill:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+
+.stats-value-text {
+  color: var(--text-value);
+  font-weight: 600;
+  font-size: clamp(14px, 2.8vw, 18px);
+  letter-spacing: 0.05em;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .stats-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .stats-label {
+    text-align: left;
+  }
+
+  .stats-value-pill {
+    width: 100%;
+    min-width: unset;
+  }
+}
