@@ -1,3 +1,9 @@
+.game-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 #gameboard {
     display: flex;
     margin: auto;
@@ -10,6 +16,7 @@
     width: fit-content;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     flex-direction: column;
+    margin-top: 2rem;
 }
 
 .gameboard-row {
@@ -30,4 +37,38 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.game-page-text {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.title {
+    margin-bottom: 2rem;
+}
+
+.timer-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.word-input-container {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.word-input {
+    height: 50%;
+    width: 40%;
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid currentColor;
+    outline: none;
+    font-size: 2rem;
+    text-align: center;
 }
