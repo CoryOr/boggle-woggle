@@ -1,6 +1,8 @@
 ## Boggle Game (Project_3c)
 <!--The name of your team.-->
 
+[![pipeline status](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2026/team/t_3c/Project_3c/badges/main/pipeline.svg)](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2026/team/t_3c/Project_3c/-/commits/main)
+
 ### Project Abstract
 
 This project is a team-based effort to develop a real-time multiplayer Boggle application where users can compete against each other online. Our team is building a system that randomly shuffles and lays out letter dice to generate a unique board for each round, provides an interactive interface for players to submit words, and automatically validates and scores entries using a shared dictionary. At the end of each game, the app will display all players’ word lists, calculate scores, and highlight unique words. Beyond the core gameplay, we plan to explore additional features such as customizable game settings, user accounts with tracked statistics, AI opponents, and the ability to design and share custom boards.
