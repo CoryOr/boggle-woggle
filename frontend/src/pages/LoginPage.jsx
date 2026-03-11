@@ -1,9 +1,12 @@
 import LoginForm from "../components/LoginForm/LoginForm";
+import "./Pages.css";
 
 const LoginPage = () => {
-    return (
-        <LoginForm />
-    )
+  return (
+    <div className="loginPage">
+      <LoginForm />
+    </div>
+  );
 };
 
 export default LoginPage;

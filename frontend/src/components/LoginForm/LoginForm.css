@@ -1,17 +1,107 @@
+/**
+ * LoginForm.css
+ *
+ * Styling for the login form component.
+ *
+ * Includes styles for:
+ * - Login form container
+ * - App logo positioning
+ * - Form width and alignment
+ * - Submit button styling and hover states
+ * - Forgot password link
+ * - Registration redirect text and link
+ * - Font consistency across login form elements
+ *
+ * Author(s): Your Name / Team Name
+ * Course: CS506
+ */
+
+/* Main login form container */
 #login-form-container {
-  width: 20rem;
+  width: 26rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(20px);
+  font-family: "Montserrat", sans-serif;
 }
 
+/* App logo displayed above the form */
+#app-logo {
+  width: 400px;
+  height: 150px;
+  position: relative;
+  top: -45px;
+}
+
+/* Ensure the form spans the full container width */
+#login-form-container form {
+  width: 100%;
+}
+
+/* Primary login button */
 .submit-btn {
   width: 100%;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  height: 3rem;
+  border: none;
+  border-radius: 0.35rem;
+  background-color: #ffff;
+  color: #2148C0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  font-family: "Montserrat", sans-serif !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
+/* Keep button styling consistent during hover, focus, and active states */
+.submit-btn:hover,
+.submit-btn:focus,
+.submit-btn:active {
+  background-color: #e9e9e9 !important;
+  color: #1849c6 !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Forgot password link below the login button */
 #forgot-password-link {
   display: block;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
+/* Registration prompt container */
 #switch-to-registration {
-  color: yellow;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* "New Here?" text */
+#switch-to-registration p {
+  margin: 0 0 0.2rem 0;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Registration link */
+#switch-to-registration a {
+  color: white;
+  text-decoration: underline;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Force Montserrat font across login form text elements */
+#login-form-container,
+#login-form-container form,
+#login-form-container input,
+#login-form-container button,
+#login-form-container a,
+#login-form-container p,
+#login-form-container ::placeholder {
+  font-family: "Montserrat", sans-serif !important;
 }
