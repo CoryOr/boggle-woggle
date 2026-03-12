@@ -9,7 +9,7 @@
  * - Clears input fields after submission
  * - Provides navigation to the registration page
  *
- * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
+ * Author(s): Alexander Ordonez, Pranab Adhikari / Boggle Woggle (t_3c)
  */
 
 import { useState } from "react";
@@ -56,50 +56,60 @@ const LoginForm = () => {
   };
 
   return (
-    <div id="login-form-container">
-      {/* App logo displayed above the login form */}
-      <img id="app-logo" src="/LOGO.png" alt="Boggle Logo" />
+      <div id="login-form-container">
+        {/* logo displayed above the login form */}
+        <img id="app-logo" src="/LOGO.png" alt="Boggle Logo" />
 
-      {/* Login form */}
-      <form onSubmit={handleSubmitAsync}>
-        <Input
-          type="Username"
-          value={username}
-          placeholder="USERNAME"
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        {/* Login form */}
+        <form onSubmit={handleSubmitAsync}>
+          <Input
+              type="Username"
+              value={username}
+              placeholder="USERNAME"
+              onChange={(e) => setUsername(e.target.value)}
+          />
 
-        <Input
-          type="Password"
-          value={password}
-          placeholder="PASSWORD"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <Input
+              type="Password"
+              value={password}
+              placeholder="PASSWORD"
+              onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <Button className="submit-btn" type="submit">
-          LOGIN
-        </Button>
-      </form>
+          <Button className="submit-btn" type="submit">
+            LOGIN
+          </Button>
+        </form>
 
-      {/* Password recovery link */}
-      <a id="forgot-password-link" href="#">
-        Forgot password?
-      </a>
-
-      {/* Registration redirect section */}
-      <div id="switch-to-registration">
-        <p>New Here?</p>
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/register");
-          }}
-        >
-          Click Here to Sign Up!
+        {/* Password recovery link */}
+        <a id="forgot-password-link" href="#">
+          Forgot password?
         </a>
+
+        {/* Registration redirect section */}
+        <div id="switch-to-registration">
+          <p>New Here?</p>
+          <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/register");
+              }}
+          >
+            Click Here to Sign Up!
+          </a>
+        </div>
+
+          {/* Added for Issue #57 */}
+          <Button
+              variant="secondary"
+              className="submit-btn"
+              style={{ marginTop: '1.5rem', backgroundColor: '#666', borderColor: '#666', color: 'white' }}
+              onClick={() => navigate("/")}
+          >
+              GO BACK TO HOME
+          </Button>
       </div>
-    </div>
   );
 };
 
