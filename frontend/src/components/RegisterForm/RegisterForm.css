@@ -1,0 +1,72 @@
+/**
+ * RegisterForm.css
+ *
+ * Styling for the registration form component.
+ *
+ * Includes styles for:
+ * - Registration form container
+ * - App logo positioning
+ * - Form width and alignment
+ * - Font consistency
+ * - Submit button styling and hover states
+ *
+ * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
+ */
+
+/* Main registration form container */
+#register-form-container {
+  width: 26rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-10px);
+  font-family: "Montserrat", sans-serif;
+}
+
+/* App logo displayed above the form */
+#app-logo {
+  width: 400px;
+  height: 150px;
+  position: relative;
+  top: -45px;
+}
+
+/* Ensure the form spans the full container width */
+#register-form-container form {
+  width: 100%;
+}
+
+/* Force Montserrat font onto form elements */
+#register-form-container,
+#register-form-container form,
+#register-form-container input,
+#register-form-container button,
+#register-form-container ::placeholder {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* Primary sign-up button */
+.submit-btn {
+  width: 100%;
+  margin-top: 2rem;
+  height: 3rem;
+  border: none;
+  border-radius: 0.35rem;
+  background-color: #ffffff;
+  color: #2148c0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  font-family: "Montserrat", sans-serif !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+/* Keep button styling consistent during hover/focus/active states */
+.submit-btn:hover,
+.submit-btn:focus,
+.submit-btn:active {
+  background-color: #e9e9e9 !important;
+  color: #1849c6 !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18) !important;
+}

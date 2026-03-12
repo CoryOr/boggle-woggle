@@ -1,3 +1,21 @@
+/**
+ * Pages.css
+ *
+ * Shared page-level styling for the Boggle frontend.
+ *
+ * Includes styles for:
+ * - General page layout
+ * - Login page
+ * - Registration page
+ * - Home page
+ * - Responsive layout adjustments
+ *
+ * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+/* General Page Layout */
 .page {
   display: flex;
   flex-direction: column;
@@ -5,9 +23,27 @@
   align-items: center;
   height: 100vh;
   padding-top: 4rem;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
+/* Login and Registration Pages */
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4285f4;
+}
+
+.registrationPage {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4285f4;
+}
+
+/* Old/Past Button Styles */
 .loginButton {
   position: absolute;
   top: 1rem;
@@ -49,4 +85,251 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Home Page Layout */
+.homePage {
+  min-height: 100vh;
+  background-color: #4285f4;
+  padding: 2rem 2.5rem 3rem 2.5rem;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Logo and top-right icons */
+.homeTopBar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+/* Logo wrapper */
+.homeLogo {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: black;
+  text-shadow: 3px 3px 0 white;
+}
+
+/* Top-right icons */
+.homeIcons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Optional icon button style */
+.homeIconButton {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #ffd400;
+  cursor: pointer;
+}
+
+/* Home Page Navigation Buttons */
+.homeButtonRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 6rem;
+}
+
+.homeMainButton {
+  background-color: #ffd400;
+  color: #0057a8;
+  border: #CFB336;
+  border-radius: 1.25rem;
+  width: 275px;
+  height: 100px;
+  padding: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+.homeMainButton:hover {
+  transform: scale(1.04);
+}
+
+/* Promotional Section & Donate Section */
+.homeBottomSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6rem;
+  flex-wrap: nowrap;
+  margin-top: 1.5rem;
+}
+
+/* Promotional burst (Spiky) */
+.merchBurst {
+  width: 260px;
+  height: 260px;
+  background: red;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  left: 75px;
+  top: -10px;
+  flex-shrink: 0;
+
+  /* Symmetric 24-spike burst shape */
+  clip-path: polygon(
+    50% 0%,
+    53% 9%,
+    59% 1%,
+    60% 11%,
+    68% 3%,
+    66% 14%,
+    77% 4%,
+    72% 17%,
+    86% 7%,
+    79% 22%,
+    94% 13%,
+    84% 27%,
+    100% 20%,
+    88% 35%,
+    100% 35%,
+    90% 44%,
+    100% 50%,
+    90% 56%,
+    100% 65%,
+    88% 65%,
+    100% 80%,
+    84% 73%,
+    94% 87%,
+    79% 78%,
+    86% 93%,
+    72% 83%,
+    77% 96%,
+    66% 86%,
+    68% 97%,
+    60% 89%,
+    59% 99%,
+    53% 91%,
+    50% 100%,
+    47% 91%,
+    41% 99%,
+    40% 89%,
+    32% 97%,
+    34% 86%,
+    23% 96%,
+    28% 83%,
+    14% 93%,
+    21% 78%,
+    6% 87%,
+    16% 73%,
+    0% 80%,
+    12% 65%,
+    0% 65%,
+    10% 56%,
+    0% 50%,
+    10% 44%,
+    0% 35%,
+    12% 35%,
+    0% 20%,
+    16% 27%,
+    6% 13%,
+    21% 22%,
+    14% 7%,
+    28% 17%,
+    23% 4%,
+    34% 14%,
+    32% 3%,
+    40% 11%,
+    41% 1%,
+    47% 9%
+  );
+}
+
+/* Bing Bong container */
+.BingBongArea {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Bing Bong styling */
+.BingBongImage {
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  position: relative;
+  right: 75px;
+  top: -10px;
+}
+
+/* Home Page Images / Icons */
+.VolumeImage {
+  width: 45px;
+  height: 45px;
+  position: relative;
+  top: -2px;
+}
+
+.SettingImage {
+  width: 40px;
+  height: 40px;
+}
+
+.BoggleLogoImage {
+  width: 400px;
+  height: 150px;
+}
+
+/* Support Button (Donate) */
+.supportButton {
+  background-color: #c9ad2f;
+  color: #0057a8;
+  border: none;
+  border-radius: 1.25rem;
+  padding: 1.5rem 5rem;
+  min-width: 560px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  position: relative;
+  right: 35px;
+}
+
+/* Apply Montserrat consistently everywhere */
+.homeMainButton,
+.supportButton,
+.merchBurst,
+.loginButton,
+.navButton {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Responsive Layout (Zoom In/Out) */
+@media (max-width: 1100px) {
+  .homeButtonRow,
+  .homeBottomSection {
+    justify-content: center;
+  }
+
+  .homeTopBar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .homeIcons {
+    position: static;
+  }
 }

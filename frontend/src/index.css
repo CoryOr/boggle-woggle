@@ -1,11 +1,26 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/**
+ * index.css
+ *
+ * Global stylesheet for the Boggle frontend.
+ *
+ * Includes styles for:
+ * - Global font import
+ * - Root-level typography and theme variables
+ * - Full-page layout sizing for html, body, and root container
+ * - Default body styling
+ * - Global anchor/link styling
+ * - Global heading styling
+ *
+ * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
+ */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+/* Root Theme & Global Variables */
+:root {
+  font-family: "Montserrat", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 600;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,57 +33,34 @@
   --game-board-color: #BBB;
 }
 
+/* Base Page Sizing */
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global Body Styling */
+body {
+  min-width: 320px;
+  letter-spacing: 0.1rem;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Global Link Styling */
 a {
   font-weight: 500;
   color: #fff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #ccc;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  letter-spacing: 0.1rem;
-}
-
+/* Global Heading Styling */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
