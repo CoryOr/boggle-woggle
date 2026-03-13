@@ -9,6 +9,7 @@ Thumbs.db
 *.jar
 //Docker
 .env.prod
+.env
 //Gradle
 .gradle
 build
