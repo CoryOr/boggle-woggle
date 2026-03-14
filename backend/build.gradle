@@ -43,7 +43,7 @@ tasks.named('test') {
 }
 
 bootRun {
-    def envFile = file('.env')
+    def envFile = file('./secrets/.env')
     if (envFile.exists()) {
         envFile.eachLine { line ->
             if (line.startsWith('GOOGLE_APPLICATION_CREDENTIALS=')) {
