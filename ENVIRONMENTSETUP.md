@@ -63,35 +63,13 @@
 
 
 
-# Local Setup with Google Cloud Hosted DB
-### Setup
-1. Go to cloud.google.com
-2. Click on "Console" in the upper right
-
-![img.png](markdown_images/img7.png)
-
-3. Select cs506-project3c in the upper left
-   1. You should already be added to this project. If you are not, contact someone in the group.
-
-![img.png](markdown_images/img8.png)
-
-4. Click the hamburger icon and navigate to the "Cloud SQL" tab
-
-![img.png](markdown_images/img13.png)
-
-5. Navigate to the "Instances" tab on the left
-6. Click on cs506-database
-
-![img.png](markdown_images/img9.png)
-
-7. Navigate to the "Connections" tab on the left and then click on "Networking"
-
-![img.png](markdown_images/img10.png)
-
-8. Under "Authorized networks", click Add a network. Give the network a name of your choosing and click "Use My IP" for the IP range.
-
-![img.png](markdown_images/img14.png)
-
+# Running Backend, Frontend With Google Cloud Hosted DB
+1. Update your .env file to use prod environment variables
+2. Navigate to the Project_3c folder and cd into the backend folder
+    1. Run ./gradlew bootRun to start up the backend on localhost:8080
+3. Navigate to the Project_3c folder in a new terminal session and cd into the frontend folder
+    1. Run npm run dev to start up the frontend on localhost:3000
+Note: You don't need to have Docker open to run it with the Google Cloud hosted DB like with the setup at the top of this file
 
 ### See Database Changes
 1. Click on "Cloud SQL Studio"
@@ -102,10 +80,3 @@
 3. Create a new query with the plus icon, type "USE boggle_db;", and click the "Run" button. You can then execute queries like normal. To see a list of tables in the db, look in the sidebar to the left or use the query "SHOW TABLES;"
 
 ![img.png](markdown_images/img12.png)
-
-### Running Backend, Frontend With Google Cloud Hosted DB
-1. Update your .env file to use prod environment variables
-2. Navigate to the Project_3c folder and cd into the backend folder
-   1. Run ./gradlew bootRun to start up the backend on localhost:8080
-3. Navigate to the Project_3c folder in a new terminal session and cd into the frontend folder
-   1. Run npm run dev to start up the frontend on localhost:3000

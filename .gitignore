@@ -7,9 +7,8 @@ Thumbs.db
 //Java
 *.class
 *.jar
-//Docker
-.env.prod
-.env
+//Environment Variables
+backend/secrets
 //Gradle
 .gradle
 build
