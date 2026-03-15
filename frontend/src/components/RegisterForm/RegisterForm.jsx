@@ -23,7 +23,6 @@ const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
   // Handles form submission and registration request
   const handleSubmitAsync = async (event) => {
