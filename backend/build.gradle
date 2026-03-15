@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.19.0'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -39,4 +40,17 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 	failOnNoDiscoveredTests = false
+}
+
+bootRun {
+    def envFile = file('./secrets/.env')
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            if (line.startsWith('GOOGLE_APPLICATION_CREDENTIALS=')) {
+                def value = line.substring('GOOGLE_APPLICATION_CREDENTIALS='.length())
+                systemProperty 'GOOGLE_APPLICATION_CREDENTIALS', value
+                environment 'GOOGLE_APPLICATION_CREDENTIALS', value
+            }
+        }
+    }
 }
