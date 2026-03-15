@@ -12,3 +12,5 @@ Thumbs.db
 //Gradle
 .gradle
 build
+// IntelliJ
+.idea/misc.xml
