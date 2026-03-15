@@ -16,7 +16,6 @@ import { useState } from "react";
 import "./RegisterForm.css";
 import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   // State variables for user input fields
