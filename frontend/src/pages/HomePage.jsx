@@ -14,6 +14,7 @@
 
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function HomePage() {
   // Navigate to different pages
@@ -35,29 +36,22 @@ export default function HomePage() {
     nav("/store");
   };
 
+  useEffect(() => {
+    localStorage.removeItem("currentGame");
+    localStorage.removeItem("foundWords");
+  }, []);
+
   return (
     <div className="homePage">
       {/* Top section: logo and settings/volume icons */}
       <div className="homeTopBar">
         <div className="homeLogo">
-          <img
-            src="/LOGO.png"
-            alt="Boggle Logo"
-            className="BoggleLogoImage"
-          />
+          <img src="/LOGO.png" alt="Boggle Logo" className="BoggleLogoImage" />
         </div>
 
         <div className="homeIcons">
-          <img
-            src="/Volume.png"
-            alt="volume"
-            className="VolumeImage"
-          />
-          <img
-            src="/SettingBox.png"
-            alt="settings"
-            className="SettingImage"
-          />
+          <img src="/Volume.png" alt="volume" className="VolumeImage" />
+          <img src="/SettingBox.png" alt="settings" className="SettingImage" />
         </div>
       </div>
 
@@ -96,11 +90,7 @@ export default function HomePage() {
         </div>
 
         <div className="BingBongArea">
-          <img
-            src="/BingBong.png"
-            alt="BingBong"
-            className="BingBongImage"
-          />
+          <img src="/BingBong.png" alt="BingBong" className="BingBongImage" />
         </div>
 
         <button className="supportButton">SUPPORT US!</button>

@@ -1,4 +1,4 @@
-package com.project.model.entity;
+package com.project.model.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

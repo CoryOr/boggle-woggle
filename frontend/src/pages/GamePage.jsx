@@ -1,9 +1,11 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { FaHourglass } from "react-icons/fa";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
+import { CurrentGameContext } from "../contexts/CurrentGameContext";
+
 /**
  * The game page that user(s) will play on. It includes a couple of general labels for now. The main game logic is 
  * currently handled in the GameBoard component.
@@ -18,6 +20,7 @@ export default function GamePage() {
   const nav = useNavigate();
   const [currentGuess, setCurrentGuess] = useState("");
   const wordInputRef = useRef(null);
+  const { board, score, timeLeft, foundWords, isLoading } = useContext(CurrentGameContext);
 
   const goHome = () => {
     nav("/");
@@ -43,7 +46,7 @@ export default function GamePage() {
           className="word-input"
         />
       </div>
-      <GameBoard />
+      <GameBoard board={board} />
       <button className="navButton" onClick={goHome}>
         Go back
       </button>
