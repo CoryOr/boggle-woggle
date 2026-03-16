@@ -1,193 +1,285 @@
 /**
  * Pages.css
  *
- * Shared page-level styling for the Boggle frontend.
+ * Main stylesheet for the Boggle home page and shared page-level UI elements.
  *
- * Includes styles for:
- * - General page layout
- * - Login page
- * - Registration page
- * - Home page
- * - Responsive layout adjustments
+ * Features:
+ * - Styles the main page layout and responsive shell
+ * - Positions the logo and top-right icon controls
+ * - Styles animated logo, volume, and settings icons
+ * - Styles the main navigation button grid
+ * - Styles the promotional merch burst, BingBong mascot, and support button
+ * - Includes responsive tablet/mobile layouts
+ * - Includes motion-reduction accessibility support
  *
  * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+/*
+  PAGE LAYOUT:
+  Main outer page container and vertical page structure
+*/
 
-/* General Page Layout */
-.page {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100vh;
-  padding-top: 4rem;
-  font-family: "Montserrat", sans-serif;
-}
-
-/* Login and Registration Pages */
-.loginPage {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #4285f4;
-}
-
-.registrationPage {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #4285f4;
-}
-
-/* Old/Past Button Styles */
-.loginButton {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: red;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  transition: all 0.2s ease-in-out;
-}
-
-.title-text {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 200px;
-}
-
-.navButton {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-/* Home Page Layout */
 .homePage {
   min-height: 100vh;
   background-color: #4285f4;
-  padding: 2rem 2.5rem 3rem 2.5rem;
+  padding: 2.5rem 1.5%;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
 
-/* Logo and top-right icons */
+.homeShell {
+  width: min(96%, 96rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4.25rem;
+}
+
+/* 
+  TOP BAR:
+  Contains the centered logo and top-right icon controls
+*/
+
 .homeTopBar {
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 5rem;
+  align-items: flex-start;
+  min-height: 10rem;
 }
 
-/* Logo wrapper */
 .homeLogo {
-  font-size: 4.5rem;
-  font-weight: 900;
-  color: black;
-  text-shadow: 3px 3px 0 white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: logoShadow 3.2s ease-in-out infinite;
 }
 
-/* Top-right icons */
 .homeIcons {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.5rem;
+  right: 1%;
   display: flex;
   gap: 1rem;
-}
-
-/* Optional icon button style */
-.homeIconButton {
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: #ffd400;
-  cursor: pointer;
-}
-
-/* Home Page Navigation Buttons */
-.homeButtonRow {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 6rem;
 }
 
-.homeMainButton {
-  background-color: #ffd400;
-  color: #0057a8;
-  border: #CFB336;
-  border-radius: 1.25rem;
-  width: 275px;
-  height: 100px;
-  padding: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
+/*
+  TOP BAR IMAGES:
+  Logo plus settings/volume icon sizing
+*/
+
+.BoggleLogoImage {
+  width: clamp(18rem, 24vw, 26rem);
+  height: auto;
+  animation: logoFloat 3.2s ease-in-out infinite;
+}
+
+.VolumeImage {
+  width: clamp(4.5rem, 5vw, 5.5rem);
+  height: auto;
+}
+
+.SettingImage {
+  width: clamp(4.25rem, 4.8vw, 5.1rem);
+  height: auto;
+}
+
+/* Shared interaction styling for clickable top-right icons */
+.VolumeImage,
+.SettingImage {
+  height: auto;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  display: block;
+  border-radius: 1rem;
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease,
+    opacity 0.18s ease;
+}
+
+/* Hover effect on icons to feel real */
+.VolumeImage:hover,
+.SettingImage:hover {
+  transform: translateY(-3px) scale(1.06);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22)) brightness(1.05);
+}
+
+/* Pressed effect while icon is being clicked */
+.VolumeImage:active,
+.SettingImage:active {
+  transform: translateY(0) scale(0.96);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18)) brightness(0.98);
+}
+
+/* 
+  LOGO ANIMATIONS:
+  Floating/breathing effect for the Boggle logo
+*/
+
+/* Move logo up and down with slight rotation */
+@keyframes logoFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Reinforce floating illusion */
+@keyframes logoShadow {
+  0% {
+    filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.12));
+  }
+  100% {
+    filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.18));
+  }
+}
+
+/*
+  TOP NAVIGATION ROW:
+  Main card buttons: Store, Single Player, Multiplayer, Stats
+*/
+
+.homeButtonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(13rem, 1fr));
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+/* Navigation card */
+.homeNavCard {
+  background-color: #ffd400 !important;
+  border: none !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.14) !important;
+  cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  min-height: 6.25rem;
 }
 
-.homeMainButton:hover {
-  transform: scale(1.04);
+/* Make mouse hover animation */
+.homeNavCard:hover {
+  transform: scale(1.05);
 }
 
-/* Promotional Section & Donate Section */
-.homeBottomSection {
+/* Centers text inside each navigation card */
+.homeNavCardBody {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6rem;
-  flex-wrap: nowrap;
-  margin-top: 1.5rem;
+  text-align: center;
+  min-height: 4rem;
+  padding: 1.1rem !important;
 }
 
-/* Promotional burst (Spiky) */
+/* Typography used in navigation cards */
+.homeNavCardText {
+  margin: 0 !important;
+  color: #0057a8 !important;
+  font-size: clamp(1.45rem, 1.9vw, 2rem);
+  font-weight: 600;
+  line-height: 1;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0;
+}
+
+/*
+  PROMO SECTION:
+  Burst + BingBong on top, Support button bottom
+*/
+
+.homePromoGrid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    "burst mascot"
+    "support support";
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  column-gap: 1rem;
+  row-gap: 2rem;
+  margin-top: 0.75rem;
+}
+
+/* Base promo card reset so custom visuals show cleanly */
+.promoCard {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Centers promo card contents */
+.promoCardBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+}
+
+/* Grid placement for merch burst */
+.burstCard {
+  grid-area: burst;
+}
+
+/* Grid placement for BingBong */
+.mascotCard {
+  grid-area: mascot;
+}
+
+/* Support button card centered beneath promo pair */
+.supportCard {
+  grid-area: support;
+  background-color: #c9ad2f !important;
+  border: none !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.14) !important;
+  cursor: pointer;
+  min-height: 4.5rem;
+  width: min(100%, 36rem);
+  justify-self: center;
+}
+
+/* Keeps support text vertically centered inside button */
+.supportCard .promoCardBody {
+  min-height: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+  MERCH BURST:
+  Red starburst promo graphic with animated pop effect
+*/
+
 .merchBurst {
-  width: 260px;
-  height: 260px;
+  width: clamp(9rem, 13vw, 13rem);
+  aspect-ratio: 1 / 1;
   background: red;
   color: white;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  left: 75px;
-  top: -10px;
-  flex-shrink: 0;
-
-  /* Symmetric 24-spike burst shape */
+  transform-origin: center;
+  will-change: transform, filter;
+  animation: merchBurstPop 2.8s ease-in-out infinite;
   clip-path: polygon(
     50% 0%,
     53% 9%,
@@ -256,80 +348,171 @@
   );
 }
 
-/* Bing Bong container */
-.BingBongArea {
-  flex: 1;
+/* Text styling inside burst */
+.merchText {
+  width: 80%;
+  max-width: 12rem;
+  text-align: center;
+  font-size: clamp(1.1rem, 1.4vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* 
+  BingBong
+*/
+
+.BingBongImage {
+  width: clamp(10rem, 14vw, 14rem);
+  max-width: 100%;
+  height: auto;
+  transform-origin: center bottom;
+  will-change: transform, filter;
+  animation: bingBongBounce 3.4s ease-in-out infinite;
+}
+
+/*
+  SUPPORT BUTTON TEXT:
+  Centers and styles text
+*/
+
+.supportCardText {
+  margin: 0 !important;
+  color: #0057a8 !important;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 600;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
-/* Bing Bong styling */
-.BingBongImage {
-  width: 300px;
-  max-width: 100%;
-  height: auto;
-  position: relative;
-  right: 75px;
-  top: -10px;
+/*
+  PROMO ANIMATIONS:
+  burst pop effect and BingBong bounce motion
+*/
+
+/* Repeating pop/glow animation for burst */
+@keyframes merchBurstPop {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  12% {
+    transform: scale(1.05) rotate(-2deg);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.25));
+  }
+  20% {
+    transform: scale(1.1) rotate(2deg);
+    filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.35));
+  }
+  28% {
+    transform: scale(1.04) rotate(-1deg);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  }
+  40% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
 }
 
-/* Home Page Images / Icons */
-.VolumeImage {
-  width: 45px;
-  height: 45px;
-  position: relative;
-  top: -2px;
+/* Gentle bounce animation for BingBong */
+@keyframes bingBongBounce {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+  18% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  26% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+  34% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
 }
 
-.SettingImage {
-  width: 40px;
-  height: 40px;
+/*
+  ACCESSIBILITY:
+  Disables animations for users who prefer reduced motion
+  note: Not sure how to test this 
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  .BoggleLogoImage,
+  .homeLogo,
+  .merchBurst,
+  .BingBongImage {
+    animation: none !important;
+  }
 }
 
-.BoggleLogoImage {
-  width: 400px;
-  height: 150px;
+/*
+  TABLET LAYOUT:
+  Stacks promo section and reduces navigation grid to 2 columns
+*/
+
+@media (max-width: 68rem) {
+  .homeButtonGrid {
+    grid-template-columns: repeat(2, minmax(12rem, 1fr));
+  }
+
+  .homePromoGrid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "burst"
+      "mascot"
+      "support";
+    justify-items: center;
+    row-gap: 2rem;
+  }
+
+  .supportCard {
+    width: min(100%, 36rem);
+  }
 }
 
-/* Support Button (Donate) */
-.supportButton {
-  background-color: #c9ad2f;
-  color: #0057a8;
-  border: none;
-  border-radius: 1.25rem;
-  padding: 1.5rem 5rem;
-  min-width: 560px;
-  font-size: 1.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-  position: relative;
-  right: 35px;
-}
+/* 
+  MOBILE LAYOUT:
+  Stacks top bar elements and uses single-column navigation buttons 
+*/
 
-/* Apply Montserrat consistently everywhere */
-.homeMainButton,
-.supportButton,
-.merchBurst,
-.loginButton,
-.navButton {
-  font-family: "Montserrat", sans-serif;
-}
+@media (max-width: 44rem) {
+  .homePage {
+    padding: 1.25rem;
+  }
 
-/* Responsive Layout (Zoom In/Out) */
-@media (max-width: 1100px) {
-  .homeButtonRow,
-  .homeBottomSection {
-    justify-content: center;
+  .homeShell {
+    gap: 2rem;
+    width: 100%;
   }
 
   .homeTopBar {
+    min-height: auto;
     flex-direction: column;
     gap: 1rem;
   }
 
   .homeIcons {
     position: static;
+    justify-content: center;
+  }
+
+  .homeButtonGrid {
+    grid-template-columns: 1fr;
   }
 }
