@@ -28,3 +28,13 @@ lint_backend:
   script:
     - ./gradlew check
   allow_failure: false
+
+lint_frontend:
+  image: node:22
+  stage: lint
+  before_script: []
+  script:
+    - cd frontend
+    - npm install
+    - npm run lint
+  allow_failure: false

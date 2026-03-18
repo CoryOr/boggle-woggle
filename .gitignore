@@ -14,3 +14,5 @@ backend/secrets
 build
 // IntelliJ
 .idea/misc.xml
+# Environment Variables
+.env

@@ -16,14 +16,12 @@ import { useState } from "react";
 import "./RegisterForm.css";
 import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   // State variables for user input fields
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
   // Handles form submission and registration request
   const handleSubmitAsync = async (event) => {

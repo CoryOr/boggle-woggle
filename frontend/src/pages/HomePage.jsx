@@ -14,27 +14,23 @@
 
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Card } from "react-bootstrap";
+import { useEffect } from "react"; 
 
 export default function HomePage() {
-  // Navigate to different pages
   const nav = useNavigate();
 
-  const singlePlayer = () => {
-    nav("/game");
-  };
+  const singlePlayer = () => nav("/game");
+  const multiplayer = () => nav("/login");
+  const stats = () => nav("/stats");
+  const store = () => nav("/store");
 
-  const multiplayer = () => {
-    nav("/login");
-  };
-
-  const stats = () => {
-    nav("/stats");
-  };
-
-  const store = () => {
-    nav("/store");
-  };
+  const navCards = [
+    { title: "STORE", action: store },
+    { title: "SINGLE PLAYER", action: singlePlayer },
+    { title: "MULTIPLAYER", action: multiplayer },
+    { title: "STATISTICS", action: stats },
+  ];
 
   useEffect(() => {
     localStorage.removeItem("currentGame");
@@ -43,57 +39,77 @@ export default function HomePage() {
 
   return (
     <div className="homePage">
-      {/* Top section: logo and settings/volume icons */}
-      <div className="homeTopBar">
-        <div className="homeLogo">
-          <img src="/LOGO.png" alt="Boggle Logo" className="BoggleLogoImage" />
-        </div>
+      <div className="homeShell">
+        <div className="homeTopBar">
+          <div className="homeLogo">
+            <img
+              src="/LOGO.png"
+              alt="Boggle Logo"
+              className="BoggleLogoImage"
+            />
+          </div>
 
-        <div className="homeIcons">
-          <img src="/Volume.png" alt="volume" className="VolumeImage" />
-          <img src="/SettingBox.png" alt="settings" className="SettingImage" />
-        </div>
-      </div>
-
-      {/* Middle section: main navigation buttons */}
-      <div className="homeButtonRow">
-        <button className="homeMainButton" onClick={store}>
-          STORE
-        </button>
-
-        <button className="homeMainButton" onClick={singlePlayer}>
-          SINGLE
-          <br />
-          PLAYER
-        </button>
-
-        <button className="homeMainButton" onClick={multiplayer}>
-          MULTIPLAYER
-        </button>
-
-        <button className="homeMainButton" onClick={stats}>
-          STATISTICS
-        </button>
-      </div>
-
-      {/* Bottom section: merch promotion and donation button */}
-      <div className="homeBottomSection">
-        <div className="merchBurst">
-          <div>
-            <br />
-            NEW MERCH
-            <br />
-            IN STORE
-            <br />
-            !!!
+          <div className="homeIcons">
+            <img src="/Volume.png" alt="volume" className="VolumeImage" />
+            <img src="/SettingBox.png" alt="settings" className="SettingImage" />
           </div>
         </div>
 
-        <div className="BingBongArea">
-          <img src="/BingBong.png" alt="BingBong" className="BingBongImage" />
+        <div className="homeButtonGrid">
+          {navCards.map((card) => (
+            <Card
+              key={card.title}
+              className="homeNavCard"
+              onClick={card.action}
+            >
+              <Card.Body className="homeNavCardBody">
+                <Card.Text className="homeNavCardText">
+                  {card.title === "SINGLE PLAYER" ? (
+                    <>
+                      SINGLE
+                      <br />
+                      PLAYER
+                    </>
+                  ) : (
+                    card.title
+                  )}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          ))}
         </div>
 
-        <button className="supportButton">SUPPORT US!</button>
+        <div className="homePromoGrid">
+          <Card className="promoCard burstCard">
+            <Card.Body className="promoCardBody">
+              <div className="merchBurst">
+                <div className="merchText">
+                  NEW MERCH
+                  <br />
+                  IN STORE
+                  <br />
+                  !!!
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
+
+          <Card className="promoCard mascotCard">
+            <Card.Body className="promoCardBody">
+              <img
+                src="/BingBong.png"
+                alt="BingBong"
+                className="BingBongImage"
+              />
+            </Card.Body>
+          </Card>
+
+          <Card className="promoCard supportCard" onClick={() => alert("Support page coming soon!")}>
+            <Card.Body className="promoCardBody">
+              <Card.Text className="supportCardText">SUPPORT US!</Card.Text>
+            </Card.Body>
+          </Card>
+        </div>
       </div>
     </div>
   );
