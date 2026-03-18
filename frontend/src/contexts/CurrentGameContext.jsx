@@ -25,6 +25,8 @@ export function CurrentGameProvider({ children }) {
         .then((data) => {
           setBoard(data.board);
           setIsLoading(false);
+          setScore(0);
+          setTimeLeft(60);
           localStorage.setItem("currentGame", JSON.stringify(data.board));
           localStorage.setItem("foundWords", JSON.stringify([]));
         })
