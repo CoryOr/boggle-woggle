@@ -1,32 +1,18 @@
-import { createContext, useState, useEffect } from "react";
-
-export const CurrentGameContext = createContext(null);
+import { useEffect } from "react";
+import { CurrentGameContext, useInitialGameState } from "./CurrentGameContext";
 
 export function CurrentGameProvider({ children }) {
-  const [board, setBoard] = useState([]);
-  const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [foundWords, setFoundWords] = useState(new Set());
-  const [isLoading, setIsLoading] = useState(true);
+  const { board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading } = useInitialGameState();
 
   useEffect(() => {
-    const currentGame = localStorage.getItem("currentGame");
-    const savedFoundWords = localStorage.getItem("foundWords");
-
-    if (currentGame) {
-      setBoard(JSON.parse(currentGame));
-      if (savedFoundWords) {
-        setFoundWords(new Set(JSON.parse(savedFoundWords)));
-      }
-    } 
-    else {
+    if (board.length === 0) {
       fetch("/api/game/new")
         .then((res) => res.json())
         .then((data) => {
           setBoard(data.board);
-          setIsLoading(false);
           setScore(0);
           setTimeLeft(60);
+          setIsLoading(false);
           localStorage.setItem("currentGame", JSON.stringify(data.board));
           localStorage.setItem("foundWords", JSON.stringify([]));
         })
@@ -35,15 +21,7 @@ export function CurrentGameProvider({ children }) {
   }, []);
 
   return (
-    <CurrentGameContext.Provider
-      value={{
-        board,
-        score,
-        timeLeft,
-        foundWords,
-        isLoading,
-      }}
-    >
+    <CurrentGameContext.Provider value={{ board, score, timeLeft, foundWords, isLoading }}>
       {children}
     </CurrentGameContext.Provider>
   );

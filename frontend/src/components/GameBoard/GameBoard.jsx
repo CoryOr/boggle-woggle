@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import LetterTile from "./LetterTile";
 import "./GameBoard.css";
 
