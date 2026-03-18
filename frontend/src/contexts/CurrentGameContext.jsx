@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { CurrentGameContext, useInitialGameState } from "./CurrentGameContext";
 
 export function CurrentGameProvider({ children }) {
-  const { board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading } = useInitialGameState();
+  const { board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } = useInitialGameState();
 
   useEffect(() => {
     if (board.length === 0) {
@@ -18,7 +18,7 @@ export function CurrentGameProvider({ children }) {
         })
         .catch((err) => console.error(err));
     }
-  }, []);
+  }, [board.length, setBoard, setIsLoading, setScore, setTimeLeft]);
 
   return (
     <CurrentGameContext.Provider value={{ board, score, timeLeft, foundWords, isLoading }}>

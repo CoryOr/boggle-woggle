@@ -35,9 +35,6 @@ export default function GamePage() {
   const { board, score, timeLeft, foundWords, isLoading } =
     useContext(CurrentGameContext);
 
-  const [mode, setMode] = useState(null);
-  const [gameStarted, setGameStarted] = useState(false);
-
   const goHome = () => {
     nav("/");
   };
