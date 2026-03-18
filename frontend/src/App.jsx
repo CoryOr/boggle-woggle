@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { CurrentGameProvider } from "./contexts/CurrentGameContext";
+import { CurrentGameProvider } from "./contexts/CurrentGameContext.jsx";
 
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";

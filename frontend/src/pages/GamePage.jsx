@@ -39,32 +39,38 @@ export default function GamePage() {
     nav("/");
   };
 
+  console.log("Current words found:" + foundWords);
+
   return (
-    <div className="game-page-container">
-      <p className="game-page-text title">DRAG OR TYPE LETTERS TO PLAY!</p>
-      <div className="timer-container">
-        <FaHourglass size="3rem" />
-        <p className="game-page-text">2:52</p>
-      </div>
-      <div className="score-container">
-        <p className="game-page-text">Score: 0</p>
-      </div>
-      <div className="word-input-container">
-        <label htmlFor="word-input" className="game-page-text">
-          WORD:
-        </label>
-        <input
-          ref={wordInputRef}
-          value={currentGuess}
-          onChange={(e) => setCurrentGuess(e.target.value)}
-          spellCheck={false}
-          className="word-input"
-        />
-      </div>
-      <GameBoard board={board} />
-      <button className="navButton" onClick={goHome}>
-        Go back
-      </button>
-    </div>
+    <>
+      {!isLoading && (
+        <div className="game-page-container">
+          <p className="game-page-text title">DRAG OR TYPE LETTERS TO PLAY!</p>
+          <div className="timer-container">
+            <FaHourglass size="3rem" />
+            <p className="game-page-text">{timeLeft}</p>
+          </div>
+          <div className="score-container">
+            <p className="game-page-text">Score: {score}</p>
+          </div>
+          <div className="word-input-container">
+            <label htmlFor="word-input" className="game-page-text">
+              WORD:
+            </label>
+            <input
+              ref={wordInputRef}
+              value={currentGuess}
+              onChange={(e) => setCurrentGuess(e.target.value)}
+              spellCheck={false}
+              className="word-input"
+            />
+          </div>
+          <GameBoard board={board} />
+          <button className="navButton" onClick={goHome}>
+            Go back
+          </button>
+        </div>
+      )}
+    </>
   );
 }
