@@ -1,0 +1,11 @@
+.game-finished-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1.5rem;
+}
+
+.game-finished-title {
+    color: white;
+}
