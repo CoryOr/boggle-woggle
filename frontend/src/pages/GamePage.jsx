@@ -32,7 +32,8 @@ export default function GamePage() {
   const nav = useNavigate();
   const [currentGuess, setCurrentGuess] = useState("");
   const wordInputRef = useRef(null);
-  const { board, score, timeLeft, foundWords, isLoading } =
+  const [mode, setMode] = useState(null);
+  const { board, score, timeLeft, foundWords, isLoading, setIsLoading } =
     useContext(CurrentGameContext);
 
   const goHome = () => {
@@ -43,7 +44,39 @@ export default function GamePage() {
 
   return (
     <>
-      {!isLoading && (
+      {isLoading ? (
+        <div>
+          <h1 className="title">
+            Select Game Mode
+          </h1>
+
+          <div className="mode-buttons">
+            <button className="navButton" onClick={() => setMode("single")}>
+              Single Player
+            </button>
+            <button className="navButton" onClick={() => setMode("multi")}>
+              Multiplayer
+            </button>
+          </div>
+
+          {mode === "single" && (
+            <div>
+              <p className="game-page-text">Mode: Single Player Selected</p>
+              <button className="navButton" onClick={() => setIsLoading(false)}>
+                START GAME
+              </button>
+            </div>
+          )}
+
+          {mode === "multi" && (
+            <p className="game-page-text">Multiplayer Mode is coming soon!</p>
+          )}
+
+          <button className="navButton" onClick={goHome}>
+            Go Back
+          </button>
+        </div>
+      ) : (
         <div className="game-page-container">
           <p className="game-page-text title">DRAG OR TYPE LETTERS TO PLAY!</p>
           <div className="timer-container">

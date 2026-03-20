@@ -12,7 +12,7 @@ export function CurrentGameProvider({ children }) {
           setBoard(data.board);
           setScore(0);
           setTimeLeft(60);
-          setIsLoading(false);
+          setIsLoading(true);
           localStorage.setItem("currentGame", JSON.stringify(data.board));
           localStorage.setItem("foundWords", JSON.stringify([]));
         })
@@ -21,7 +21,7 @@ export function CurrentGameProvider({ children }) {
   }, [board.length, setBoard, setIsLoading, setScore, setTimeLeft]);
 
   return (
-    <CurrentGameContext.Provider value={{ board, score, timeLeft, foundWords, isLoading }}>
+    <CurrentGameContext.Provider value={{ board, score, timeLeft, foundWords, isLoading, setIsLoading }}>
       {children}
     </CurrentGameContext.Provider>
   );
