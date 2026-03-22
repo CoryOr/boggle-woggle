@@ -6,16 +6,15 @@ import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
+import WordInput from "../components/WordInput/WordInput";
 
 export default function GamePage() {
     const nav = useNavigate();
-    const [currentGuess, setCurrentGuess] = useState("");
-    const wordInputRef = useRef(null);
     const [mode, setMode] = useState(null);
     const { board, score, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } =
         useContext(CurrentGameContext);
 
-    console.log("Current words found:" + foundWords);
+    //console.log("Current words found:" + foundWords);
 
     const goHome = () => {
         nav("/");
@@ -68,16 +67,7 @@ export default function GamePage() {
                     <div className="score-container">
                         <p className="game-page-text">Score: {score}</p>
                     </div>
-                    <div className="word-input-container">
-                        <label htmlFor="word-input" className="game-page-text">WORD:</label>
-                        <input
-                            ref={wordInputRef}
-                            value={currentGuess}
-                            onChange={(e) => setCurrentGuess(e.target.value)}
-                            spellCheck={false}
-                            className="word-input"
-                        />
-                    </div>
+                    <WordInput />
 
                     <GameBoard board={board} />
 

@@ -46,6 +46,10 @@ public class DictionaryService {
    * @return true if a valid word; false otherwise
    */
   public boolean isValidWord(String word) {
-    return trie.isWord(word);
+      if (word.length() < 3) {
+          return false;
+      }
+
+      return trie.isWord(word);
   }
 }
