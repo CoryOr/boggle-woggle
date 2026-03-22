@@ -15,6 +15,7 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
+import { useEffect } from "react"; 
 
 export default function HomePage() {
   const nav = useNavigate();
@@ -30,6 +31,11 @@ export default function HomePage() {
     { title: "MULTIPLAYER", action: multiplayer },
     { title: "STATISTICS", action: stats },
   ];
+
+  useEffect(() => {
+    localStorage.removeItem("currentGame");
+    localStorage.removeItem("foundWords");
+  }, []);
 
   return (
     <div className="homePage">
