@@ -486,6 +486,26 @@
   }
 }
 
+/*
+  GAME SELECTION/START:
+  Styling for mode selection
+*/
+.mode-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.mode-selection-title {
+    color: white;
+}
+
+.start-button {
+    background-color: #28a745;
+    color: white;
+}
+
 /* 
   MOBILE LAYOUT:
   Stacks top bar elements and uses single-column navigation buttons 
