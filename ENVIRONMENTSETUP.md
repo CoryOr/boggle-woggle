@@ -63,20 +63,21 @@
 
 
 
-# Running Backend, Frontend With Google Cloud Hosted DB
-1. Update your .env file to use prod environment variables
-2. Navigate to the Project_3c folder and cd into the backend folder
+# Running Backend, Frontend With University VM Hosted DB
+1. Update your .env file to use the correct password. Note: All other values are the same. Only the password needs changed.
+2. Establish an ssh tunnel
+   1. In a new terminal, type in "ssh -L 3306:localhost:3306 <your_cs_login>@cs506x3c.cs.wisc.edu"
+3. Navigate to the Project_3c folder and cd into the backend folder
     1. Run ./gradlew bootRun to start up the backend on localhost:8080
-3. Navigate to the Project_3c folder in a new terminal session and cd into the frontend folder
+4. Navigate to the Project_3c folder in a new terminal session and cd into the frontend folder
     1. Run npm run dev to start up the frontend on localhost:3000
-Note: You don't need to have Docker open to run it with the Google Cloud hosted DB like with the setup at the top of this file
 
 ### See Database Changes
-1. Click on "Cloud SQL Studio"
+1. On the university vm, enter this command: "docker exec -it boggle-mysql-db mysql -u root -p<password_from_env_file>". Note that there is no space after the -p flag. If you add a space you will get an error
+2. If this was successful, you should see a "mysql>" prompt. At this point, type in "use boggle_db;". Then you can type sql queries like normal. For a list of tables, use "show tables;"
 
-![img.png](markdown_images/img11.png)
 
-2. To log in, use boggle_db as the Database. Click the "Built-in database authentication" circle. User should be "project-member". The password should be the same password from .env.
-3. Create a new query with the plus icon, type "USE boggle_db;", and click the "Run" button. You can then execute queries like normal. To see a list of tables in the db, look in the sidebar to the left or use the query "SHOW TABLES;"
-
-![img.png](markdown_images/img12.png)
+### Known Issues
+- If you try to run the "docker exec -it boggle-mysql-db mysql -u root -p<password_from_env_file>" command and get the response: "Error response from daemon: container <some_long_string> is not running", it means that the docker container is not running.
+  - Run docker container ps to verify. If boggle-mysql-db isn't listed, the container was stopped.
+  - Run "docker compose up -d" in the same directory that has docker-compose.yml to recreate the container and get it running
