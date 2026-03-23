@@ -1,4 +1,6 @@
 package com.project.model.dto;
 
-public record GuessRequest(String guess) {
+import java.util.UUID;
+
+public record GuessRequest(UUID gameId, String guess) {
 }

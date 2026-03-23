@@ -1,3 +1,5 @@
 package com.project.model.dto;
 
-public record GameResponse(String gameId, String[][] board) {}
+import java.util.UUID;
+
+public record GameResponse(UUID gameId, String[][] board) {}

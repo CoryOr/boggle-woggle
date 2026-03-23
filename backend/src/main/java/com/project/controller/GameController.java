@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.model.dto.GameResponse;
 import com.project.model.dto.GuessRequest;
 import com.project.model.dto.GuessResponse;
-import com.project.service.DictionaryService;
 import com.project.service.GameService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +26,6 @@ public class GameController {
 
     @PostMapping("/guess")
     public GuessResponse submitGuess(@RequestBody GuessRequest request) {
-        return gameService.processGuess(request.guess());
+        return gameService.processGuess(request.gameId(), request.guess());
     }
 }
