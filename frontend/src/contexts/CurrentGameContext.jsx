@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { CurrentGameContext, useInitialGameState } from "./CurrentGameContext";
 
 export function CurrentGameProvider({ children }) {
-    const { gameId, setGameId, board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } = useInitialGameState();
+    const { gameId, setGameId, board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading } = useInitialGameState();
 
     useEffect(() => {
         fetch("/api/game/new")
@@ -27,7 +27,7 @@ export function CurrentGameProvider({ children }) {
     }, [isLoading, timeLeft, setTimeLeft]);
 
     return (
-        <CurrentGameContext.Provider value={{ gameId, board, score, setScore, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading }}>
+        <CurrentGameContext.Provider value={{ gameId, board, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading }}>
             {children}
         </CurrentGameContext.Provider>
     );
