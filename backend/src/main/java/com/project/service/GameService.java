@@ -20,10 +20,17 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
+    /**
+     * save method inherited in gameRepository generates the UUID for us, so we only need to create the board. Save
+     * the game in the Game database table as well. The board is stored as an nvarchar and mapped back out to a 2d array
+     * of strings when we need to reference the board again.
+     * @return (gameId, board) for the newly created game
+     */
     public GameResponse generateNewGame() {
         Board board = new Board();
         String[][] boardLetters = board.getBoard();
 
+        // Convert to a flat 1d string for db saving purposes
         StringBuilder sb = new StringBuilder();
         int n = boardLetters.length;
         for (int i = 0; i < n; i++) {
@@ -37,7 +44,16 @@ public class GameService {
         return new GameResponse(saved.getGameId(), boardLetters);
     }
 
-    public String[][] getCurrentBoard(UUID gameId) {
+    /**
+     * Used by processGuess method. Gets the current game from the database, maps the board back to a 2d array of
+     * strings, and returns the board to be traversed.
+     * @param gameId the unique game we care about
+     * @return a 2d array of strings representing the current game's board
+     *
+     * TODO: In the future, this could become a bottleneck for guessing words. We might need to implement some sort of
+     * caching later down the line, but in its current state there is no noticeable delay. Guesses are instantaneous
+     */
+    private String[][] getCurrentBoard(UUID gameId) {
         Game currentGame = gameRepository.findById(gameId).orElseThrow(() -> new RuntimeException("Game not found: " + gameId));
 
         String letters = currentGame.getLetters().toLowerCase();
@@ -47,10 +63,12 @@ public class GameService {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+                // Case where we have a Qu letter tile
                 if (letters.charAt(lettersPointer) == 'q') {
                     board[i][j] = letters.substring(lettersPointer, lettersPointer + 2);
                     lettersPointer += 2;
                 }
+                // Normal case where a letter tile only contains one letter
                 else {
                     board[i][j] = String.valueOf(letters.charAt(lettersPointer));
                     lettersPointer++;
@@ -60,7 +78,14 @@ public class GameService {
 
         return board;
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Checks if word can be formed from the current game's board. For example, "water" is a word, but it might not
+     * be present on the current game's board
+     * @param board the current game's board
+     * @param word the guess the user has made
+     * @return true if the guess can be found in the game board
+     */
     private boolean canFormWord(String[][] board, String word) {
         int size = board.length;
 
@@ -75,15 +100,33 @@ public class GameService {
         return false;
     }
 
+    /**
+     * dfs algorithm to explore the current board efficiently and determine if word exists in the current game's board
+     * @param board the current game's gameboard
+     * @param word the user guess
+     * @param row current row we are looking through
+     * @param col current col we are looking through
+     * @param index the current character index in word
+     * @param visited tracks which cells have already been visited. We cannot reuse letters on a gameboard
+     * @return true if word exists in board
+     */
     private boolean dfs(String[][] board, String word, int row, int col, int index, boolean[][] visited) {
-        if (index == word.length()) return true;
+        if (index == word.length()) {
+            return true;
+        }
 
         int size = board.length;
-        if (row < 0 || row >= size || col < 0 || col >= size) return false;
-        if (visited[row][col]) return false;
+        if (row < 0 || row >= size || col < 0 || col >= size) {
+            return false;
+        }
+        if (visited[row][col]) {
+            return false;
+        }
 
         String current = board[row][col]; // handles "qu" naturally
-        if (!word.startsWith(current, index)) return false;
+        if (!word.startsWith(current, index)) {
+            return false;
+        }
 
         visited[row][col] = true;
 
@@ -98,7 +141,7 @@ public class GameService {
         visited[row][col] = false;
         return false;
     }
-///  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Validates if it is possible to get this word with the given board. Also does point calculation
      *

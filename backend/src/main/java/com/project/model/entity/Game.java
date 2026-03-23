@@ -37,4 +37,12 @@ public class Game {
     public String getLetters() {
         return letters;
     }
+
+    /**
+     * This is only used by tests
+     * @param gameId the game id to set this test instance to
+     */
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
+    }
 }
