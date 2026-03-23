@@ -7,11 +7,12 @@ import { CurrentGameContext } from "../contexts/CurrentGameContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
+import CurrentScore from "../components/CurrentScore/CurrentScore";
 
 export default function GamePage() {
     const nav = useNavigate();
     const [mode, setMode] = useState(null);
-    const { board, score, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } =
+    const { board, score, setScore, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } =
         useContext(CurrentGameContext);
 
     //console.log("Current words found:" + foundWords);
@@ -19,6 +20,10 @@ export default function GamePage() {
     const goHome = () => {
         nav("/");
     };
+
+    const updateScore = (points) => {
+        setScore(score + points);
+    }
 
     return (
         <div className="game-page-container">
@@ -64,10 +69,8 @@ export default function GamePage() {
                 <>
                     <p className="game-page-text title">DRAG OR TYPE LETTERS TO PLAY!</p>
                     <Timer timeLeft={timeLeft} />
-                    <div className="score-container">
-                        <p className="game-page-text">Score: {score}</p>
-                    </div>
-                    <WordInput />
+                    <CurrentScore score={score} />
+                    <WordInput updateScore={updateScore}/>
 
                     <GameBoard board={board} />
 
