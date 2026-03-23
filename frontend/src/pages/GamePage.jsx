@@ -1,25 +1,36 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef, useContext } from "react";
+import { useState, useContext } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
+import WordInput from "../components/WordInput/WordInput";
+import CurrentScore from "../components/CurrentScore/CurrentScore";
 
+/**
+ * A hub file for all of our game logic. Currently holds only single player information, but will
+ * be extended to multiplayer in the future. 
+ * 
+ * TODO: Don't allow words to be submitted multiple times for a single game.
+ * @returns the GamePage jsx
+ */
 export default function GamePage() {
     const nav = useNavigate();
-    const [currentGuess, setCurrentGuess] = useState("");
-    const wordInputRef = useRef(null);
     const [mode, setMode] = useState(null);
-    const { board, score, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } =
+    const { board, score, setScore, timeLeft, setTimeLeft, foundWords, isLoading, setIsLoading } =
         useContext(CurrentGameContext);
 
-    console.log("Current words found:" + foundWords);
+    console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
 
     const goHome = () => {
         nav("/");
     };
+
+    const updateScore = (points) => {
+        setScore(score + points);
+    }
 
     return (
         <div className="game-page-container">
@@ -65,19 +76,8 @@ export default function GamePage() {
                 <>
                     <p className="game-page-text title">DRAG OR TYPE LETTERS TO PLAY!</p>
                     <Timer timeLeft={timeLeft} />
-                    <div className="score-container">
-                        <p className="game-page-text">Score: {score}</p>
-                    </div>
-                    <div className="word-input-container">
-                        <label htmlFor="word-input" className="game-page-text">WORD:</label>
-                        <input
-                            ref={wordInputRef}
-                            value={currentGuess}
-                            onChange={(e) => setCurrentGuess(e.target.value)}
-                            spellCheck={false}
-                            className="word-input"
-                        />
-                    </div>
+                    <CurrentScore score={score} />
+                    <WordInput updateScore={updateScore}/>
 
                     <GameBoard board={board} />
 

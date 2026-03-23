@@ -8,6 +8,7 @@ export function useInitialGameState() {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
     const [isLoading, setIsLoading] = useState(true);
+    const [gameId, setGameId] = useState(null);
 
-  return { board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading };
+  return { gameId, setGameId, board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading };
 }

@@ -1,0 +1,9 @@
+.word-input-label {
+    display: flex;
+    align-items: flex-end;
+    font-size: 2rem;
+}
+
+.word-input {
+    width: 30%;
+}
