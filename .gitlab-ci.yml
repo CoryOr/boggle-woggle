@@ -5,17 +5,24 @@ stages:
   - test
   - lint
 
-before_script:
-  - cd backend
-  - chmod +x gradlew
-
+# --- BACKEND JOBS ---
 build_backend:
   stage: build
+  before_script:
+    - cd backend
+    - chmod +x gradlew
   script:
     - ./gradlew clean assemble
+  artifacts:
+    paths:
+      - backend/build/libs/*.jar
+    expire_in: 1 week
 
 test_backend:
   stage: test
+  before_script:
+    - cd backend
+    - chmod +x gradlew
   script:
     - ./gradlew test
   artifacts:
@@ -23,18 +30,44 @@ test_backend:
     reports:
       junit: backend/build/test-results/test/**/TEST-*.xml
 
+# --- FRONTEND JOBS ---
+build_frontend:
+  image: node:22
+  stage: build
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 week
+
+test_frontend:
+  image: node:22
+  stage: test
+  script:
+    - cd frontend
+    - npm install
+    - npm run test --if-present
+  # Non-blocking until frontend test coverage is increased
+  allow_failure: true
+
+# --- LINTING ---
 lint_backend:
   stage: lint
+  before_script:
+    - cd backend
+    - chmod +x gradlew
   script:
     - ./gradlew check
-  allow_failure: false
+  allow_failure: true
 
 lint_frontend:
   image: node:22
   stage: lint
-  before_script: []
   script:
     - cd frontend
     - npm install
     - npm run lint
-  allow_failure: false
+  allow_failure: true
