@@ -19,6 +19,7 @@
 /* Main login form container */
 #login-form-container {
   width: 26rem;
+  margin: 5rem auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,4 +105,17 @@
 #login-form-container p,
 #login-form-container ::placeholder {
   font-family: "Montserrat", sans-serif !important;
+}
+
+/* GO BACK TO HOME Button Styles */
+.go-back-btn {
+  margin-top: 1.5rem;
+  background-color: #666 !important;
+  border-color: #666 !important;
+  color: white !important;
+}
+
+.go-back-btn:hover {
+  background-color: #555 !important;
+  border-color: #555 !important;
 }
