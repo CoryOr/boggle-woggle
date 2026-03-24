@@ -5,11 +5,17 @@ import "./WordInput.css";
 export default function WordInput({ updateScore }) {
   const [currentGuess, setCurrentGuess] = useState("");
   const [invalidWord, setInvalidWord] = useState(null);
-  const { gameId } = useContext(CurrentGameContext);
+  const { gameId, setFoundWords, foundWords } = useContext(CurrentGameContext);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       const guess = currentGuess.toLowerCase(); // Note: no need to trim since onChange for input component doesn't allow anything other than letters
+
+      if (foundWords.has(guess)) {
+        setInvalidWord(currentGuess);
+        setCurrentGuess("");
+        return;
+      }
 
       fetch("/api/game/guess", {
         method: "POST",
@@ -22,6 +28,7 @@ export default function WordInput({ updateScore }) {
         .then((data) => {
           if (data.valid) {
             updateScore(data.score);
+            setFoundWords((prev) => new Set(prev).add(guess));
           } else {
             setInvalidWord(currentGuess);
           }
@@ -54,7 +61,7 @@ export default function WordInput({ updateScore }) {
           className="word-input"
         />
       </div>
-      {invalidWord && <p>{invalidWord.toUpperCase()} not found</p>}
+      {invalidWord && <p>{invalidWord.toUpperCase()} not found or already guessed</p>}
     </>
   );
 }
