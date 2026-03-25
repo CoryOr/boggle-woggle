@@ -11,45 +11,43 @@
  *
  * Author(s): Alexander Ordonez, Pranab Adhikari / Boggle Woggle (t_3c)
  */
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Input from "../Input/Input";
 import "./LoginForm.css";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 
 const LoginForm = () => {
-    // State variables for login form inputs
-    const [username, setUsername] = useState("");
+    const [usernameInput, setUsernameInput] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { login } = useContext(UserContext);
 
-    // Handles login form submission
     const handleSubmitAsync = async (event) => {
         event.preventDefault();
-        // Build request payload for backend authentication
+
         const userData = {
-            username,
+            username: usernameInput,
             password,
         };
 
-        // Send login request to backend API
         const response = await fetch("/api/auth/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
         });
 
-        // Show success or failure alert
         if (response.ok) {
+            const data = await response.json();
+            login(data);
             alert("Login Success");
+            navigate("/");
         } else {
             alert("Login Failed");
         }
 
-        // Clear form fields after submission
-        setUsername("");
+        setUsernameInput("");
         setPassword("");
     };
 
@@ -62,9 +60,9 @@ const LoginForm = () => {
             <form onSubmit={handleSubmitAsync}>
                 <Input
                     type="Username"
-                    value={username}
+                    value={usernameInput}
                     placeholder="USERNAME"
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUsernameInput(e.target.value)}
                 />
                 <Input
                     type="Password"
