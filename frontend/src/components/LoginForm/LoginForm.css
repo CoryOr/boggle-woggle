@@ -4,40 +4,54 @@
  * Styling for the login form component.
  *
  * Includes styles for:
+ * - Login page wrapper
  * - Login form container
  * - App logo positioning
  * - Form width and alignment
  * - Submit button styling and hover states
  * - Forgot password link
  * - Registration redirect text and link
+ * - Back to home button
  * - Font consistency across login form elements
  *
- * Author(s): Your Name / Team Name
+ * Author(s): Alexander Ordonez, Pranab Adhikari / Boggle Woggle (t_3c)
  * Course: CS506
  */
 
-/* Main login form container */
-#login-form-container {
-  width: 26rem;
-  margin: 5rem auto;
+/* Whole page wrapper */
+#login-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0.5rem 1.25rem 2rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translateY(20px);
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Main login form container */
+#login-form-container {
+  width: min(26rem, 92vw);
+  margin: -1.25rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: "Montserrat", sans-serif;
 }
 
 /* App logo displayed above the form */
 #app-logo {
-  width: 400px;
-  height: 150px;
-  position: relative;
-  top: -45px;
+  width: min(400px, 80vw);
+  height: auto;
+  margin-bottom: 1rem;
+  transform: translateY(0);
 }
 
 /* Ensure the form spans the full container width */
 #login-form-container form {
   width: 100%;
+  transform: translateY(0);
 }
 
 /* Primary login button */
@@ -69,16 +83,18 @@
 /* Forgot password link below the login button */
 #forgot-password-link {
   display: block;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   color: white;
   text-decoration: none;
   font-size: 1rem;
+  transform: translateY(0);
 }
 
 /* Registration prompt container */
 #switch-to-registration {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   text-align: center;
+  transform: translateY(0);
 }
 
 /* "New Here?" text */
@@ -97,6 +113,7 @@
 }
 
 /* Force Montserrat font across login form text elements */
+#login-page,
 #login-form-container,
 #login-form-container form,
 #login-form-container input,
@@ -107,15 +124,75 @@
   font-family: "Montserrat", sans-serif !important;
 }
 
-/* GO BACK TO HOME Button Styles */
-.go-back-btn {
-  margin-top: 1.5rem;
-  background-color: #666 !important;
-  border-color: #666 !important;
-  color: white !important;
+/* Back button: match StatsPage styling */
+.login-back-btn {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  background: none;
+  border: none;
+  padding: 1rem 2rem 0.5rem 2rem;
+  transition: opacity 0.2s ease;
+  max-width: 100%;
 }
 
-.go-back-btn:hover {
-  background-color: #555 !important;
-  border-color: #555 !important;
+.login-back-btn:hover {
+  opacity: 0.75;
+}
+
+.login-back-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2.5px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 25px;
+  flex-shrink: 0;
+}
+
+.login-back-text {
+  color: white;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+}
+
+/* Smaller screens */
+@media (max-width: 700px) {
+  #login-page {
+    padding: 0.5rem 0.75rem 1.5rem;
+  }
+
+  #login-form-container {
+    margin: -0.5rem auto 0;
+  }
+
+  .login-back-btn {
+    padding: 0.75rem 0.5rem 0.25rem 0.5rem;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+    font-size: 16px;
+  }
+
+  .login-back-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+
+  #app-logo {
+    width: min(340px, 92vw);
+  }
 }
