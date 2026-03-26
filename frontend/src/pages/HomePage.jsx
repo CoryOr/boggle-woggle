@@ -51,7 +51,7 @@ export default function HomePage() {
 
           <div className="homeIcons">
             <img src="/Volume.png" alt="volume" className="VolumeImage" />
-            <img src="/SettingBox.png" alt="settings" className="SettingImage" />
+            <img src="/SettingBox.png" alt="settings" className="SettingImage" onClick={() => nav("/settings")}/>
           </div>
         </div>
 

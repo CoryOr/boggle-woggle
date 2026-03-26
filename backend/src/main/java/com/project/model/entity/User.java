@@ -33,16 +33,15 @@ public class User {
     @Column(name = "high_score")
     private int highScore = 0;
 
+    @Column(name = "longest_word")
+    private String longestWord = null;
+
     // JPA requires a protected or public no-arg constructor
     public User() {}
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public String getPasswordHash() {
-        return this.password;
     }
 
     public UUID getId() {
@@ -63,5 +62,33 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordHash() {
+        return this.password;
+    }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
+    }
+
+    public String getLongestWord() {
+        return longestWord;
+    }
+
+    public void setLongestWord(String longestWord) {
+        this.longestWord = longestWord;
+    }
+
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+
+    public void setGamesPlayed(int gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
     }
 }
