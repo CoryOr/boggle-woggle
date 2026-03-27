@@ -1,20 +1,26 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// Backend requests should be sent to 8080
-let proxyConfig = {
-    target: 'http://localhost:8080',
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '../', '');
+
+  const proxyConfig = {
+    target: `http://${env.VM_HOST}:8080`,
     secure: false,
     changeOrigin: true,
-};
+  };
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    proxy: {
+  return {
+    plugins: [react()],
+    server: {
+      host: true,
+      port: 3000,
+      proxy: {
         '/api': proxyConfig
+      },
+      watch: {
+        usePolling: true
+      }
     }
   }
-})
+});
