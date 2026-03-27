@@ -4,14 +4,14 @@ server:
 spring:
   application:
     name: Project_3c
-  config:
-    import: file:secrets/.env[.properties]
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    generate-ddl: true
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
@@ -20,5 +20,5 @@ spring:
 
 app:
   jwt:
-    secret: ${JWT_SECRET}
-    expirationSeconds: 3600
+    secret: ${APP_JWT_SECRET}
+    expirationSeconds: ${APP_JWT_EXPIRATIONSECONDS}
