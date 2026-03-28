@@ -48,9 +48,11 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest req) {
         var authToken = new UsernamePasswordAuthenticationToken(req.username(), req.password());
-        authenticationManager.authenticate(authToken); // throws BadCredentialsException if invalid
+        authenticationManager.authenticate(authToken);
+
+        User user = userRepository.findByUsername(req.username().trim());
 
         String jwt = jwtService.generateToken(req.username().trim());
-        return AuthResponse.bearer(jwt);
+        return AuthResponse.bearer(jwt, user.getId(), user.getUsername(), user.getHighScore(), user.getLongestWord(), user.getGamesPlayed());
     }
 }

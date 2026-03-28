@@ -8,7 +8,7 @@
 
 import "./GameFinished.css";
 import { useContext } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
 
 export default function GameFinished({ onGoHome }) {
     const { foundWords, score } = useContext(CurrentGameContext);

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
 import "./WordInput.css";
 
 export default function WordInput({ updateScore }) {
