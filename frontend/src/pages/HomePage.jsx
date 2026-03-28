@@ -21,14 +21,14 @@ export default function HomePage() {
   const nav = useNavigate();
 
   const singlePlayer = () => nav("/game");
-  const multiplayer = () => nav("/login");
+  const login = () => nav("/login");
   const stats = () => nav("/stats");
   const store = () => nav("/store");
 
   const navCards = [
     { title: "STORE", action: store },
     { title: "SINGLE PLAYER", action: singlePlayer },
-    { title: "MULTIPLAYER", action: multiplayer },
+    { title: "LOGIN/REGISTER", action: login },
     { title: "STATISTICS", action: stats },
   ];
 
