@@ -1,16 +1,3 @@
-/**
- * LoginForm.jsx
- *
- * Login form component for authenticating a Boggle user.
- *
- * Features:
- * - Accepts username and password input
- * - Sends a POST request to the backend login endpoint
- * - Clears input fields after submission
- * - Provides navigation to the registration page
- *
- * Author(s): Alexander Ordonez, Pranab Adhikari / Boggle Woggle (t_3c)
- */
 import { useState, useContext } from "react";
 import Input from "../Input/Input";
 import "./LoginForm.css";
@@ -53,10 +40,8 @@ const LoginForm = () => {
 
     return (
         <div id="login-form-container">
-            {/* logo displayed above the login form */}
             <img id="app-logo" src="/LOGO.png" alt="Boggle Logo" />
 
-            {/* Login form */}
             <form onSubmit={handleSubmitAsync}>
                 <Input
                     type="Username"
@@ -75,12 +60,10 @@ const LoginForm = () => {
                 </Button>
             </form>
 
-            {/* Password recovery link */}
             <a id="forgot-password-link" href="#">
                 Forgot password?
             </a>
 
-            {/* Registration redirect section */}
             <div id="switch-to-registration">
                 <p>New Here?</p>
                 <a
@@ -94,13 +77,15 @@ const LoginForm = () => {
                 </a>
             </div>
 
-            {/* Added for Issue #57 */}
             <Button
                 variant="secondary"
                 className="submit-btn go-back-btn"
                 onClick={() => navigate("/")}
             >
-                GO BACK TO HOME
+                <span className="login-back-arrow" aria-hidden="true">
+                    ←
+                </span>
+                <span className="login-back-text">BACK TO HOME</span>
             </Button>
         </div>
     );
