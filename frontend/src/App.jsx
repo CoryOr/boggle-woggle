@@ -10,6 +10,8 @@ import GamePage from "./pages/GamePage.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
 import StorePage from "./pages/StorePage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
+import GameModeSelectionPage from "./pages/GameModeSelectionPage.jsx";
+import LobbyPage from './pages/LobbyPage.jsx';
 
 import "./App.css";
 
@@ -28,6 +30,8 @@ const App = () => {
         } />
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/store" element={<StorePage />} />
+        <Route path="/game-select" element={<GameModeSelectionPage />} />
+        <Route path="/lobby" element={<LobbyPage />} />
       </Routes>
     </UserProvider>
   );

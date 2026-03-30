@@ -93,15 +93,6 @@ const LoginForm = () => {
                     Click Here to Sign Up!
                 </a>
             </div>
-
-            {/* Added for Issue #57 */}
-            <Button
-                variant="secondary"
-                className="submit-btn go-back-btn"
-                onClick={() => navigate("/")}
-            >
-                GO BACK TO HOME
-            </Button>
         </div>
     );
 };

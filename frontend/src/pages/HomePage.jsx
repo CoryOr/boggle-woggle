@@ -20,16 +20,16 @@ import { useEffect } from "react";
 export default function HomePage() {
   const nav = useNavigate();
 
-  const singlePlayer = () => nav("/game");
-  const multiplayer = () => nav("/login");
+  const gameSelect = () => nav("/game-select");
+  const login = () => nav("/login");
   const stats = () => nav("/stats");
   const store = () => nav("/store");
 
   const navCards = [
     { title: "STORE", action: store },
-    { title: "SINGLE PLAYER", action: singlePlayer },
-    { title: "MULTIPLAYER", action: multiplayer },
+    { title: "PLAY GAME", action: gameSelect },
     { title: "STATISTICS", action: stats },
+    { title: "LOGIN", action: login },
   ];
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function HomePage() {
             </Card.Body>
           </Card>
 
-          <Card className="promoCard supportCard" onClick={() => alert("Support page coming soon!")}>
+          <Card className="promoCard supportCard" disabled={true}>
             <Card.Body className="promoCardBody">
               <Card.Text className="supportCardText">SUPPORT US!</Card.Text>
             </Card.Body>

@@ -11,8 +11,9 @@ export function CurrentGameProvider({ children }) {
                 setBoard(data.board);
                 setScore(0);
                 setTimeLeft(60);
-                setIsLoading(true);
                 setGameId(data.gameId);
+                setTimeout(() => setIsLoading(false), 1000);
+                //setIsLoading(false);
             })
             .catch((err) => console.error(err));
     }, []);
