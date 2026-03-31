@@ -16,30 +16,27 @@ import { useState } from "react";
 import "./RegisterForm.css";
 import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
-  // State variables for user input fields
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
-  // Handles form submission and registration request
   const handleSubmitAsync = async (event) => {
     event.preventDefault();
 
-    // Ensure password and confirm password match
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Create request body for backend API
     const userData = {
-      username: username,
-      password: password,
+      username,
+      password,
     };
 
-    // Send registration request to backend
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
@@ -48,51 +45,60 @@ const RegisterForm = () => {
       body: JSON.stringify(userData),
     });
 
-    // Display success/failure message
     if (response.ok) {
       alert("User created successfully");
     } else {
       alert("Something went wrong with inserting user");
     }
 
-    // Clear the form after submission
     setUsername("");
     setPassword("");
     setConfirmPassword("");
   };
 
   return (
-    <div id="register-form-container">
-      {/* App logo displayed above the registration form */}
-      <img id="app-logo" src="../../../LOGO.png" alt="Boggle Logo" />
+    <div id="register-page-wrapper">
+      <button
+        type="button"
+        className="register-back-btn"
+        onClick={() => navigate("/")}
+      >
+        <span className="register-back-arrow" aria-hidden="true">
+          ←
+        </span>
+        <span className="register-back-text">BACK TO HOME</span>
+      </button>
 
-      {/* Registration form */}
-      <form onSubmit={handleSubmitAsync}>
-        <Input
-          type="Username"
-          value={username}
-          placeholder="USERNAME"
-          onChange={(e) => setUsername(e.target.value)}
-        />
+      <div id="register-form-shell">
+        <img id="register-page-logo" src="/LOGO.png" alt="Boggle Logo" />
 
-        <Input
-          type="Password"
-          value={password}
-          placeholder="PASSWORD"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form className="register-form" onSubmit={handleSubmitAsync}>
+          <Input
+            type="Username"
+            value={username}
+            placeholder="USERNAME"
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-        <Input
-          type="Password"
-          value={confirmPassword}
-          placeholder="CONFIRM PASSWORD"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+          <Input
+            type="Password"
+            value={password}
+            placeholder="PASSWORD"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <Button className="submit-btn" type="submit">
-          SIGN UP
-        </Button>
-      </form>
+          <Input
+            type="Password"
+            value={confirmPassword}
+            placeholder="CONFIRM PASSWORD"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
+          <Button className="register-submit-btn" type="submit">
+            SIGN UP
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
