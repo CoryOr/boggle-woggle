@@ -30,7 +30,7 @@ export function CurrentGameProvider({ children }) {
                 setTimeout(() => setIsLoading(false), 1000);
             })
             .catch((err) => console.error(err));
-    }, []);
+    }, [setBoard, setGameId, setIsLoading, setScore, setTimeLeft]);
 
     // Sets timer to go off every 1000 milliseconds and update timeLeft accordingly
     useEffect(() => {

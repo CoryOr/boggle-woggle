@@ -39,7 +39,7 @@ export function UserProvider({ children }) {
             .catch(() => {
                 setIsLoggedIn(false);
             });
-    }, []);
+    }, [setId, setUsername, setHighScore, setLongestWord, setGamesPlayed, setIsLoggedIn]);
 
     // Call this after a successful login form submission
     function login(userData) {

@@ -1,6 +1,6 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
