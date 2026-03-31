@@ -18,7 +18,6 @@ import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
  */
 export default function GamePage() {
   const nav = useNavigate();
-  const [mode, setMode] = useState(null);
   const {
     board,
     score,
@@ -27,7 +26,6 @@ export default function GamePage() {
     setTimeLeft,
     foundWords,
     isLoading,
-    setIsLoading,
   } = useContext(CurrentGameContext);
 
   console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
