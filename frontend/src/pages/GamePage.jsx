@@ -14,7 +14,6 @@ import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
  * A hub file for all of our game logic. Currently holds only single player information, but will
  * be extended to multiplayer in the future.
  *
- * TODO: Don't allow words to be submitted multiple times for a single game.
  * @returns the GamePage jsx
  */
 export default function GamePage() {

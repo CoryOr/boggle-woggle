@@ -1,3 +1,7 @@
+/**
+ * Page that stores user settings. Has zero functionality currently. To be implemented...
+ */
+
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
 import { useNavigate } from "react-router-dom";

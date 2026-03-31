@@ -1,3 +1,7 @@
+/**
+ * Store page containing microtransactions. We ain't actually developing this page 
+ */
+
 import "./Pages.css";
 import { useNavigate } from 'react-router-dom';
 

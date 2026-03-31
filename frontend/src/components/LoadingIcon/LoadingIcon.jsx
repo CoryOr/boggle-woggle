@@ -1,9 +1,16 @@
+/**
+ * Contains animated letters and an ellipses(...) that make the loading screen a bit more appealing
+ */
+
 import './LoadingIcon.css';
 
 const letters = ['B', 'O', 'G', 'G', 'L', 'E', 'W', 'O', 'G'];
 
 const LoadingIcon = () => (
   <div className="loading-wrapper">
+      {/* B O G */}
+      {/* G L E */}
+      {/* W O G */}
     <div className="loading-grid">
       {letters.map((letter, i) => (
         <div
@@ -15,6 +22,7 @@ const LoadingIcon = () => (
         </div>
       ))}
     </div>
+    {/* Setting things up ...  */}
     <div className="loading-message">
       Setting things up
       <span className="loading-dot">.</span>

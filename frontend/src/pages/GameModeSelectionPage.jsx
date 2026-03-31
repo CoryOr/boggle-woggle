@@ -1,3 +1,11 @@
+/**
+ * Page that a user navigates to after clicking "Play Game" button on home page
+ * Current gamemodes:
+ * 1) Single player(navigates to GamePage)
+ * 2) Multiplayer(navigates to LobbyPage)
+ * 3) Daily Challenge(My own idea of something we could add, but not necessary for the project :D)
+ */
+
 import { Card, CardHeader, CardBody } from "react-bootstrap";
 import { RiUser3Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
