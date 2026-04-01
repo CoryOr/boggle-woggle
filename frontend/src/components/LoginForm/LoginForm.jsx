@@ -76,17 +76,6 @@ const LoginForm = () => {
                     Click Here to Sign Up!
                 </a>
             </div>
-
-            <Button
-                variant="secondary"
-                className="submit-btn go-back-btn"
-                onClick={() => navigate("/")}
-            >
-                <span className="login-back-arrow" aria-hidden="true">
-                    ←
-                </span>
-                <span className="login-back-text">BACK TO HOME</span>
-            </Button>
         </div>
     );
 };
