@@ -24,11 +24,14 @@ test_backend:
     - cd backend
     - chmod +x gradlew
   script:
-    - ./gradlew test
+    - ./gradlew test jacocoTestCoverageVerification
   artifacts:
     when: always
     reports:
       junit: backend/build/test-results/test/**/TEST-*.xml
+      coverage_report:
+        coverage_format: jacoco
+        path: backend/build/reports/jacoco/test/jacocoTestReport.xml
 
 # --- FRONTEND JOBS ---
 build_frontend:
@@ -49,9 +52,14 @@ test_frontend:
   script:
     - cd frontend
     - npm install
-    - npm run test --if-present
-  # Non-blocking until frontend test coverage is increased
-  allow_failure: true
+    - npm run test
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: frontend/coverage/cobertura-coverage.xml
 
 # --- LINTING ---
 lint_backend:
