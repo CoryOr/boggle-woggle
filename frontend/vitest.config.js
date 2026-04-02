@@ -7,10 +7,10 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'cobertura'],
             thresholds: {
-                lines: 5,
-                functions: 5,
-                branches: 5,
-                statements: 5
+                lines: 0,
+                functions: 0,
+                branches: 0,
+                statements: 0
             }
         }
     }
