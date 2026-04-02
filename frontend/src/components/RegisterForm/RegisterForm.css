@@ -159,3 +159,63 @@
     width: min(340px, 92vw);
   }
 }
+
+.avatar-picker {
+  width: 100%;
+  margin: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+.avatar-picker-label {
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  justify-items: center;
+  align-items: center;
+}
+
+.avatar-option {
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  padding: 0.2rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+}
+
+.avatar-option:hover {
+  transform: translateY(-2px) scale(1.05);
+  opacity: 0.95;
+}
+
+.avatar-option img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-option.selected {
+  border-color: #ffd54a;
+}
+
+@media (max-width: 700px) {
+  .avatar-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .avatar-option img {
+    width: 58px;
+    height: 58px;
+  }
+}

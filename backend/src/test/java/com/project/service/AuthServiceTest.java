@@ -40,19 +40,23 @@ class AuthServiceTest {
     }
 
     @Test
-    void register_ShouldReturnMeResponse_WhenUsernameIsAvailable() {
-        // Arrange
-        RegisterRequest request = new RegisterRequest("testuser", "password123");
-        when(userRepository.findByUsername("testuser")).thenReturn(null);
-        when(passwordEncoder.encode("password123")).thenReturn("hashedPassword");
-        when(userRepository.save(any(User.class))).thenReturn(new User("testuser", "hashedPassword"));
+  void register_ShouldReturnMeResponse_WhenUsernameIsAvailable() {
+      RegisterRequest request = new RegisterRequest(
+              "testuser",
+              "password123",
+              "/Cow_Avatar.png"
+      );
 
-        // Act
-        MeResponse response = authService.register(request);
+      when(userRepository.findByUsername("testuser")).thenReturn(null);
+      when(passwordEncoder.encode("password123")).thenReturn("hashedPassword");
+      when(userRepository.save(any(User.class)))
+              .thenReturn(new User("testuser", "hashedPassword", "/Cow_Avatar.png"));
 
-        // Assert
-        assertNotNull(response);
-        assertEquals("testuser", response.username());
-        verify(userRepository, times(1)).save(any(User.class));
-    }
+      MeResponse response = authService.register(request);
+
+      assertNotNull(response);
+      assertEquals("testuser", response.username());
+      assertEquals("/Cow_Avatar.png", response.avatar());
+      verify(userRepository, times(1)).save(any(User.class));
+  }
 }

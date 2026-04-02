@@ -1,3 +1,4 @@
+// User.java
 package com.project.model.entity;
 
 import jakarta.persistence.Column;
@@ -36,12 +37,16 @@ public class User {
     @Column(name = "longest_word")
     private String longestWord = null;
 
+    @Column(nullable = false)
+    private String avatar;
+
     // JPA requires a protected or public no-arg constructor
     public User() {}
 
-    public User(String username, String password) {
+    public User(String username, String password, String avatar) {
         this.username = username;
         this.password = password;
+        this.avatar = avatar;
     }
 
     public UUID getId() {
@@ -90,5 +95,13 @@ public class User {
 
     public void setGamesPlayed(int gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

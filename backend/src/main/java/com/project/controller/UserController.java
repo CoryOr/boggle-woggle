@@ -1,10 +1,11 @@
+// UserController.java
 package com.project.controller;
 
 import com.project.model.dto.MeResponse;
 import com.project.model.entity.User;
 import com.project.repository.UserRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,13 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        return new MeResponse(user.getId(), user.getUsername());
+        return new MeResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getAvatar(),
+                user.getHighScore(),
+                user.getLongestWord(),
+                user.getGamesPlayed()
+        );
     }
 }
