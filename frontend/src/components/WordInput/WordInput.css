@@ -1,9 +1,43 @@
-.word-input-label {
+.word-input-container {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem auto;
+}
+
+.word-input-label {
     font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
 }
 
 .word-input {
-    width: 30%;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid #000;
+    color: #000;
+    font-size: 2.5rem;
+    text-align: center;
+    outline: none;
+    width: 250px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.invalid-word-container {
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.invalid-word-text {
+    margin: 0;
+    color: #000;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
 }

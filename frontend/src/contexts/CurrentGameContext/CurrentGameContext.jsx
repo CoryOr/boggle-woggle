@@ -11,11 +11,14 @@
  * any other game modes that are not currently in the scope of the team.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CurrentGameContext, useInitialGameState } from "./CurrentGameContext";
 
 export function CurrentGameProvider({ children }) {
     const { gameId, setGameId, board, setBoard, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading } = useInitialGameState();
+
+    const [currentGuess, setCurrentGuess] = useState("");
+    const [invalidWord, setInvalidWord] = useState(null);
 
     useEffect(() => {
         fetch("/api/game/new")
@@ -25,6 +28,7 @@ export function CurrentGameProvider({ children }) {
                 setScore(0);
                 setTimeLeft(60);
                 setGameId(data.gameId);
+                setCurrentGuess(""); // Clear the guess on a new game
                 // A small delay added forces the loading screen to appear at least temporarily. Without it, the loading
                 // screen can cause a weird visual glitch when the server responds extremely quickly
                 setTimeout(() => setIsLoading(false), 1000);
@@ -43,7 +47,12 @@ export function CurrentGameProvider({ children }) {
     }, [isLoading, timeLeft, setTimeLeft]);
 
     return (
-        <CurrentGameContext.Provider value={{ gameId, board, score, setScore, timeLeft, setTimeLeft, foundWords, setFoundWords, isLoading, setIsLoading }}>
+        <CurrentGameContext.Provider value={{
+            gameId, board, score, setScore, timeLeft, setTimeLeft,
+            foundWords, setFoundWords, isLoading, setIsLoading,
+            currentGuess, setCurrentGuess,
+            invalidWord, setInvalidWord
+        }}>
             {children}
         </CurrentGameContext.Provider>
     );

@@ -54,7 +54,7 @@ export default function GamePage() {
               <Timer timeLeft={timeLeft} />
               <CurrentScore score={score} />
               <WordInput updateScore={updateScore} />
-              <GameBoard board={board} />
+              <GameBoard board={board} updateScore={updateScore} />
               <button
                 className="btn quit-btn"
                 onClick={() => setTimeLeft(0)}

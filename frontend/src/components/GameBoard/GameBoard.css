@@ -1,7 +1,15 @@
 .game-page-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.gameboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 #gameboard {
@@ -16,12 +24,16 @@
     width: fit-content;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     flex-direction: column;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    position: relative;
+    cursor: default;
 }
 
 .gameboard-row {
     display: flex;
     gap: 0.5rem;
+    position: relative;
+    z-index: 1;
 }
 
 .letter-tile {
@@ -37,15 +49,55 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
 }
+
+.letter-tile:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+}
+
+.letter-tile--first {
+    background-color: #ffd400;
+    color: #003580;
+    box-shadow: 0 0 0 3px #003580;
+    transform: scale(1.1);
+}
+
+.letter-tile--selected {
+    background-color: #ffe566;
+    color: #003580;
+    box-shadow: 0 0 0 3px #ffd400;
+    transform: scale(1.08);
+}
+
+.tile-connection-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.no-select-tile {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 
 .game-page-text {
     margin: 0;
-    font-size: 2rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
 }
 
 .title {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .timer-container {
@@ -53,22 +105,13 @@
     gap: 0.5rem;
     align-items: center;
     justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
-.word-input-container {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-}
-
-.word-input {
-    height: 50%;
-    width: 40%;
-    align-self: flex-end;
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid currentColor;
-    outline: none;
-    font-size: 2rem;
-    text-align: center;
+.game-page-container > p,
+.game-page-container > div > p,
+.game-page-container > div {
+    font-size: 2.2rem;
+    font-weight: 700;
 }
