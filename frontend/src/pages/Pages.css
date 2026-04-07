@@ -646,10 +646,9 @@ Gamemode selection screen specific styles
 }
 
 .homeUserAvatar {
-  width: 54px;
-  height: 54px;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid white;
   margin-right: 0.75rem;
 }

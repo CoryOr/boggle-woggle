@@ -7,6 +7,7 @@
  * - Accepts username, password, and confirm password input 
  * - Validates that both password fields match 
  * - Sends a POST request to the backend registration endpoint 
+ * - Automatically logs the user in after successful registration via the returned auth response
  * - Clears input fields after submission 
  * 
  * Author(s): Alexander Ordonez / Boggle Woggle (t_3c) 
@@ -54,7 +55,7 @@ const RegisterForm = () => {
       avatar: selectedAvatar,
     };
 
-    const registerResponse = await fetch("/api/auth/register", {
+    const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,40 +63,23 @@ const RegisterForm = () => {
       body: JSON.stringify(userData),
     });
 
-    if (!registerResponse.ok) {
-      const errorText = await registerResponse.text();
-      console.error("Register failed:", registerResponse.status, errorText);
-      alert(`Register failed (${registerResponse.status}): ${errorText}`);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Register failed:", response.status, errorText);
+      alert(`Register failed (${response.status}): ${errorText}`);
       return;
     }
 
-    // Auto-login after successful registration
-    const loginResponse = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (loginResponse.ok) {
-      const loginData = await loginResponse.json();
-
-      login({
-        ...loginData,
-        avatar: loginData.avatar ?? selectedAvatar,
-      });
-
-      alert("User created successfully");
-      navigate("/");
-    } else {
-      alert("User created, but auto-login failed");
-      navigate("/login");
-    }
+    const data = await response.json();
+    login(data);
+    alert("User created successfully");
+    navigate("/");
 
     setUsername("");
     setPassword("");
     setConfirmPassword("");
     setSelectedAvatar("");
-  };
+    };
 
   return (
     <div id="register-page-wrapper">

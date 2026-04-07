@@ -1,17 +1,18 @@
-// AuthService.java
 package com.project.service;
 
 import com.project.auth.jwt.JwtService;
 import com.project.model.dto.AuthResponse;
 import com.project.model.dto.LoginRequest;
-import com.project.model.dto.MeResponse;
 import com.project.model.dto.RegisterRequest;
 import com.project.model.entity.User;
 import com.project.repository.UserRepository;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
@@ -42,25 +43,24 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public MeResponse register(RegisterRequest req) {
+    public AuthResponse register(RegisterRequest req) {
         String username = req.username().trim();
 
         if (userRepository.findByUsername(username) != null) {
-            throw new IllegalArgumentException("Username already taken");
-        }
-
-        if (req.avatar() == null || req.avatar().isBlank()) {
-            throw new IllegalArgumentException("Avatar is required");
+          throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
 
         if (!ALLOWED_AVATARS.contains(req.avatar())) {
-            throw new IllegalArgumentException("Invalid avatar");
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid avatar");
         }
 
         String hash = passwordEncoder.encode(req.password());
         User saved = userRepository.save(new User(username, hash, req.avatar()));
 
-        return new MeResponse(
+        String jwt = jwtService.generateToken(saved.getUsername());
+
+        return AuthResponse.bearer(
+                jwt,
                 saved.getId(),
                 saved.getUsername(),
                 saved.getAvatar(),
