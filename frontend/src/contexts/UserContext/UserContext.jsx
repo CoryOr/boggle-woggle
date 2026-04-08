@@ -5,13 +5,13 @@ export function UserProvider({ children }) {
     const {
         id, setId,
         username, setUsername,
+        avatar, setAvatar,
         highScore, setHighScore,
         longestWord, setLongestWord,
         gamesPlayed, setGamesPlayed,
         isLoggedIn, setIsLoggedIn,
     } = useInitialUserState();
 
-    // On mount, check if a session already exists (e.g. cookie/token)
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -21,7 +21,7 @@ export function UserProvider({ children }) {
 
         fetch("/api/users/me", {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         })
             .then((res) => {
@@ -31,32 +31,43 @@ export function UserProvider({ children }) {
             .then((data) => {
                 setId(data.id);
                 setUsername(data.username);
+                setAvatar(data.avatar);
                 setHighScore(data.highScore);
                 setLongestWord(data.longestWord);
                 setGamesPlayed(data.gamesPlayed);
                 setIsLoggedIn(true);
             })
             .catch(() => {
+                localStorage.removeItem("token");
+                setId(null);
+                setUsername(null);
+                setAvatar(null);
+                setHighScore(0);
+                setLongestWord(null);
+                setGamesPlayed(0);
                 setIsLoggedIn(false);
             });
     }, [setId, setUsername, setHighScore, setLongestWord, setGamesPlayed, setIsLoggedIn]);
 
-    // Call this after a successful login form submission
     function login(userData) {
-        localStorage.setItem("token", userData.accessToken);
-        setId(userData.id);
-        setUsername(userData.username);
-        setHighScore(userData.highScore);
-        setLongestWord(userData.longestWord);
-        setGamesPlayed(userData.gamesPlayed);
+        if (userData.accessToken) {
+          localStorage.setItem("token", userData.accessToken);
+        }
+
+        setId(userData.id ?? null);
+        setUsername(userData.username ?? null);
+        setAvatar(userData.avatar ?? null);
+        setHighScore(userData.highScore ?? 0);
+        setLongestWord(userData.longestWord ?? null);
+        setGamesPlayed(userData.gamesPlayed ?? 0);
         setIsLoggedIn(true);
     }
 
-    // Call this to log the user out
     function logout() {
         localStorage.removeItem("token");
         setId(null);
         setUsername(null);
+        setAvatar(null);
         setHighScore(0);
         setLongestWord(null);
         setGamesPlayed(0);
@@ -67,6 +78,7 @@ export function UserProvider({ children }) {
         <UserContext.Provider value={{
             id,
             username,
+            avatar,
             highScore, setHighScore,
             longestWord, setLongestWord,
             gamesPlayed, setGamesPlayed,

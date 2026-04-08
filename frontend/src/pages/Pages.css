@@ -644,3 +644,11 @@ Gamemode selection screen specific styles
   padding: 1rem 3rem;
   align-self: center;
 }
+
+.homeUserAvatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.75rem;
+}

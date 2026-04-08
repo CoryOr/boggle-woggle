@@ -15,10 +15,12 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
-import { useEffect } from "react"; 
+import { useEffect, useContext } from "react";
+import { UserContext } from "../contexts/UserContext/UserContext";
 
 export default function HomePage() {
   const nav = useNavigate();
+  const { avatar, username, isLoggedIn } = useContext(UserContext);
 
   const gameSelect = () => nav("/game-select");
   const login = () => nav("/login");
@@ -50,8 +52,21 @@ export default function HomePage() {
           </div>
 
           <div className="homeIcons">
+            {isLoggedIn && avatar && (
+              <img
+                src={avatar}
+                alt={`${username}'s avatar`}
+                className="homeUserAvatar"
+              />
+            )}
+
             <img src="/Volume.png" alt="volume" className="VolumeImage" />
-            <img src="/SettingBox.png" alt="settings" className="SettingImage" onClick={() => nav("/settings")}/>
+            <img
+              src="/SettingBox.png"
+              alt="settings"
+              className="SettingImage"
+              onClick={() => nav("/settings")}
+            />
           </div>
         </div>
 

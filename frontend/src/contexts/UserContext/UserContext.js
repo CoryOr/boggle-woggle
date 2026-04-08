@@ -9,10 +9,12 @@ export function useInitialUserState() {
     const [longestWord, setLongestWord] = useState(null);
     const [gamesPlayed, setGamesPlayed] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [avatar, setAvatar] = useState(null);
 
     return {
         id, setId,
         username, setUsername,
+        avatar, setAvatar,
         highScore, setHighScore,
         longestWord, setLongestWord,
         gamesPlayed, setGamesPlayed,
