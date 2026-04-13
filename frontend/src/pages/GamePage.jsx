@@ -1,6 +1,6 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
@@ -29,12 +29,31 @@ export default function GamePage() {
     setScore,
     timeLeft,
     setTimeLeft,
+    foundWords,
     isLoading,
+    gameId,
   } = useContext(CurrentGameContext);
 
-  /**
-   * Navigates the user back to the home screen.
-   */
+  console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
+
+/**
+ * When the game timer hits 0,  we will send a request to the database to store the game information
+ */
+ useEffect(() => {
+     if (timeLeft === 0 && gameId) {
+        fetch("/api/game/finish", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}` // or wherever you store your JWT
+            },
+            body: JSON.stringify({ gameId, score, foundWords: [...foundWords] }),
+        })
+        .then(res => console.log("Game saved, status:", res.status))
+        .catch(err => console.error("Failed to save game result:", err));
+     }
+ }, [timeLeft, gameId, score, foundWords]);
+
   const goHome = () => {
     nav("/");
   };

@@ -47,7 +47,7 @@ export function UserProvider({ children }) {
                 setGamesPlayed(0);
                 setIsLoggedIn(false);
             });
-    }, [setId, setUsername, setHighScore, setLongestWord, setGamesPlayed, setIsLoggedIn]);
+    }, [setId, setUsername, setAvatar, setHighScore, setLongestWord, setGamesPlayed, setIsLoggedIn]);
 
     function login(userData) {
         if (userData.accessToken) {

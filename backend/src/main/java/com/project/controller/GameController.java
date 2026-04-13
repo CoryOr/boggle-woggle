@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.project.model.dto.GameResultRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/game")
@@ -36,5 +39,16 @@ public class GameController {
     @PostMapping("/guess")
     public GuessResponse submitGuess(@RequestBody GuessRequest request) {
         return gameService.processGuess(request.gameId(), request.guess());
+    }
+
+    /**
+     * Saves the result of a completed game for the authenticated user.
+     * @param request the frontend request containing (gameId, score, foundWords)
+     * @param auth the authenticated user
+     */
+    @PostMapping("/finish")
+    public ResponseEntity<Void> finishGame(@RequestBody GameResultRequest request, Authentication auth) {
+        gameService.saveGameResult(request, auth.getName());
+        return ResponseEntity.ok().build();
     }
 }
