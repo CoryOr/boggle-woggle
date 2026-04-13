@@ -1,6 +1,6 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useRef, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
@@ -47,7 +47,7 @@ export default function GamePage() {
         .then(res => console.log("Game saved, status:", res.status))
         .catch(err => console.error("Failed to save game result:", err));
      }
- }, [timeLeft]);
+ }, [timeLeft, gameId, score, foundWords]);
 
   const goHome = () => {
     nav("/");
