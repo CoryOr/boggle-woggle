@@ -55,7 +55,6 @@ test_frontend:
     - cd frontend
     - npm install
     - npm run test
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
     when: always
     reports:
