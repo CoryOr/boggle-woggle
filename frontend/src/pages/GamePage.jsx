@@ -29,6 +29,7 @@ export default function GamePage() {
     setScore,
     timeLeft,
     setTimeLeft,
+    foundWords,
     isLoading,
     gameId,
   } = useContext(CurrentGameContext);
