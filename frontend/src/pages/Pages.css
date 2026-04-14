@@ -607,7 +607,7 @@ Gamemode selection screen specific styles
   letter-spacing: 0.01em;
 }
 
-.disabled-game-mode {
+.disabled {
   background-color: rgba(255, 255, 255, 0.08);
   color: rgba(255,255,255,0.30);
 }
@@ -651,4 +651,44 @@ Gamemode selection screen specific styles
   border-radius: 50%;
   object-fit: cover;
   margin-right: 0.75rem;
+}
+
+.lobby-page {
+  width: calc(100% - 2rem);
+  height: 100%;
+  display: flex;
+  align-items: baseline;
+  padding: 0;
+  box-sizing: border-box;
+  gap: 1rem;
+  padding: 1rem;
+  margin: auto;
+}
+
+.lobby-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 5px solid white;
+  border-radius: 3rem;
+  width: 50%;
+  margin-top: 0;
+  padding: 1rem;
+}
+
+.title {
+  width: 100%;
+}
+
+.lobby-buttons-container {
+  display: flex;
+  gap: 1rem;
+  margin: auto auto;
+  padding: 3rem;
+  width: 30%;
+}
+
+.btn-disabled {
+  background-color: #7a7a7a;
+  color: rgba(0,0,0, 0.35);
 }

@@ -1,0 +1,74 @@
+.code-card {
+    width: 30%;
+    align-self: center;
+    padding: 1rem;
+    border: 5px solid transparent; 
+    border-radius: 1.5rem; 
+    background-image: 
+        linear-gradient(#000000, #2b2c41),
+        linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    margin-bottom: 0.5rem;
+}
+
+.code-card > * {
+    color: white;
+}
+
+.player-cards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.player-card {
+    width: 80%;
+    align-self: left;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 3px solid white;
+    color: white;
+    display: flex;
+    margin: 3px;
+    align-items: center;
+    gap: 2rem;
+}
+
+.avatar {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.player-name {
+    text-align: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.check {
+    margin-left: auto;
+    margin-right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    transition: all 0.3s ease;
+}
+
+.ready {
+    color: #2ecc71;
+    filter: drop-shadow(0 0 5px rgba(46, 204, 113, 0.6));
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.not-ready {
+    color: #ffffff;
+    opacity: 0.2;
+    filter: grayscale(100%);
+    transform: scale(0.9);
+}

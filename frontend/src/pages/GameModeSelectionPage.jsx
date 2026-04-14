@@ -42,7 +42,7 @@ export default function GameModeSelectionPage() {
             <p>Create a lobby to invite and challenge your friends</p>
           </CardBody>
         </Card>
-        <Card className="gamemode-selection-card disabled-game-mode">
+        <Card className="gamemode-selection-card disabled">
           <CardHeader className="gamemode-selection-card-header">
             <FaBoltLightning />
             <h3>Daily Challenge</h3>
