@@ -28,8 +28,9 @@ test_backend:
     - chmod +x gradlew
   script:
     - ./gradlew test jacocoTestReport
-    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print "Total coverage:", 100*covered/instructions, "%" }' build/reports/jacoco/test/jacocoTestReport.csv
-  coverage: '/Total coverage: \d+(\.\d+)? %/'
+    - |
+      awk -F"," '{ instructions += $4 + $5; covered += $5 } END { printf("Total coverage: %.2f %%\n", 100*covered/instructions) }' build/reports/jacoco/test/jacocoTestReport.csv
+  coverage: '/Total coverage: \d+\.\d+ %/'
   artifacts:
     when: always
     reports:
