@@ -16,11 +16,8 @@ import "./Pages.css";
 export default function LobbyPage() {
   const nav = useNavigate();
   const [players, setPlayers] = useState([]);
-  const { roomCode: urlCode } = useParams();
-  const [roomCode, setRoomCode] = useState(null);
+  const { roomCode } = useParams();
   const { username } = useContext(UserContext);
-
-  setRoomCode(urlCode);
 
   useEffect(() => {
     if (roomCode) {

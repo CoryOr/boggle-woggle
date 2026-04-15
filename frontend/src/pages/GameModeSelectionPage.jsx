@@ -28,6 +28,7 @@ export default function GameModeSelectionPage() {
     }
     catch (error) {
       alert("Error creating room");
+      console.log(error);
     }
   }
 
