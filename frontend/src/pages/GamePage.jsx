@@ -1,6 +1,6 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
@@ -39,15 +39,20 @@ export default function GamePage() {
 
   const { highScore, longestWord } = useContext(UserContext);
 
-  const prevHighScore = useRef(undefined);
-  const prevLongestWord = useRef(undefined);
+  const [prevHighScore, setPrevHighScore] = useState(0);
+  const [prevLongestWord, setPrevLongestWord] = useState(0);
 
-  if (prevHighScore.current === undefined && highScore !== undefined) {
-    prevHighScore.current = highScore;
-  }
-  if (prevLongestWord.current === undefined && longestWord !== undefined) {
-    prevLongestWord.current = longestWord?.length ?? 0;
-  }
+  useEffect(() => {
+    if (highScore !== undefined) {
+      setPrevHighScore(highScore);
+    }
+  }, []); // empty deps = run once on mount, capturing initial values
+
+  useEffect(() => {
+    if (longestWord !== undefined) {
+      setPrevLongestWord(longestWord?.length ?? 0);
+    }
+  }, []);
 
   console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
 
@@ -86,8 +91,8 @@ export default function GamePage() {
       {timeLeft === 0 ? (
         <GameFinished 
           onGoHome={goHome} 
-          prevHighScore={prevHighScore.current ?? 0}
-          prevLongestWord={prevLongestWord.current ?? 0}
+          prevHighScore={prevHighScore}
+          prevLongestWord={prevLongestWord}
         />
       ) : (
         <>
