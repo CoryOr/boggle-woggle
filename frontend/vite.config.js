@@ -4,11 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '../', '');
 
-  const proxyConfig = {
-    target: `http://${env.VM_HOST}:8080`,
-    secure: false,
-    changeOrigin: true,
-  };
+  const targetHost = `http://${env.VM_HOST}:8080`;
 
   return {
     plugins: [react()],
@@ -20,10 +16,14 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         '/ws': {
-          target: 'http://localhost:8080',
+          target: targetHost,
           ws: true
         },
-        '/api': proxyConfig
+        '/api': {
+          target: targetHost,
+          secure: false,
+          changeOrigin: true
+        }
       },
       watch: {
         usePolling: true
