@@ -16,6 +16,9 @@ import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
  *
  * @returns the GamePage jsx
  */
+import { UserContext } from "../contexts/UserContext/UserContext";
+import { useRef } from 'react';
+
 export default function GamePage() {
   const nav = useNavigate();
   const {
@@ -27,6 +30,20 @@ export default function GamePage() {
     foundWords,
     isLoading,
   } = useContext(CurrentGameContext);
+
+  const { highScore, longestWord } = useContext(UserContext);
+
+  const prevHighScore = useRef(null);
+  const prevLongestWord = useRef(null);
+
+  if (prevHighScore.current === null && highScore !== undefined) {
+    prevHighScore.current = highScore;
+    console.log("Snapshotted prevHighScore:", prevHighScore.current);
+  }
+  if (prevLongestWord.current === null && longestWord !== undefined) {
+    prevLongestWord.current = longestWord?.length ?? 0;
+    console.log("Snapshotted prevLongestWord:", prevLongestWord.current);
+  }
 
   console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
 
@@ -41,7 +58,11 @@ export default function GamePage() {
   return (
     <div className="game-page-container">
       {timeLeft === 0 ? (
-        <GameFinished onGoHome={goHome} />
+        <GameFinished 
+          onGoHome={goHome} 
+          prevHighScore={prevHighScore.current ?? 0}
+          prevLongestWord={prevLongestWord.current ?? 0}
+        />
       ) : (
         <>
           {isLoading ? (

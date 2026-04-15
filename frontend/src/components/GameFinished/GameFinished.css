@@ -102,6 +102,25 @@
     transform: scale(0.97);
 }
 
+.gf-banners {
+    position: fixed;
+    top: 1.25rem;
+    left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gf-banner {
+    background-color: #ffd400;
+    color: #0057a8;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.14);
+}
+
 @media (max-width: 44rem) {
     .game-finished-container {
         padding: 1.25rem;
