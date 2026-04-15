@@ -12,10 +12,17 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    define: {
+      global: 'window'
+    },
     server: {
       host: true,
       port: 3000,
       proxy: {
+        '/ws': {
+          target: 'http://localhost:8080',
+          ws: true
+        },
         '/api': proxyConfig
       },
       watch: {
