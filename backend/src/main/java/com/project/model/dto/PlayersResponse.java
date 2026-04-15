@@ -1,4 +1,8 @@
 package com.project.model.dto;
 
-public record PlayersResponse() {
+import com.project.model.domain.LobbyUser;
+
+import java.util.List;
+
+public record PlayersResponse(List<LobbyUser> players) {
 }

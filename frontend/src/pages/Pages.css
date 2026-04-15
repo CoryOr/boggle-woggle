@@ -658,7 +658,6 @@ Gamemode selection screen specific styles
   height: 100%;
   display: flex;
   align-items: baseline;
-  padding: 0;
   box-sizing: border-box;
   gap: 1rem;
   padding: 1rem;
@@ -769,4 +768,28 @@ Gamemode selection screen specific styles
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Wraps the board and sidebar so they sit side-by-side */
+.game-layout-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px; /* Space between the game board and the sidebar */
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Keeps the main gameplay elements stacked vertically */
+.game-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 400px;
+}
+
+/* Pushes the sidebar down slightly so it aligns with the game board instead of the title text */
+.game-right-column {
+  margin-top: 100px;
 }
