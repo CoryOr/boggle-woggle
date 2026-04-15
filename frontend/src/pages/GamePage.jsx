@@ -1,6 +1,6 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
@@ -9,18 +9,23 @@ import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
 import CurrentScore from "../components/CurrentScore/CurrentScore";
 import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
+import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar";
 
 /**
- * A hub file for all of our game logic. Currently holds only single player information, but will
- * be extended to multiplayer in the future.
+ * A hub file for all of our game logic. Currently holds single player information,
+ * but will be extended to multiplayer in the future. Coordinates the layout between
+ * the game board, inputs, timers, and the sidebar.
  *
- * @returns the GamePage jsx
+ * @component
+ * @returns {JSX.Element} The rendered GamePage UI.
  */
 import { UserContext } from "../contexts/UserContext/UserContext";
 import { useRef } from 'react';
 
 export default function GamePage() {
   const nav = useNavigate();
+
+  // Pull necessary global state for the main hub logic
   const {
     board,
     score,
@@ -29,28 +34,49 @@ export default function GamePage() {
     setTimeLeft,
     foundWords,
     isLoading,
+    gameId,
   } = useContext(CurrentGameContext);
 
   const { highScore, longestWord } = useContext(UserContext);
 
-  const prevHighScore = useRef(null);
-  const prevLongestWord = useRef(null);
+  const prevHighScore = useRef(undefined);
+  const prevLongestWord = useRef(undefined);
 
-  if (prevHighScore.current === null && highScore !== undefined) {
+  if (prevHighScore.current === undefined && highScore !== undefined) {
     prevHighScore.current = highScore;
-    console.log("Snapshotted prevHighScore:", prevHighScore.current);
   }
-  if (prevLongestWord.current === null && longestWord !== undefined) {
+  if (prevLongestWord.current === undefined && longestWord !== undefined) {
     prevLongestWord.current = longestWord?.length ?? 0;
-    console.log("Snapshotted prevLongestWord:", prevLongestWord.current);
   }
 
   console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
+
+/**
+ * When the game timer hits 0,  we will send a request to the database to store the game information
+ */
+ useEffect(() => {
+     if (timeLeft === 0 && gameId) {
+        fetch("/api/game/finish", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}` // or wherever you store your JWT
+            },
+            body: JSON.stringify({ gameId, score, foundWords: [...foundWords] }),
+        })
+        .then(res => console.log("Game saved, status:", res.status))
+        .catch(err => console.error("Failed to save game result:", err));
+     }
+ }, [timeLeft, gameId, score, foundWords]);
 
   const goHome = () => {
     nav("/");
   };
 
+  /**
+   * Callback to increase the user's score upon a valid guess.
+   * @param {number} points - The points to add to the current score.
+   */
   const updateScore = (points) => {
     setScore(score + points);
   };
@@ -68,24 +94,34 @@ export default function GamePage() {
           {isLoading ? (
             <LoadingIcon />
           ) : (
-            <>
-              <p className="game-page-text title">
-                DRAG OR TYPE LETTERS TO PLAY!
-              </p>
-              <Timer timeLeft={timeLeft} />
-              <CurrentScore score={score} />
-              <WordInput updateScore={updateScore} />
-              <GameBoard board={board} updateScore={updateScore} />
-              <button
-                className="btn quit-btn"
-                onClick={() => setTimeLeft(0)}
-              >
-                QUIT
-              </button>
+                  <div className="game-layout-wrapper">
+
+                    {/* Left Side: The Main Game Board & Input */}
+                    <div className="game-center-column">
+                      <p className="game-page-text title">
+                        DRAG OR TYPE LETTERS TO PLAY!
+                      </p>
+                      <Timer timeLeft={timeLeft} />
+                      <CurrentScore score={score} />
+                      <WordInput updateScore={updateScore} />
+                      <GameBoard board={board} updateScore={updateScore} />
+                      <button
+                          className="btn quit-btn"
+                          onClick={() => setTimeLeft(0)}
+                      >
+                        QUIT
+                      </button>
+                    </div>
+
+                    {/* Right Side: The Found Words Sidebar */}
+                    <div className="game-right-column">
+                      <FoundWordsSidebar />
+                    </div>
+
+                  </div>
+              )}
             </>
-          )}
-        </>
-      )}
-    </div>
+        )}
+      </div>
   );
 }

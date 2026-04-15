@@ -3,7 +3,10 @@ package com.project.service;
 import com.project.model.dto.GameResponse;
 import com.project.model.dto.GuessResponse;
 import com.project.model.entity.Game;
+import com.project.model.entity.GameResult;
 import com.project.repository.GameRepository;
+import com.project.repository.GameResultRepository;
+import com.project.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.lenient;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +30,12 @@ public class GameServiceTests {
     @Mock
     private GameRepository gameRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private GameResultRepository gameResultRepository;
+
     @InjectMocks
     private GameService gameService;
 
@@ -39,13 +49,13 @@ public class GameServiceTests {
      */
     @BeforeEach
     void setUp() {
-        gameService = new GameService(dictionaryService, gameRepository);
+        gameService = new GameService(dictionaryService, gameRepository, userRepository, gameResultRepository);
 
         // Example game that could be created
         Game mockedGame = new Game(4, "irlnsesetctnjadl");
         mockedGame.setGameId(UUID.randomUUID());
-        when(gameRepository.save(any(Game.class))).thenReturn(mockedGame);
-        when(gameRepository.findById(mockedGame.getGameId())).thenReturn(Optional.of(mockedGame));
+        lenient().when(gameRepository.save(any(Game.class))).thenReturn(mockedGame);
+        lenient().when(gameRepository.findById(mockedGame.getGameId())).thenReturn(Optional.of(mockedGame));
     }
 
     /**
@@ -164,5 +174,49 @@ public class GameServiceTests {
         GuessResponse response = gameService.processGuess(game.gameId(), "restates");
         assert(response.valid());
         assert(response.score() == 11);
+    }
+
+    /**
+     * Saving a game result should increment the user's games played by 1
+     */
+    @Test
+    void testSaveGameResultIncrementsGamesPlayed() {
+        com.project.model.entity.User user = new com.project.model.entity.User("alice", "hashedpw", "avatar.png");
+        when(userRepository.findByUsername("alice")).thenReturn(user);
+
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 3, java.util.List.of("ten"));
+        gameService.saveGameResult(request, "alice");
+
+        assert(user.getGamesPlayed() == 1);
+    }
+
+    /**
+     * If the score from this game beats the user's current high score, high score should update
+     */
+    @Test
+    void testSaveGameResultUpdatesHighScore() {
+        com.project.model.entity.User user = new com.project.model.entity.User("alice", "hashedpw", "avatar.png");
+        user.setHighScore(5);
+        when(userRepository.findByUsername("alice")).thenReturn(user);
+
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 99, java.util.List.of("ten"));
+        gameService.saveGameResult(request, "alice");
+
+        assert(user.getHighScore() == 99);
+    }
+
+    /**
+     * If the user finds a word longer than their current longest word, longest word should update
+     */
+    @Test
+    void testSaveGameResultUpdatesLongestWord() {
+        com.project.model.entity.User user = new com.project.model.entity.User("alice", "hashedpw", "avatar.png");
+        user.setLongestWord("cat");
+        when(userRepository.findByUsername("alice")).thenReturn(user);
+
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 11, java.util.List.of("cat", "restates"));
+        gameService.saveGameResult(request, "alice");
+
+        assert(user.getLongestWord().equals("restates"));
     }
 }

@@ -15,23 +15,25 @@ build_backend:
     - ./gradlew clean assemble
   artifacts:
     paths:
-      - backend/build/libs/*.jar
+      - backend/build/
     expire_in: 1 week
 
 test_backend:
   stage: test
+  dependencies:
+    - build_backend
   before_script:
     - cd backend
     - chmod +x gradlew
   script:
-    - ./gradlew test jacocoTestCoverageVerification
+    - ./gradlew test jacocoTestReport
+    - |
+      awk -F"," '{ instructions += $4 + $5; covered += $5 } END { printf("Total coverage: %.2f %%\n", 100*covered/instructions) }' build/reports/jacoco/test/jacocoTestReport.csv
+  coverage: '/Total coverage: \d+\.\d+ %/'
   artifacts:
     when: always
     reports:
       junit: backend/build/test-results/test/**/TEST-*.xml
-      coverage_report:
-        coverage_format: jacoco
-        path: backend/build/reports/jacoco/test/jacocoTestReport.xml
 
 # --- FRONTEND JOBS ---
 build_frontend:
@@ -53,7 +55,6 @@ test_frontend:
     - cd frontend
     - npm install
     - npm run test
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
     when: always
     reports:

@@ -19,8 +19,13 @@ export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord 
     const longestThisGame = [...foundWords].reduce((longest, word) =>
         word.length > longest.length ? word : longest, "");
 
-    const newHighScore = isLoggedIn && score > prevHighScore;
-    const newLongestWord = isLoggedIn && longestThisGame.length > prevLongestWord;
+    const newHighScore = isLoggedIn 
+        && prevHighScore !== undefined 
+        && score > prevHighScore;
+
+    const newLongestWord = isLoggedIn 
+        && prevLongestWord !== undefined 
+        && longestThisGame.length > prevLongestWord;
 
     return (
         <div className="game-finished-container">

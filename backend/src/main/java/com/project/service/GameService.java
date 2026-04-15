@@ -3,21 +3,33 @@ package com.project.service;
 import com.project.model.domain.Board;
 import com.project.model.dto.GameResponse;
 
+import com.project.model.dto.GameResultRequest;
 import com.project.model.dto.GuessResponse;
 import com.project.model.entity.Game;
+import com.project.model.entity.User;
+import com.project.model.entity.GameResult;
 import com.project.repository.GameRepository;
+import com.project.repository.GameResultRepository;
+import com.project.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
 public class GameService {
     private final DictionaryService dictionaryService;
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
+    private final GameResultRepository gameResultRepository;
 
-    public GameService(DictionaryService dictionaryService, GameRepository gameRepository) {
+
+
+    public GameService(DictionaryService dictionaryService, GameRepository gameRepository, UserRepository userRepository, GameResultRepository gameResultRepository) {
         this.dictionaryService = dictionaryService;
         this.gameRepository = gameRepository;
+        this.userRepository = userRepository;
+        this.gameResultRepository = gameResultRepository;
     }
 
     /**
@@ -183,5 +195,33 @@ public class GameService {
         }
 
         return new GuessResponse(points, isWord && canFormWord);
+    }
+
+    public void saveGameResult(GameResultRequest request, String username) {
+        GameResult result = new GameResult(
+                username,
+                request.gameId(),
+                request.score(),
+                String.join(",", request.foundWords()),
+                false
+        );
+        gameResultRepository.save(result);
+
+        User user = userRepository.findByUsername(username);
+        user.setGamesPlayed(user.getGamesPlayed() + 1);
+
+        if (request.score() > user.getHighScore()) {
+            user.setHighScore(request.score());
+        }
+
+        request.foundWords().stream()
+                .max(Comparator.comparingInt(String::length))
+                .ifPresent(longest -> {
+                    if (user.getLongestWord() == null || longest.length() > user.getLongestWord().length()) {
+                        user.setLongestWord(longest);
+                    }
+                });
+
+        userRepository.save(user);
     }
 }
