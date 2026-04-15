@@ -37,7 +37,8 @@ public class UserController {
                 user.getAvatar(),
                 user.getHighScore(),
                 user.getLongestWord(),
-                user.getGamesPlayed()
+                user.getGamesPlayed(),
+                user.getGamesWon()
         );
     }
 }
