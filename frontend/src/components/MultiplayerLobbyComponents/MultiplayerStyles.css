@@ -72,3 +72,8 @@
     filter: grayscale(100%);
     transform: scale(0.9);
 }
+
+.host-icon {
+    width: 2rem;
+    height: 2rem;
+}

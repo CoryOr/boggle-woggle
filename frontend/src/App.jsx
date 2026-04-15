@@ -31,7 +31,11 @@ const App = () => {
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/store" element={<StorePage />} />
         <Route path="/game-select" element={<GameModeSelectionPage />} />
-        <Route path="/lobby" element={<LobbyPage />} />
+        <Route path="/lobby/:roomCode" element={
+          <UserProvider>
+            <LobbyPage />
+          </UserProvider>
+        } />
       </Routes>
     </UserProvider>
   );

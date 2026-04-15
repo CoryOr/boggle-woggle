@@ -1,9 +1,7 @@
 import { Card, CardHeader, CardBody } from "react-bootstrap";
 import "./MultiplayerStyles.css";
 
-const RoomCodeCard = () => {
-  const roomCode = "x78yUzya180";
-
+const RoomCodeCard = ({ roomCode }) => {
   return (
     <Card className="code-card">
       <CardHeader>Room Code</CardHeader>

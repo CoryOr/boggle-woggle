@@ -6,15 +6,34 @@
  * 3) Daily Challenge(My own idea of something we could add, but not necessary for the project :D)
  */
 
-import { Card, CardHeader, CardBody } from "react-bootstrap";
+import { useState } from "react";
+import { Card, CardHeader, CardBody, Button } from "react-bootstrap";
 import { RiUser3Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import { FaBoltLightning } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import WebSocketService from "../websocket/WebSocketService";
 import "./Pages.css";
 
 export default function GameModeSelectionPage() {
   const nav = useNavigate();
+  const [hasClickedMultiplayer, setHasClickedMultiPlayer] = useState(false);
+  const [userInputtedRoomCode, setUserInputtedRoomCode] = useState("");
+
+  const createNewRoom = async () => {
+    try {
+      const result = await fetch("/api/room/new");
+      const data = await result.json();
+      nav(`/lobby/${data.roomCode}`);
+    }
+    catch (error) {
+      alert("Error creating room");
+    }
+  }
+
+  const joinRoom = () => {
+    nav(`/lobby/${userInputtedRoomCode}`);
+  };
 
   return (
     <>
@@ -33,7 +52,10 @@ export default function GameModeSelectionPage() {
             <p>Find as many words as you can in one minute</p>
           </CardBody>
         </Card>
-        <Card className="gamemode-selection-card" onClick={() => nav("/lobby")}>
+        <Card
+          className="gamemode-selection-card"
+          onClick={() => setHasClickedMultiPlayer(true)}
+        >
           <CardHeader className="gamemode-selection-card-header">
             <FaUsers />
             <h3>Multiplayer</h3>
@@ -42,6 +64,35 @@ export default function GameModeSelectionPage() {
             <p>Create a lobby to invite and challenge your friends</p>
           </CardBody>
         </Card>
+        {hasClickedMultiplayer && (
+          <>
+            <Card
+              className="multiplayer-selection-card top"
+              style={{ animationDelay: "0.1s" }}
+              onClick={createNewRoom}
+            >
+              Create A Room
+            </Card>
+            <Card
+              className="multiplayer-selection-card bottom"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <CardHeader>Join An Existing Room</CardHeader>
+              <CardBody>
+                <div className="lobby-join-form">
+                  <input
+                    className="code-input"
+                    value={userInputtedRoomCode}
+                    onChange={(e) => setUserInputtedRoomCode(e.target.value)}
+                  ></input>
+                  <Button className="lobby-button" onClick={joinRoom}>
+                    Enter
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+          </>
+        )}
         <Card className="gamemode-selection-card disabled">
           <CardHeader className="gamemode-selection-card-header">
             <FaBoltLightning />
