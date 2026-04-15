@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
+import { UserContext } from "../contexts/UserContext/UserContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
@@ -19,8 +20,6 @@ import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar
  * @component
  * @returns {JSX.Element} The rendered GamePage UI.
  */
-import { UserContext } from "../contexts/UserContext/UserContext";
-import { useRef } from 'react';
 
 export default function GamePage() {
   const nav = useNavigate();
@@ -39,20 +38,8 @@ export default function GamePage() {
 
   const { highScore, longestWord } = useContext(UserContext);
 
-  const [prevHighScore, setPrevHighScore] = useState(0);
-  const [prevLongestWord, setPrevLongestWord] = useState(0);
-
-  useEffect(() => {
-    if (highScore !== undefined) {
-      setPrevHighScore(highScore);
-    }
-  }, []); // empty deps = run once on mount, capturing initial values
-
-  useEffect(() => {
-    if (longestWord !== undefined) {
-      setPrevLongestWord(longestWord?.length ?? 0);
-    }
-  }, []);
+  const [prevHighScore] = useState(() => highScore ?? 0);
+  const [prevLongestWord] = useState(() => longestWord?.length ?? 0);
 
   console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
 
