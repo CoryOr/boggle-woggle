@@ -17,8 +17,10 @@ export default function LobbyPage() {
   const nav = useNavigate();
   const [players, setPlayers] = useState([]);
   const { roomCode: urlCode } = useParams();
-  const [roomCode, setRoomCode] = useState(urlCode || null);
+  const [roomCode, setRoomCode] = useState(null);
   const { username } = useContext(UserContext);
+
+  setRoomCode(urlCode);
 
   useEffect(() => {
     if (roomCode) {

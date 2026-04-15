@@ -22,6 +22,7 @@ class WebSocketService {
   this.client.onConnect = (frame) => {
     // FIX 1: Use 'username' (the parameter), not 'userId'
     console.log("Connected to STOMP as user:", username);
+    console.log(frame); // here for linting
 
     // Subscribe to the room's topic
     this.client.subscribe(`/room/${roomCode}`, (message) => { // FIX 2: Callback param should be 'message'
