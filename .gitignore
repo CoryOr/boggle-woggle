@@ -15,4 +15,4 @@ build
 // IntelliJ
 .idea/misc.xml
 # Environment Variables
-.env
+.env.vscode/
