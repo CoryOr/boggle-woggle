@@ -20,19 +20,26 @@ import { UserContext } from "../contexts/UserContext/UserContext";
 
 export default function HomePage() {
   const nav = useNavigate();
-  const { avatar, username, isLoggedIn } = useContext(UserContext);
+  const { avatar, username, isLoggedIn, logout } = useContext(UserContext);
 
   const gameSelect = () => nav("/game-select");
   const login = () => nav("/login");
   const stats = () => nav("/stats");
   const store = () => nav("/store");
+  const handleLogout = () => {
+    logout();
+    nav("/login");
+  };
+
 
   const navCards = [
     { title: "STORE", action: store },
     { title: "PLAY GAME", action: gameSelect },
     { title: "STATISTICS", action: stats },
-    { title: "LOGIN", action: login },
-  ];
+    isLoggedIn
+        ? { title: "LOG OUT", action: handleLogout }
+        : { title: "LOGIN", action: login },
+    ];
 
   useEffect(() => {
     localStorage.removeItem("currentGame");

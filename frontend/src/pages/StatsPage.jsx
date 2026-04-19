@@ -23,6 +23,9 @@ export default function StatsPage() {
     fontWeight: '600'
   };
 
+  if (!isLoggedIn) return null;
+
+
   return (
     <>
       <button className="stats-back-btn" onClick={goHome}>

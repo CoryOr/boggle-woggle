@@ -17,7 +17,13 @@ export default function LobbyPage() {
   const nav = useNavigate();
   const [players, setPlayers] = useState([]);
   const { roomCode } = useParams();
-  const { username } = useContext(UserContext);
+  const { username, isLoggedIn } = useContext(UserContext);
+
+  useEffect(() => {
+      if (!isLoggedIn) {
+          nav("/login");
+      }
+  }, [isLoggedIn, nav]);
 
   useEffect(() => {
     if (roomCode) {
@@ -30,6 +36,9 @@ export default function LobbyPage() {
       WebSocketService.disconnect();
     };
   }, [roomCode, username]);
+
+   if (!isLoggedIn) return null;
+
 
   return (
     <>
