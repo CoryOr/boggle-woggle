@@ -9,13 +9,35 @@
 import "./GameFinished.css";
 import { useContext } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { UserContext } from "../../contexts/UserContext/UserContext";
 
-export default function GameFinished({ onGoHome }) {
+export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord }) {
     const { foundWords, score } = useContext(CurrentGameContext);
+    const { isLoggedIn } = useContext(UserContext);
     const wordList = [...foundWords].sort();
+
+    const longestThisGame = [...foundWords].reduce((longest, word) =>
+        word.length > longest.length ? word : longest, "");
+
+    const newHighScore = isLoggedIn 
+        && prevHighScore !== undefined 
+        && score > prevHighScore;
+
+    const newLongestWord = isLoggedIn 
+        && prevLongestWord !== undefined 
+        && longestThisGame.length > prevLongestWord;
 
     return (
         <div className="game-finished-container">
+            <div className="gf-banners">
+                {newHighScore && (
+                    <div className="gf-banner">New high score!: {score}!</div>
+                )}
+                {newLongestWord && (
+                    <div className="gf-banner">New longest word!: {longestThisGame}!</div>
+                )}
+            </div>
+
             <h1 className="game-finished-title">Game Over</h1>
 
             <p className="gf-stat">Final score: {score} points!</p>
