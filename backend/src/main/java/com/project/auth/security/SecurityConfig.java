@@ -41,8 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 4. Set up authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/game/**", "/api/words/**", "/h2-console/**", "/ws/**").permitAll()
-                        .requestMatchers("/api/room/**").authenticated()
+                        .requestMatchers("/api/auth/**", "/api/game/**", "/api/words/**", "/h2-console/**", "/ws/**", "/api/room/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // 5. Handle H2 Console frame options

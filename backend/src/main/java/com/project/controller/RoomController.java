@@ -27,25 +27,22 @@ public class RoomController {
 
     @GetMapping("/api/room/new")
     @ResponseBody
-    public Map<String, String> createRoom(Authentication auth) {
-        if (auth == null || !auth.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Must be logged in to create a room");
-        }
+    public Map<String, String> createRoom() {
         String newCode = roomService.createRoom();
         return Map.of("roomCode", newCode);
     }
 
     @MessageMapping("/room.join")
-    public void joinRoom(@Payload JoinRoomRequest request, Principal principal) {
-        if (principal == null) {
-            return;
-        }
+    public void joinRoom(@Payload JoinRoomRequest request) {
         try {
-            // Uses  the server-side username from the JWT, not whatever the client sent to prevent people from spoofing
-            roomService.addPlayerToRoom(request.roomCode(), principal.getName());
+            roomService.addPlayerToRoom(request.roomCode(), request.username());
             PlayersResponse players = roomService.getPlayersInRoom(request.roomCode());
+
+            // Broadcast the full list to everyone in the room
             messagingTemplate.convertAndSend("/room/" + request.roomCode(), players);
-        } catch (IllegalArgumentException e) {
+        }
+        catch(IllegalArgumentException e) {
+            // TODO: Add something for handling an invalid room request
             System.out.println(e + " " + request.roomCode());
         }
     }
