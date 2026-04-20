@@ -2,6 +2,7 @@ package com.project.controller;
 
 import com.project.model.dto.JoinRoomRequest;
 import com.project.model.dto.PlayersResponse;
+import com.project.model.dto.UpdateReadyRequest;
 import com.project.service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -44,6 +45,19 @@ public class RoomController {
         catch(IllegalArgumentException e) {
             // TODO: Add something for handling an invalid room request
             System.out.println(e + " " + request.roomCode());
+        }
+    }
+
+    @MessageMapping("/room.ready")
+    public void toggleReady(@Payload UpdateReadyRequest request) {
+        try {
+            roomService.togglePlayerReady(request.roomCode(), request.username());
+
+            PlayersResponse players = roomService.getPlayersInRoom(request.roomCode());
+            messagingTemplate.convertAndSend("/room/" + request.roomCode(), players);
+        }
+        catch (Exception e) {
+            System.out.println("Error with toggling ready state");
         }
     }
 }

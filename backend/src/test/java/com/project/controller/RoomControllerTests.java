@@ -3,6 +3,7 @@ package com.project.controller;
 import com.project.auth.jwt.JwtService;
 import com.project.model.dto.JoinRoomRequest;
 import com.project.model.dto.PlayersResponse;
+import com.project.model.dto.UpdateReadyRequest;
 import com.project.service.RoomService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class RoomControllerTests {
     @MockitoBean
     private com.project.auth.security.CustomUserDetailsService customUserDetailsService;
 
+    /**
+     * Tests creating a new room
+     * @throws Exception
+     */
     @Test
     void testCreateRoomEndpoint() throws Exception {
         String mockedCode = "ABC123D";
@@ -54,6 +59,9 @@ public class RoomControllerTests {
                 .andExpect(jsonPath("$.roomCode").value(mockedCode));
     }
 
+    /**
+     * Tests joining an existing room
+     */
     @Test
     void testJoinRoomWebSocketLogic() {
         String roomCode = "ABC123D";
@@ -70,6 +78,9 @@ public class RoomControllerTests {
         verify(messagingTemplate).convertAndSend(eq("/room/" + roomCode), eq(mockResponse));
     }
 
+    /**
+     * Tests trying to join a room that doesn't exist
+     */
     @Test
     void testJoinRoomHandlesException() {
         JoinRoomRequest request = new JoinRoomRequest("INVALID", "User");
@@ -77,5 +88,21 @@ public class RoomControllerTests {
 
         roomController.joinRoom(request);
         verify(roomService).addPlayerToRoom("INVALID", "User");
+    }
+
+    @Test
+    void testToggleUserReady() {
+        String roomCode = "ABC123D";
+        String username = "testUser";
+        UpdateReadyRequest request = new UpdateReadyRequest(roomCode, username);
+
+        PlayersResponse mockResponse = new PlayersResponse(new ArrayList<>());
+        when(roomService.getPlayersInRoom(roomCode)).thenReturn(mockResponse);
+
+        roomController.toggleReady(request);
+
+        verify(roomService).togglePlayerReady(roomCode, username);
+
+        verify(messagingTemplate).convertAndSend(eq("/room/" + roomCode), eq(mockResponse));
     }
 }

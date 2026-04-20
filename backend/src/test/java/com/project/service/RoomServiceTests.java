@@ -59,12 +59,14 @@ public class RoomServiceTests {
         assertThrows(IllegalArgumentException.class, () -> roomService.addPlayerToRoom(roomCode, testUsername));
     }
 
+    /**
+     * Test adding a player to a room that does exist
+     */
     @Test
     void testAddPlayerToExistingRoom() {
         String roomCode = roomService.createRoom();
         String testUsername = "Username";
 
-        // Create and mock the test user
         User testUser = new User(testUsername, "password", "avatar");
 
         when(userRepository.findByUsername(testUsername)).thenReturn(testUser);
@@ -76,5 +78,34 @@ public class RoomServiceTests {
         assert(players != null);
         assert(players.size() == 1);
         assert(players.getFirst().getUsername().equals(testUsername));
+    }
+
+    @Test
+    void testTogglePlayerReadyInExistingRoom() {
+        String roomCode = roomService.createRoom();
+        String testUsername = "Username";
+
+        User testUser = new User(testUsername, "password", "avatar");
+
+        when(userRepository.findByUsername(testUsername)).thenReturn(testUser);
+
+        roomService.addPlayerToRoom(roomCode, testUsername);
+
+        List<LobbyUser> players = roomService.getPlayersInRoom(roomCode).players();
+
+        assert(players.size() == 1);
+        assert(!players.getFirst().getIsReady());
+
+        roomService.togglePlayerReady(roomCode, testUsername);
+        assert(players.getFirst().getIsReady());
+    }
+
+    /**
+     * If we try to toggle a user's ready state who isn't in a game, we should get an error
+     */
+    @Test
+    void testTogglePlayerReadyInNonexistentRoom() {
+        String testUsername = "Username";
+        assertThrows(IllegalArgumentException.class, () -> roomService.togglePlayerReady("nonexistent", testUsername));
     }
 }

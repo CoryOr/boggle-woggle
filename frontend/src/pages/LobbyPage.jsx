@@ -19,10 +19,16 @@ export default function LobbyPage() {
   const { roomCode } = useParams();
   const { username, isLoggedIn } = useContext(UserContext);
 
+  // Derived state: these are calculated every render based on the 'players' state
+  const currentUser = players.find((p) => p.username === username);
+  const isHost = currentUser?.isHost || false;
+  const isReady = currentUser?.isReady || false;
+  const allPlayersReady = players.length > 0 && players.every((p) => p.isReady);
+
   useEffect(() => {
-      if (!isLoggedIn) {
-          nav("/login");
-      }
+    if (!isLoggedIn) {
+      nav("/login");
+    }
   }, [isLoggedIn, nav]);
 
   useEffect(() => {
@@ -37,8 +43,7 @@ export default function LobbyPage() {
     };
   }, [roomCode, username]);
 
-   if (!isLoggedIn) return null;
-
+  if (!isLoggedIn) return null;
 
   return (
     <>
@@ -53,8 +58,19 @@ export default function LobbyPage() {
           <PlayerCards players={players} />
         </Card>
         <Card className="lobby-page-container lobby-buttons-container">
-          <Button className="btn">Ready</Button>
-          <Button className="btn-disabled">Waiting for host...</Button>
+          <Button
+            className="btn"
+            onClick={() => WebSocketService.toggleReady(roomCode, username)}
+          >
+            {!isReady ? "Ready" : "Not Ready"}
+          </Button>
+          {isHost ? (
+            <Button className={allPlayersReady ? "btn" : "btn-disabled"}>
+              Start Game
+            </Button>
+          ) : (
+            <Button className="btn-disabled">Waiting for host...</Button>
+          )}
         </Card>
       </div>
     </>
