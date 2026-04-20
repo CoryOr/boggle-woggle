@@ -58,6 +58,20 @@ class WebSocketService {
   }
 }
 
+toggleReady(roomCode, username) {
+    if (this.client && this.client.connected) {
+        const payload = {
+            roomCode: roomCode,
+            username: username
+        };
+
+        this.client.publish({
+            destination: "/app/room.ready",
+            body: JSON.stringify(payload)
+        });
+    }
+}
+
   disconnect() {
     if (this.client) {
       this.client.deactivate();
