@@ -1,4 +1,3 @@
-// UserController.java
 package com.project.controller;
 
 import com.project.model.dto.MeResponse;
