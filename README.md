@@ -43,43 +43,40 @@ A <--> B
 B <--> C
 ```
 
-#### Database (Not fully thought out yet)
+#### Database
 
 ```mermaid
 ---
-title: Sample Database ERD for an Order System
+title: Word Game Database ERD
 ---
 erDiagram
-    Customer ||--o{ Order : "placed by"
-    Order ||--o{ OrderItem : "contains"
-    Product ||--o{ OrderItem : "included in"
-
-    Customer {
-        int customer_id PK
-        string name
-        string email
-        string phone
+    Users ||--o{ GameResult : "has"
+    Game ||--o{ GameResult : "generates"
+ 
+    Users {
+        int id PK
+        string username UK
+        string password
+        string avatar
+        int games_played
+        int games_won
+        int high_score
+        string longest_word
     }
-
-    Order {
-        int order_id PK
-        int customer_id FK
-        string order_date
-        string status
+ 
+    Game {
+        string game_id PK
+        int board_size
+        string letters
     }
-
-    Product {
-        int product_id PK
-        string name
-        string description
-        decimal price
-    }
-
-    OrderItem {
-        int order_item_id PK
-        int order_id FK
-        int product_id FK
-        int quantity
+ 
+    GameResult {
+        int id PK
+        string game_id FK
+        string username FK
+        int score
+        string found_words
+        bit won
     }
 ```
 
