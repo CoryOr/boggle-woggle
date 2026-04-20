@@ -33,7 +33,6 @@ export default function GameModeSelectionPage() {
       const data = await result.json();
       nav(`/lobby/${data.roomCode}`);
     } catch (error) {
-        console.log(error);
       alert("Error creating room");
       console.log(error);
     }
