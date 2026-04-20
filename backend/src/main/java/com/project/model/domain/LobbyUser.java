@@ -28,4 +28,8 @@ public class LobbyUser {
     public boolean getIsHost() {
         return isHost;
     }
+
+    public void setIsReady() {
+        isReady = !isReady;
+    }
 }

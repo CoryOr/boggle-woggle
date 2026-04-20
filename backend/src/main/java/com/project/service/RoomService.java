@@ -57,4 +57,18 @@ public class RoomService {
         List<LobbyUser> players = activeRooms.getOrDefault(roomCode, new ArrayList<>());
         return new PlayersResponse(new ArrayList<>(players));
     }
+
+    public void togglePlayerReady(String roomCode, String username) {
+        if (!isActiveRoom(roomCode)) {
+            throw new IllegalArgumentException("Room does not exist");
+        }
+
+        List<LobbyUser> users = activeRooms.get(roomCode);
+        for (LobbyUser user: users) {
+            if (user.getUsername().equals(username)) {
+                user.setIsReady();
+                break;
+            }
+        }
+    }
 }
