@@ -58,19 +58,25 @@ class WebSocketService {
   }
 }
 
-toggleReady(roomCode, username) {
-    if (this.client && this.client.connected) {
-        const payload = {
-            roomCode: roomCode,
-            username: username
-        };
+  toggleReady(roomCode, username) {
+    console.log("Toggle Ready function called for:", username); // Log 1
 
-        this.client.publish({
-            destination: "/app/room.ready",
-            body: JSON.stringify(payload)
-        });
+    if (this.client && this.client.connected) {
+      const payload = {
+        roomCode: roomCode,
+        username: username
+      };
+
+      console.log("Publishing to /app/room.ready with payload:", payload); // Log 2
+
+      this.client.publish({
+        destination: "/app/room.ready",
+        body: JSON.stringify(payload)
+      });
+    } else {
+      console.error("Cannot toggle ready: Not connected to WebSocket"); // Log 3
     }
-}
+  }
 
   disconnect() {
     if (this.client) {
