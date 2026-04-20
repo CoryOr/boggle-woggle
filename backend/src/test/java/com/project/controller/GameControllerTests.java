@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -69,7 +70,7 @@ public class GameControllerTests {
 
     @Test
     void testSubmitGuessEndpoint() throws Exception {
-        when(gameService.processGuess(org.mockito.ArgumentMatchers.any(java.util.UUID.class), org.mockito.ArgumentMatchers.anyString()))
+        when(gameService.processGuess(org.mockito.ArgumentMatchers.any(java.util.UUID.class), anyString()))
                 .thenReturn(new GuessResponse(0, false));
 
         mockMvc.perform(post("/api/game/guess")
@@ -82,11 +83,14 @@ public class GameControllerTests {
 
     @Test
     void testGetPlayersEndpoint() throws Exception {
-        when(roomService.getPlayersInRoom(org.mockito.ArgumentMatchers.anyString()))
+        when(roomService.getPlayersInRoom(anyString()))
                 .thenReturn(new PlayersResponse(new java.util.ArrayList<>()));
 
+        String jsonBody = "{\"roomCode\":\"ABC123D\"}";
+
         mockMvc.perform(post("/api/game/players")
-                .param("roomId", "ABC123D"))
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content(jsonBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.players").isArray())
                 .andExpect(jsonPath("$.players.length()").value(0));
