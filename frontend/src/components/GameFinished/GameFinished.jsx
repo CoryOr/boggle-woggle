@@ -7,33 +7,49 @@
  */
 
 import "./GameFinished.css";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContext";
 
 export default function GameFinished({ onGoHome }) {
-    const { foundWords, score } = useContext(CurrentGameContext);
-    const wordList = [...foundWords].sort();
+  const { foundWords, score } = useContext(CurrentGameContext);
+  const { playSfx } = useContext(AudioContext);
+  const wordList = [...foundWords].sort();
 
-    return (
-        <div className="game-finished-container">
-            <h1 className="game-finished-title">Game Over</h1>
+  useEffect(() => {
+    playSfx("/sounds/Winner.mp3");
+  }, [playSfx]);
 
-            <p className="gf-stat">Final score: {score} points!</p>
-            <p className="gf-stat">{wordList.length} words found</p>
+  return (
+    <div className="game-finished-container">
+      <h1 className="game-finished-title">Game Over</h1>
 
-            <div className="gf-words-card">
-                {wordList.length === 0 ? (
-                    <p className="gf-no-words">No words found this round.</p>
-                ) : (
-                    <ul className="gf-word-list">
-                        {wordList.map((word) => (
-                            <li key={word} className="gf-word-item">{word}</li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+      <p className="gf-stat">Final score: {score} points!</p>
+      <p className="gf-stat">{wordList.length} words found</p>
 
-            <button className="gf-home-button" onClick={onGoHome}>Go Home</button>
-        </div>
-    );
+      <div className="gf-words-card">
+        {wordList.length === 0 ? (
+          <p className="gf-no-words">No words found this round.</p>
+        ) : (
+          <ul className="gf-word-list">
+            {wordList.map((word) => (
+              <li key={word} className="gf-word-item">
+                {word}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <button
+        className="gf-home-button"
+        onClick={() => {
+          playSfx("/sounds/click.wav");
+          onGoHome();
+        }}
+      >
+        Go Home
+      </button>
+    </div>
+  );
 }

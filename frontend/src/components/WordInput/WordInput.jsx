@@ -10,6 +10,7 @@
 
 import { useContext } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContext";
 import "./WordInput.css";
 
 /**
@@ -21,7 +22,6 @@ import "./WordInput.css";
  * @returns {JSX.Element} The text input UI and the reserved space for error messages.
  */
 export default function WordInput({ updateScore }) {
-    // Pull in the global game state so typing and dragging share the same data
     const {
         gameId,
         setFoundWords,
@@ -32,24 +32,24 @@ export default function WordInput({ updateScore }) {
         setInvalidWord
     } = useContext(CurrentGameContext);
 
-    /**
-     * Handles keyboard events inside the input field.
-     * Listens specifically for the "Enter" key to submit the current guess to the backend API.
-     *
-     * @param {Event} e - The keyboard event triggered by the user.
-     */
+    const { playSfx } = useContext(AudioContext);
+
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
             const guess = currentGuess.toLowerCase();
+
+            if (!guess.trim()) {
+                return;
+            }
 
             // Check if the word was already found before asking the server
             if (foundWords.has(guess)) {
                 setInvalidWord(currentGuess);
                 setCurrentGuess("");
+                playSfx("/sounds/invalid.wav");
                 return;
             }
 
-            // Send the guess to the Spring Boot backend to verify against the dictionary
             fetch("/api/game/guess", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -60,14 +60,15 @@ export default function WordInput({ updateScore }) {
                     if (data.valid) {
                         updateScore(data.score);
                         setFoundWords((prev) => new Set(prev).add(guess));
-                        setInvalidWord(null); // Clear any existing error messages on a successful guess
+                        setInvalidWord(null);
+                        playSfx("/sounds/valid.wav");
                     } else {
-                        setInvalidWord(currentGuess); // Display the invalid word to the user
+                        setInvalidWord(currentGuess);
+                        playSfx("/sounds/invalid.wav");
                     }
                 })
                 .catch((err) => console.error("Error submitting guess:", err));
 
-            // Instantly clear the input box so the UI feels responsive while the fetch happens
             setCurrentGuess("");
         }
     };
@@ -82,11 +83,9 @@ export default function WordInput({ updateScore }) {
                     id="word-input"
                     value={currentGuess}
                     onChange={(e) => {
-                        // Use regex to strip out numbers and special characters, leaving only letters
                         const lettersOnly = e.target.value.replace(/[^a-zA-Z]/g, "");
                         setCurrentGuess(lettersOnly.toUpperCase());
 
-                        // Hide the "invalid word" message the moment the user starts typing a new word
                         if (lettersOnly.length > 0) {
                             setInvalidWord(null);
                         }
@@ -98,11 +97,12 @@ export default function WordInput({ updateScore }) {
                 />
             </div>
 
-            {/* This container has a fixed height in WordInput.css.
-        It prevents the GameBoard from jumping down when an error message appears. 
-      */}
             <div className="invalid-word-container">
-                {invalidWord && <p className="invalid-word-text">{invalidWord} not found or already guessed</p>}
+                {invalidWord && (
+                    <p className="invalid-word-text">
+                        {invalidWord} not found or already guessed
+                    </p>
+                )}
             </div>
         </>
     );

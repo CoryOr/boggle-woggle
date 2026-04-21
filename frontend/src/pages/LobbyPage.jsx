@@ -11,6 +11,7 @@ import PlayerCards from "../components/MultiplayerLobbyComponents/PlayerCards";
 import { Card, Button } from "react-bootstrap";
 import WebSocketService from "../websocket/WebSocketService";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContext";
 import "./Pages.css";
 
 export default function LobbyPage() {
@@ -18,8 +19,11 @@ export default function LobbyPage() {
   const [players, setPlayers] = useState([]);
   const { roomCode } = useParams();
   const { username } = useContext(UserContext);
+  const { playSfx, startMusic } = useContext(AudioContext);
 
   useEffect(() => {
+    startMusic("/sounds/menu-music.mp3");
+
     if (roomCode) {
       WebSocketService.connect(roomCode, username, (data) => {
         setPlayers(data.players);
@@ -29,11 +33,17 @@ export default function LobbyPage() {
     return () => {
       WebSocketService.disconnect();
     };
-  }, [roomCode, username]);
+  }, [roomCode, username, startMusic]);
 
   return (
     <>
-      <button className="stats-back-btn" onClick={() => nav("/game-select")}>
+      <button
+        className="stats-back-btn"
+        onClick={() => {
+          playSfx("/sounds/click.wav");
+          nav("/game-select");
+        }}
+      >
         <div className="stats-back-arrow">←</div>
         BACK
       </button>
