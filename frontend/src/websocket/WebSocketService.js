@@ -4,78 +4,85 @@ import { Client } from '@stomp/stompjs';
 class WebSocketService {
   constructor() {
     this.client = null;
+    this.pendingMessages = [];
   }
 
-  /**
-   * @param {string} roomCode - The code for the specific lobby
-   * @param {string} userId - The current user's ID from UserContext
-   * @param {function} onMessageReceived - Callback to update the React 'players' state
-   */
   connect(roomCode, username, onMessageReceived) {
-  if (this.client && this.client.active) return;
+    if (this.client && this.client.active) return;
 
-  this.client = new Client({
-    webSocketFactory: () => new SockJS(`/ws`),
-    reconnectDelay: 5000,
-  });
-
-  this.client.onConnect = (frame) => {
-    console.log("Connected to STOMP as user:", username);
-    console.log(frame); // here for linting
-
-    // Subscribe to the room's topic
-    this.client.subscribe(`/room/${roomCode}`, (message) => {
-      console.log(message.body);
-      if (onMessageReceived) {
-        onMessageReceived(JSON.parse(message.body));
-      }
+    this.client = new Client({
+      webSocketFactory: () => new SockJS(`/ws`),
+      reconnectDelay: 5000,
     });
 
-    this.joinRoom(roomCode, username); 
-  };
+    this.client.onConnect = () => {
+      console.log("Connected to STOMP as user:", username);
 
-  this.client.activate();
-}
+      this.client.subscribe(`/room/${roomCode}`, (message) => {
+        console.log("Received message from server:", message.body);
+        if (onMessageReceived) {
+          onMessageReceived(JSON.parse(message.body));
+        }
+      });
 
-  /**
-   * Publishes a message to the backend to add the user to the room list
-   */
-  joinRoom(roomCode, username) {
-    if (!roomCode || !username) {
-    console.error("JoinRoom aborted: roomCode or username is null", { roomCode, username });
-    return;
-  }
-  if (this.client && this.client.connected) {
-    const payload = {
-      roomCode: roomCode,
-      username: username
+      this.pendingMessages.forEach(({ destination, payload }) => {
+        this._publishNow(destination, payload);
+      });
+      this.pendingMessages = [];
+
+      this.joinRoom(roomCode, username);
     };
 
-    this.client.publish({
-      destination: "/app/room.join",
-      body: JSON.stringify(payload),
-    });
+    this.client.activate();
   }
-}
 
-toggleReady(roomCode, username) {
-    if (this.client && this.client.connected) {
-        const payload = {
-            roomCode: roomCode,
-            username: username
-        };
-
-        this.client.publish({
-            destination: "/app/room.ready",
-            body: JSON.stringify(payload)
-        });
+  _publishNow(destination, payload) {
+    try {
+      this.client.publish({
+        destination: destination,
+        body: JSON.stringify(payload),
+        headers: { 'content-type': 'application/json' }
+      });
+      console.log(`Successfully published to ${destination} with payload:`, payload);
+    } catch (error) {
+      console.error(`STOMP Publish failed for ${destination}:`, error);
     }
-}
+  }
+
+  _publish(destination, payload) {
+    if (!this.client || !this.client.active) {
+      console.error(`Client not active, dropping message to ${destination}`);
+      return;
+    }
+
+    if (!this.client.connected) {
+      console.warn(`STOMP not fully connected, queuing message to ${destination}`);
+      this.pendingMessages.push({ destination, payload });
+      return;
+    }
+
+    this._publishNow(destination, payload);
+  }
+
+  joinRoom(roomCode, username) {
+    if (!roomCode || !username) {
+      console.error("JoinRoom aborted: roomCode or username is null", { roomCode, username });
+      return;
+    }
+    const payload = { roomCode: roomCode, username: username };
+    this._publish("/app/room.join", payload);
+  }
+
+  toggleReady(roomCode, username) {
+    console.log("Toggle Ready function called for:", username);
+    const payload = { roomCode: roomCode, username: username };
+    this._publish("/app/room.toggle-ready", payload);
+  }
 
   disconnect() {
     if (this.client) {
       this.client.deactivate();
-      this.client = null; // Reset the client for future connections
+      this.client = null;
       console.log("Disconnected from WebSocket");
     }
   }

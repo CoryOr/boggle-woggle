@@ -7,7 +7,7 @@ const PlayerCards = ({ players }) => {
     return (
         <div className="player-cards-container">
             {players.map(player => (
-                <Card key={player.name} className="player-card">
+                <Card key={player.username} className="player-card">
                     <img src={player.avatar} className="avatar" />
                     <p className="player-name">{player.username}</p>
                     {player.isHost && <FaCircleH className="host-icon" /> }

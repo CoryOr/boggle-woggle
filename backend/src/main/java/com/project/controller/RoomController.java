@@ -2,28 +2,35 @@ package com.project.controller;
 
 import com.project.model.dto.JoinRoomRequest;
 import com.project.model.dto.PlayersResponse;
-import com.project.model.dto.UpdateReadyRequest;
 import com.project.service.RoomService;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
-import java.security.Principal;
+
 import java.util.Map;
 
 @Controller
 public class RoomController {
+
+    private static final Logger log = LoggerFactory.getLogger(RoomController.class);
+
     private final SimpMessagingTemplate messagingTemplate;
     private final RoomService roomService;
 
     public RoomController(SimpMessagingTemplate messagingTemplate, RoomService roomService) {
         this.messagingTemplate = messagingTemplate;
         this.roomService = roomService;
+    }
+
+    @MessageExceptionHandler
+    public void handleException(Exception e) {
+        log.error("🚨 CAUGHT SILENT WEBSOCKET ERROR: ", e);
     }
 
     @GetMapping("/api/room/new")
@@ -38,26 +45,31 @@ public class RoomController {
         try {
             roomService.addPlayerToRoom(request.roomCode(), request.username());
             PlayersResponse players = roomService.getPlayersInRoom(request.roomCode());
-
-            // Broadcast the full list to everyone in the room
             messagingTemplate.convertAndSend("/room/" + request.roomCode(), players);
         }
         catch(IllegalArgumentException e) {
-            // TODO: Add something for handling an invalid room request
-            System.out.println(e + " " + request.roomCode());
+            log.warn("Room join failed: {}", request.roomCode(), e);
         }
     }
 
-    @MessageMapping("/room.ready")
-    public void toggleReady(@Payload UpdateReadyRequest request) {
+    @MessageMapping("/room.toggle-ready")
+    public void toggleReady(@Payload Map<String, String> payload) {
+        log.info(" LOGGER BYPASS! RAW JSON RECEIVED: {}", payload);
         try {
-            roomService.togglePlayerReady(request.roomCode(), request.username());
+            String roomCode = payload.get("roomCode");
+            String username = payload.get("username");
 
-            PlayersResponse players = roomService.getPlayersInRoom(request.roomCode());
-            messagingTemplate.convertAndSend("/room/" + request.roomCode(), players);
+            log.info("Sending to RoomService -> Room: {}, User: {}", roomCode, username);
+            roomService.togglePlayerReady(roomCode, username);
+
+            log.info("Fetching updated players...");
+            PlayersResponse players = roomService.getPlayersInRoom(roomCode);
+
+            log.info("Broadcasting back to frontend!");
+            messagingTemplate.convertAndSend("/room/" + roomCode, players);
         }
         catch (Exception e) {
-            System.out.println("Error with toggling ready state");
+            log.error("Error with toggling ready state!", e);
         }
     }
 }
