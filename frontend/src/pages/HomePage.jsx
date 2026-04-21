@@ -21,7 +21,7 @@ import { AudioContext } from "../contexts/AudioContext/AudioContext";
 
 export default function HomePage() {
   const nav = useNavigate();
-  const { avatar, username, isLoggedIn } = useContext(UserContext);
+  const { avatar, username, isLoggedIn, logout } = useContext(UserContext);
   const { muted, toggleMute, playSfx, startMusic } = useContext(AudioContext);
 
   const gameSelect = () => nav("/game-select");
@@ -29,11 +29,18 @@ export default function HomePage() {
   const stats = () => nav("/stats");
   const store = () => nav("/store");
 
+  const handleLogout = () => {
+    logout();
+    nav("/login");
+  };
+
   const navCards = [
     { title: "STORE", action: store },
     { title: "PLAY GAME", action: gameSelect },
     { title: "STATISTICS", action: stats },
-    { title: "LOGIN", action: login },
+    isLoggedIn
+      ? { title: "LOG OUT", action: handleLogout }
+      : { title: "LOGIN", action: login },
   ];
 
   useEffect(() => {

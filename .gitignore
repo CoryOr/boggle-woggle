@@ -16,3 +16,4 @@ build
 .idea/misc.xml
 # Environment Variables
 .env.vscode/
+.env

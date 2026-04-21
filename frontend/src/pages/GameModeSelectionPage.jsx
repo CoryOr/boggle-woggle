@@ -6,7 +6,7 @@
  * 3) Daily Challenge(My own idea of something we could add, but not necessary for the project :D)
  */
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, CardHeader, CardBody, Button } from "react-bootstrap";
 import { RiUser3Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
@@ -14,25 +14,36 @@ import { FaBoltLightning } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import WebSocketService from "../websocket/WebSocketService";
 import "./Pages.css";
+import { UserContext } from "../contexts/UserContext/UserContext";
 
 export default function GameModeSelectionPage() {
   const nav = useNavigate();
+  const { isLoggedIn } = useContext(UserContext);
   const [hasClickedMultiplayer, setHasClickedMultiPlayer] = useState(false);
   const [userInputtedRoomCode, setUserInputtedRoomCode] = useState("");
 
   const createNewRoom = async () => {
+    if (!isLoggedIn) {
+      nav("/login");
+      alert("You must login in order to create a multiplayer room!")
+      return;
+    }
     try {
       const result = await fetch("/api/room/new");
       const data = await result.json();
       nav(`/lobby/${data.roomCode}`);
-    }
-    catch (error) {
+    } catch (error) {
       alert("Error creating room");
       console.log(error);
     }
-  }
+  };
 
   const joinRoom = () => {
+    if (!isLoggedIn) {
+      nav("/login");
+      alert("You must login in order to join a multiplayer room!")
+      return;
+    }
     nav(`/lobby/${userInputtedRoomCode}`);
   };
 

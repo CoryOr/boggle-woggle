@@ -1,10 +1,11 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
 import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { UserContext } from "../contexts/UserContext/UserContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
@@ -36,12 +37,17 @@ export default function GamePage() {
   } = useContext(CurrentGameContext);
 
   const { startMusic, stopMusic, playSfx } = useContext(AudioContext);
+  const { highScore, longestWord } = useContext(UserContext);
+
+  const [prevHighScore] = useState(() => highScore ?? 0);
+  const [prevLongestWord] = useState(() => longestWord?.length ?? 0);
 
   console.log("Current words found:", [...foundWords]);
 
+  // Uncomment when you add gameplay music
   // useEffect(() => {
   //   startMusic("/sounds/bg-music.mp3");
-
+  //
   //   return () => {
   //     stopMusic();
   //   };
@@ -79,7 +85,11 @@ export default function GamePage() {
   return (
     <div className="game-page-container">
       {timeLeft === 0 ? (
-        <GameFinished onGoHome={goHome} />
+        <GameFinished
+          onGoHome={goHome}
+          prevHighScore={prevHighScore}
+          prevLongestWord={prevLongestWord}
+        />
       ) : (
         <>
           {isLoading ? (
