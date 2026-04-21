@@ -9,7 +9,7 @@
  */
 
 import { useContext } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import "./WordInput.css";
 
 /**

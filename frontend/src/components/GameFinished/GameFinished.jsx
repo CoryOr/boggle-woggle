@@ -8,7 +8,7 @@
 
 import "./GameFinished.css";
 import { useContext } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
 export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord }) {
