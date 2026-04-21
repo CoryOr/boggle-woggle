@@ -1,0 +1,258 @@
+/**
+ * MultiplayerGameFinished.css
+ *
+ * Matches the single player GameFinished palette (blue / yellow / white / Montserrat)
+ * while layering in leaderboard-specific elements.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+/* ── Root container ── */
+.mpgf-container {
+    min-height: 100vh;
+    background-color: #4285f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2.5rem 1.5rem 3rem;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    gap: 1.5rem;
+}
+
+/* ── Winner banner ── */
+.mpgf-winner-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: #ffd400;
+    border-radius: 2rem;
+    padding: 0.9rem 2rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    animation: mpgf-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.mpgf-trophy {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.mpgf-winner-text {
+    color: #0057a8;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+}
+
+/* ── Leaderboard card ── */
+.mpgf-leaderboard {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 1.5rem 2rem;
+    width: min(92%, 34rem);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
+    animation: mpgf-slide-up 0.4s ease both;
+    animation-delay: 0.1s;
+}
+
+.mpgf-section-title {
+    color: #0057a8;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 1rem;
+}
+
+.mpgf-board-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mpgf-board-row {
+    display: grid;
+    /* rank | name (flex) | word-count | score */
+    grid-template-columns: 2.2rem 1fr 3rem 5rem;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #f0f4ff;
+    border-radius: 0.75rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0057a8;
+    transition: background-color 0.15s;
+}
+
+/* Highlight the current user's row */
+.mpgf-board-row--me {
+    background-color: #ffd400;
+    color: #003d80;
+}
+
+.mpgf-rank {
+    font-size: 1.15rem;
+    text-align: center;
+}
+
+.mpgf-board-name {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.mpgf-you-tag {
+    background-color: #0057a8;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+}
+
+.mpgf-board-row--me .mpgf-you-tag {
+    background-color: #003d80;
+}
+
+.mpgf-board-words {
+    text-align: right;
+    font-size: 0.8rem;
+    opacity: 0.75;
+}
+
+.mpgf-board-score {
+    text-align: right;
+    font-weight: 700;
+}
+
+/* ── My stats strip ── */
+.mpgf-my-stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    animation: mpgf-slide-up 0.4s ease both;
+    animation-delay: 0.2s;
+}
+
+.mpgf-my-stats strong {
+    font-weight: 800;
+}
+
+/* ── Found-words card (mirrors single-player) ── */
+.mpgf-words-card {
+    background-color: #ffd400;
+    border-radius: 1.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.14);
+    padding: 1.25rem 1.75rem;
+    width: min(92%, 28rem);
+    box-sizing: border-box;
+    animation: mpgf-slide-up 0.4s ease both;
+    animation-delay: 0.25s;
+}
+
+.mpgf-words-card-title {
+    color: #0057a8;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.75rem;
+}
+
+.mpgf-word-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: #0057a8 transparent;
+}
+
+.mpgf-word-item {
+    background-color: white;
+    color: #0057a8;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mpgf-no-words {
+    color: #0057a8;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+}
+
+/* ── Go Home button ── */
+.mpgf-home-button {
+    background-color: #ffd400;
+    color: #0057a8;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 1rem 3rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.14);
+    transition: transform 0.2s ease-in-out;
+    animation: mpgf-slide-up 0.4s ease both;
+    animation-delay: 0.35s;
+}
+
+.mpgf-home-button:hover  { transform: scale(1.05); }
+.mpgf-home-button:active { transform: scale(0.97); }
+
+/* ── Keyframes ── */
+@keyframes mpgf-pop {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1);   }
+}
+
+@keyframes mpgf-slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Responsive ── */
+@media (max-width: 44rem) {
+    .mpgf-container {
+        padding: 1.5rem 1rem 2.5rem;
+    }
+    .mpgf-leaderboard,
+    .mpgf-words-card {
+        width: 100%;
+    }
+    .mpgf-board-row {
+        grid-template-columns: 2rem 1fr 2.5rem 4.5rem;
+        font-size: 0.85rem;
+    }
+    .mpgf-my-stats {
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+}
