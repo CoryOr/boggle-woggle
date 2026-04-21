@@ -15,7 +15,7 @@ class WebSocketService {
       reconnectDelay: 5000,
     });
 
-    this.client.onConnect = (frame) => {
+    this.client.onConnect = () => {
       console.log("Connected to STOMP as user:", username);
 
       this.client.subscribe(`/room/${roomCode}`, (message) => {
