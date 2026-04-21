@@ -28,3 +28,4 @@ app:
   jwt:
     secret: ${APP_JWT_SECRET}
     expirationSeconds: ${APP_JWT_EXPIRATIONSECONDS}
+

@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.auth.jwt.JwtService;
 import com.project.model.dto.JoinRoomRequest;
 import com.project.model.dto.PlayersResponse;
-import com.project.model.dto.UpdateReadyRequest;
 import com.project.service.RoomService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,10 +45,6 @@ public class RoomControllerTests {
     @MockitoBean
     private com.project.auth.security.CustomUserDetailsService customUserDetailsService;
 
-    /**
-     * Tests creating a new room
-     * @throws Exception
-     */
     @Test
     void testCreateRoomEndpoint() throws Exception {
         String mockedCode = "ABC123D";
@@ -59,9 +55,6 @@ public class RoomControllerTests {
                 .andExpect(jsonPath("$.roomCode").value(mockedCode));
     }
 
-    /**
-     * Tests joining an existing room
-     */
     @Test
     void testJoinRoomWebSocketLogic() {
         String roomCode = "ABC123D";
@@ -74,13 +67,9 @@ public class RoomControllerTests {
         roomController.joinRoom(request);
 
         verify(roomService).addPlayerToRoom(roomCode, username);
-
         verify(messagingTemplate).convertAndSend(eq("/room/" + roomCode), eq(mockResponse));
     }
 
-    /**
-     * Tests trying to join a room that doesn't exist
-     */
     @Test
     void testJoinRoomHandlesException() {
         JoinRoomRequest request = new JoinRoomRequest("INVALID", "User");
@@ -94,7 +83,11 @@ public class RoomControllerTests {
     void testToggleUserReady() {
         String roomCode = "ABC123D";
         String username = "testUser";
-        UpdateReadyRequest request = new UpdateReadyRequest(roomCode, username);
+
+        Map<String, String> request = Map.of(
+                "roomCode", roomCode,
+                "username", username
+        );
 
         PlayersResponse mockResponse = new PlayersResponse(new ArrayList<>());
         when(roomService.getPlayersInRoom(roomCode)).thenReturn(mockResponse);
@@ -102,7 +95,6 @@ public class RoomControllerTests {
         roomController.toggleReady(request);
 
         verify(roomService).togglePlayerReady(roomCode, username);
-
         verify(messagingTemplate).convertAndSend(eq("/room/" + roomCode), eq(mockResponse));
     }
 }
