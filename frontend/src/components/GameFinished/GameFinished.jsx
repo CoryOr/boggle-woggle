@@ -8,11 +8,15 @@
 
 import "./GameFinished.css";
 import { useContext, useEffect } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
-export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord }) {
+export default function GameFinished({
+  onGoHome,
+  prevHighScore,
+  prevLongestWord,
+}) {
   const { foundWords, score } = useContext(CurrentGameContext);
   const { isLoggedIn } = useContext(UserContext);
   const { playSfx } = useContext(AudioContext);
@@ -24,9 +28,7 @@ export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord 
   );
 
   const newHighScore =
-    isLoggedIn &&
-    prevHighScore !== undefined &&
-    score > prevHighScore;
+    isLoggedIn && prevHighScore !== undefined && score > prevHighScore;
 
   const newLongestWord =
     isLoggedIn &&

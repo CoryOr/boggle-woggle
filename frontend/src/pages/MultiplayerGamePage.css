@@ -1,0 +1,134 @@
+/**
+ * MultiplayerGamePage.css
+ *
+ * Styles for the multiplayer game layout. Extends the single-player
+ * game layout with a third column (live scoreboard) on the left.
+ */
+
+/* Three-column layout: scoreboard | game | found-words */
+.multiplayer-layout-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* ── LEFT COLUMN: live scoreboard ── */
+.multiplayer-left-column {
+  margin-top: 100px; /* Align with the game board, same offset as right column */
+  min-width: 200px;
+  max-width: 240px;
+}
+
+.mp-scoreboard-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.25rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.mp-scoreboard-title {
+  color: #ffd400;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin: 0 0 1rem 0;
+}
+
+.mp-scoreboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.mp-scoreboard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.07);
+  transition: background 0.2s ease;
+}
+
+/* Highlight the local player's row */
+.mp-scoreboard-row--me {
+  background: rgba(255, 212, 0, 0.18);
+  border: 1px solid rgba(255, 212, 0, 0.4);
+}
+
+.mp-rank {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 1.4rem;
+}
+
+.mp-avatar {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.mp-player-name {
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mp-host-badge {
+  font-size: 0.7rem;
+}
+
+.mp-player-score {
+  color: #ffd400;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── Responsive: collapse side columns on smaller screens ── */
+@media (max-width: 1000px) {
+  .multiplayer-layout-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .multiplayer-left-column {
+    margin-top: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .mp-scoreboard-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .mp-scoreboard-row {
+    flex: 1 1 140px;
+  }
+}

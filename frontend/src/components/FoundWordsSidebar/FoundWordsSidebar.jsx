@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import "./FoundWordsSidebar.css";
 
 /**

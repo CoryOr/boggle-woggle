@@ -8,9 +8,23 @@ import { UserContext } from "../contexts/UserContext/UserContext";
 import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import "./Pages.css";
 
+/**
+ * LobbyPage.jsx
+ *
+ * Multiplayer lobby. Players join, toggle ready, and the host starts the game.
+ *
+ * When the host clicks Start Game:
+ *  1. Host publishes { roomCode } to /app/room.start via WebSocket
+ *  2. Server generates a board and broadcasts MultiplayerGameState to
+ *     /room/{roomCode}/start
+ *  3. All clients receive it here and navigate to /lobby/:roomCode/game
+ *     with players, gameId, and board in router state
+ *  4. MultiplayerGamePage reconnects fresh after a short delay
+ */
 export default function LobbyPage() {
   const nav = useNavigate();
   const [players, setPlayers] = useState([]);
+  const [isStarting, setIsStarting] = useState(false);
   const { roomCode } = useParams();
   const { username, isLoggedIn } = useContext(UserContext);
   const { playSfx, startMusic } = useContext(AudioContext);
@@ -20,25 +34,48 @@ export default function LobbyPage() {
   const isReady = currentUser?.isReady || false;
   const allPlayersReady = players.length > 0 && players.every((p) => p.isReady);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!isLoggedIn) {
-      nav("/login");
-    }
+    if (!isLoggedIn) nav("/login");
   }, [isLoggedIn, nav]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     startMusic("/sounds/menu-music.mp3");
 
-    if (roomCode && username) {
-      socketService.connect(roomCode, username, (data) => {
-        setPlayers(data.players);
-      });
-    }
+    if (!roomCode || !username) return;
+
+    socketService.connect(
+      roomCode,
+      username,
+      (data) => {
+        if (data.gameId && data.board) {
+          nav(`/lobby/${roomCode}/game`, {
+            state: { players, gameId: data.gameId, board: data.board },
+          });
+          return;
+        }
+        if (data.players) setPlayers(data.players);
+      },
+      null
+    );
 
     return () => {
       socketService.disconnect();
     };
-  }, [roomCode, username, startMusic]);
+  }, [roomCode, username, nav, startMusic, players]);
+
+  const handleStartGame = () => {
+    if (!allPlayersReady || isStarting) return;
+    setIsStarting(true);
+    try {
+      playSfx("/sounds/click.wav");
+      socketService._publish("/app/room.start", { roomCode });
+    } catch (err) {
+      console.error("Failed to start game:", err);
+      setIsStarting(false);
+    }
+  };
 
   if (!isLoggedIn) return null;
 
@@ -72,11 +109,17 @@ export default function LobbyPage() {
           </Button>
 
           {isHost ? (
-            <Button className={allPlayersReady ? "btn" : "btn-disabled"}>
-              Start Game
+            <Button
+              className={allPlayersReady && !isStarting ? "btn" : "btn btn-disabled"}
+              onClick={handleStartGame}
+              disabled={!allPlayersReady || isStarting}
+            >
+              {isStarting ? "Starting..." : "Start Game"}
             </Button>
           ) : (
-            <Button className="btn-disabled">Waiting for host...</Button>
+            <Button className="btn btn-disabled" disabled>
+              Waiting for host...
+            </Button>
           )}
         </Card>
       </div>
