@@ -71,4 +71,15 @@ public class RoomService {
             }
         }
     }
+
+    public void updatePlayerScore(String roomCode, String username, int score) {
+        List<LobbyUser> users = activeRooms.get(roomCode);
+
+        for (LobbyUser user: users) {
+            if (user.getUsername().equals(username)) {
+                user.setScore(score);
+                break;
+            }
+        }
+    }
 }
