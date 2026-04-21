@@ -10,7 +10,7 @@
 
 import { useContext } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
-import { AudioContext } from "../../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 import "./WordInput.css";
 
 /**

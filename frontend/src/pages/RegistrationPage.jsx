@@ -1,7 +1,7 @@
 import RegisterForm from "../components/RegisterForm/RegisterForm";
 import "./Pages.css";
 import { useContext, useEffect } from "react";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 
 const RegistrationPage = () => {
   const { startMusic } = useContext(AudioContext);

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import { UserContext } from "../contexts/UserContext/UserContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
@@ -36,22 +36,13 @@ export default function GamePage() {
     gameId,
   } = useContext(CurrentGameContext);
 
-  const { startMusic, stopMusic, playSfx } = useContext(AudioContext);
+  const { stopMusic, playSfx } = useContext(AudioContext);
   const { highScore, longestWord } = useContext(UserContext);
 
   const [prevHighScore] = useState(() => highScore ?? 0);
   const [prevLongestWord] = useState(() => longestWord?.length ?? 0);
 
   console.log("Current words found:", [...foundWords]);
-
-  // Uncomment when you add gameplay music
-  // useEffect(() => {
-  //   startMusic("/sounds/bg-music.mp3");
-  //
-  //   return () => {
-  //     stopMusic();
-  //   };
-  // }, [startMusic, stopMusic]);
 
   useEffect(() => {
     if (timeLeft === 0) {

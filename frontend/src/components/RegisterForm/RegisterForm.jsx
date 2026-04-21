@@ -20,7 +20,7 @@ import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext/UserContext";
-import { AudioContext } from "../../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 
 const avatarOptions = [
   { label: "Assassin", src: "/Assassin_Avatar.png" },

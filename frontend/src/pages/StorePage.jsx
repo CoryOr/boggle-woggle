@@ -5,7 +5,7 @@
 import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 
 export default function StorePage() {
   const nav = useNavigate();

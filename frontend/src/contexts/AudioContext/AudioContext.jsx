@@ -16,15 +16,13 @@
  */
 
 import {
-  createContext,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-
-export const AudioContext = createContext(null);
+import { AudioContext } from "./AudioContextContext";
 
 const AUDIO_STORAGE_KEY = "audioSettings";
 
@@ -48,9 +46,6 @@ export function AudioProvider({ children }) {
   });
 
   const backgroundMusicRef = useRef(null);
-
-  // Keeps track of the exact music path we last started,
-  // so navigating across pages with the same song does not restart it
   const currentMusicSrcRef = useRef(null);
 
   useEffect(() => {
@@ -108,7 +103,6 @@ export function AudioProvider({ children }) {
       try {
         const currentMusic = backgroundMusicRef.current;
 
-        // If the same exact track is already active, do not restart it.
         if (currentMusic && currentMusicSrcRef.current === src) {
           currentMusic.volume = muted ? 0 : volume;
           currentMusic.muted = muted;
@@ -122,7 +116,6 @@ export function AudioProvider({ children }) {
           return;
         }
 
-        // If a different track is currently loaded, stop it before switching
         if (currentMusic) {
           currentMusic.pause();
           currentMusic.currentTime = 0;

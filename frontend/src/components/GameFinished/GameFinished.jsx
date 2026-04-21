@@ -9,7 +9,7 @@
 import "./GameFinished.css";
 import { useContext, useEffect } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
-import { AudioContext } from "../../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 import { UserContext } from "../../contexts/UserContext/UserContext";
 
 export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord }) {

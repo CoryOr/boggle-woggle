@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import LetterTile from "./LetterTile";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
-import { AudioContext } from "../../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 import "./GameBoard.css";
 
 /**

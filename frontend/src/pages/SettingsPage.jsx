@@ -5,7 +5,7 @@
 
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import { useNavigate } from "react-router-dom";
 
 export default function SettingsPage() {

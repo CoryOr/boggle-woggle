@@ -2,7 +2,7 @@ import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import StatsComponent from "../components/StatsPage/StatsComponent";
 
 export default function StatsPage() {

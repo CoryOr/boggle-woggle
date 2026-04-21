@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 
 export default function HomePage() {
   const nav = useNavigate();

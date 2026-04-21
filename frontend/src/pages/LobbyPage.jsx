@@ -5,7 +5,7 @@ import PlayerCards from "../components/MultiplayerLobbyComponents/PlayerCards";
 import { Card, Button } from "react-bootstrap";
 import socketService from "../websocket/WebSocketService";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import "./Pages.css";
 
 export default function LobbyPage() {
