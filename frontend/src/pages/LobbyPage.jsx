@@ -33,10 +33,12 @@ export default function LobbyPage() {
     const isReady = currentUser?.isReady || false;
     const allPlayersReady = players.length > 0 && players.every((p) => p.isReady);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (!isLoggedIn) nav("/login");
     }, [isLoggedIn, nav]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (!roomCode || !username) return;
 
