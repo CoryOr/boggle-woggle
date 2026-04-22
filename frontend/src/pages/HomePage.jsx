@@ -17,30 +17,34 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 
 export default function HomePage() {
   const nav = useNavigate();
-  const { avatar, username, isLoggedIn } = useContext(UserContext);
-  const { muted, toggleMute, playSfx, startMusic } = useContext(AudioContext);
+  const { avatar, username, isLoggedIn, logout } = useContext(UserContext);
 
   const gameSelect = () => nav("/game-select");
   const login = () => nav("/login");
   const stats = () => nav("/stats");
   const store = () => nav("/store");
+  const handleLogout = () => {
+    logout();
+    nav("/login");
+  };
+
 
   const navCards = [
     { title: "STORE", action: store },
     { title: "PLAY GAME", action: gameSelect },
     { title: "STATISTICS", action: stats },
-    { title: "LOGIN", action: login },
-  ];
+    isLoggedIn
+        ? { title: "LOG OUT", action: handleLogout }
+        : { title: "LOGIN", action: login },
+    ];
 
   useEffect(() => {
     localStorage.removeItem("currentGame");
     localStorage.removeItem("foundWords");
-    startMusic("/sounds/menu-music.mp3");
-  }, [startMusic]);
+  }, []);
 
   return (
     <div className="homePage">
@@ -63,25 +67,12 @@ export default function HomePage() {
               />
             )}
 
-            <img
-              src="/Volume.png"
-              alt={muted ? "audio muted" : "audio on"}
-              className="VolumeImage"
-              onClick={() => {
-                playSfx("/sounds/click.wav");
-                toggleMute();
-              }}
-              style={{ cursor: "pointer", opacity: muted ? 0.6 : 1 }}
-            />
-
+            <img src="/Volume.png" alt="volume" className="VolumeImage" />
             <img
               src="/SettingBox.png"
               alt="settings"
               className="SettingImage"
-              onClick={() => {
-                playSfx("/sounds/click.wav");
-                nav("/settings");
-              }}
+              onClick={() => nav("/settings")}
             />
           </div>
         </div>
@@ -91,13 +82,20 @@ export default function HomePage() {
             <Card
               key={card.title}
               className="homeNavCard"
-              onClick={() => {
-                playSfx("/sounds/click.wav");
-                card.action();
-              }}
+              onClick={card.action}
             >
               <Card.Body className="homeNavCardBody">
-                <Card.Text className="homeNavCardText">{card.title}</Card.Text>
+                <Card.Text className="homeNavCardText">
+                  {card.title === "SINGLE PLAYER" ? (
+                    <>
+                      SINGLE
+                      <br />
+                      PLAYER
+                    </>
+                  ) : (
+                    card.title
+                  )}
+                </Card.Text>
               </Card.Body>
             </Card>
           ))}
