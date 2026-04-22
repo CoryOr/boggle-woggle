@@ -1,7 +1,7 @@
 import "./Pages.css";
 import "./MultiplayerGamePage.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useContext, useEffect, useState, useCallback } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import MultiplayerWordInput from "../components/MultiplayerWordInput/MultiplayerWordInput";
 import CurrentScore from "../components/CurrentScore/CurrentScore";
@@ -11,7 +11,6 @@ import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar
 import MultiplayerGameFinished from "../components/MultiplayerGameFinished/MultiplayerGameFinished";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import socketService from "../websocket/WebSocketService";
 
 /**
@@ -31,6 +30,7 @@ import socketService from "../websocket/WebSocketService";
 export default function MultiplayerGamePage({ initialPlayers }) {
   const nav = useNavigate();
   const { roomCode } = useParams();
+  const [version, setVersion] = useState(0);
 
   const {
     board,
@@ -45,8 +45,8 @@ export default function MultiplayerGamePage({ initialPlayers }) {
   } = useContext(CurrentGameContext);
 
   const { username } = useContext(UserContext);
-  const { startMusic, stopMusic, playSfx } = useContext(AudioContext);
 
+  // playerScores: { username: number } — matches MultiplayerGameFinished prop shape
   const [playerScores, setPlayerScores] = useState(() => {
     const initial = {};
     (initialPlayers ?? []).forEach((p) => {
@@ -55,26 +55,36 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     return initial;
   });
 
+  const updateScore = (points) => {
+    setScore(score + points);
+  };
+
+  const updatePlayerScores = (points) => {
+    setPlayerScores((prev) => ({
+      ...prev,
+      [username]: (prev[username] || 0) + points,
+    }));
+  };
+
+  // playerFoundWords: { username: string[] } — matches MultiplayerGameFinished prop shape
   const [playerFoundWords, setPlayerFoundWords] = useState({});
 
   useEffect(() => {
-    startMusic("/sounds/gameplay-music.mp3");
-
-    return () => {
-      stopMusic();
-    };
-  }, [startMusic, stopMusic]);
-
-  useEffect(() => {
+    // Small delay ensures LobbyPage's disconnect cleanup finishes before
+    // we establish the new connection. Without this, React Strict Mode's
+    // double-invoke causes a race between disconnect and connect.
     const timer = setTimeout(() => {
       socketService.connect(roomCode, username, null, (state) => {
+        // state = MultiplayerGameState { playerScores: {}, playerFoundWords: {} }
         setPlayerScores({ ...state.playerScores });
         setPlayerFoundWords({ ...state.playerFoundWords });
 
+        // Keep local context score in sync so CurrentScore is accurate
         if (state.playerScores[username] !== undefined) {
           setScore(state.playerScores[username]);
         }
 
+        // Keep local found words in sync so FoundWordsSidebar is accurate
         // if (state.playerFoundWords?.[username]) {
         //   setFoundWords(new Set(state.playerFoundWords[username]));
         // }
@@ -82,7 +92,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [roomCode, username, setFoundWords, setScore]);
+  }, [roomCode, username, setFoundWords, setScore, version]);
 
   useEffect(() => {
     if (timeLeft === 0 && gameId) {
@@ -105,21 +115,11 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }
   }, [timeLeft, gameId, score, foundWords]);
 
-  const updateScore = (points) => {
-    setScore(score + points);
-  };
-
-  const updatePlayerScores = (points) => {
-    setPlayerScores((prev) => ({
-      ...prev,
-      [username]: (prev[username] || 0) + points,
-    }));
-  };
-
   const goHome = () => {
     socketService.disconnect();
     nav("/");
   };
+
 
   if (timeLeft === 0) {
     console.log(playerFoundWords);
@@ -139,6 +139,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
         <LoadingIcon />
       ) : (
         <div className="multiplayer-layout-wrapper">
+          {/* Left: live scoreboard */}
           <div className="multiplayer-left-column">
             <div className="mp-scoreboard-card">
               <h2 className="mp-scoreboard-title">SCORES</h2>
@@ -179,6 +180,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             </div>
           </div>
 
+          {/* Center: main game */}
           <div className="game-center-column">
             <p className="game-page-text title">
               DRAG OR TYPE LETTERS TO PLAY!
@@ -196,7 +198,6 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             <button
               className="btn quit-btn"
               onClick={() => {
-                playSfx("/sounds/click.wav");
                 socketService.disconnect();
                 setTimeLeft(0);
               }}
@@ -205,6 +206,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             </button>
           </div>
 
+          {/* Right: found words */}
           <div className="game-right-column">
             <FoundWordsSidebar />
           </div>

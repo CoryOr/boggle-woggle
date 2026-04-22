@@ -1,110 +1,22 @@
 /**
- * SettingsPage.jsx
- * Page for user settings, including global audio controls.
+ * Page that stores user settings. Has zero functionality currently. To be implemented...
  */
 
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import { useNavigate } from "react-router-dom";
 
 export default function SettingsPage() {
   const { username } = useContext(UserContext);
-  const {
-    muted,
-    toggleMute,
-    volume,
-    setVolume,
-    musicVolume,
-    setMusicVolume,
-    sfxVolume,
-    setSfxVolume,
-    playSfx,
-    startMusic,
-  } = useContext(AudioContext);
   const nav = useNavigate();
-
-  useEffect(() => {
-    startMusic("/sounds/menu-music.mp3");
-  }, [startMusic]);
 
   return (
     <>
-      <button
-        className="stats-back-btn"
-        onClick={() => {
-          playSfx("/sounds/click.wav");
-          nav("/");
-        }}
-      >
+      <button className="stats-back-btn" onClick={() => nav("/")}>
         <div className="stats-back-arrow">←</div>
         BACK
       </button>
-
-      <h1 className="title">Settings for: {username}</h1>
-
-      <div style={{ padding: "1rem" }}>
-        <h2>Audio Settings</h2>
-
-        <p>Audio is currently: {muted ? "Muted" : "On"}</p>
-
-        <button
-          onClick={() => {
-            playSfx("/sounds/click.wav");
-            toggleMute();
-          }}
-        >
-          {muted ? "Unmute Audio" : "Mute Audio"}
-        </button>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label htmlFor="master-volume-slider">
-            Master Volume: {Math.round(volume * 100)}%
-          </label>
-          <br />
-          <input
-            id="master-volume-slider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            onChange={(e) => setVolume(e.target.value)}
-          />
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label htmlFor="music-volume-slider">
-            Music Volume: {Math.round(musicVolume * 100)}%
-          </label>
-          <br />
-          <input
-            id="music-volume-slider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={musicVolume}
-            onChange={(e) => setMusicVolume(e.target.value)}
-          />
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          <label htmlFor="sfx-volume-slider">
-            SFX Volume: {Math.round(sfxVolume * 100)}%
-          </label>
-          <br />
-          <input
-            id="sfx-volume-slider"
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={sfxVolume}
-            onChange={(e) => setSfxVolume(e.target.value)}
-          />
-        </div>
-      </div>
+      <h1 className="title">Username is: {username}</h1>
     </>
   );
 }
