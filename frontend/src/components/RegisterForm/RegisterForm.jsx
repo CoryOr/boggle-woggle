@@ -20,6 +20,7 @@ import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext/UserContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 
 const avatarOptions = [
   { label: "Assassin", src: "/Assassin_Avatar.png" },
@@ -35,6 +36,7 @@ const RegisterForm = () => {
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
+  const { playSfx } = useContext(AudioContext);
 
   const handleSubmitAsync = async (event) => {
     event.preventDefault();
@@ -79,14 +81,17 @@ const RegisterForm = () => {
     setPassword("");
     setConfirmPassword("");
     setSelectedAvatar("");
-    };
+  };
 
   return (
     <div id="register-page-wrapper">
       <button
         type="button"
         className="register-back-btn"
-        onClick={() => navigate("/")}
+        onClick={() => {
+          playSfx("/sounds/click.wav");
+          navigate("/");
+        }}
       >
         <span className="register-back-arrow" aria-hidden="true">
           ←
@@ -128,7 +133,10 @@ const RegisterForm = () => {
                   key={avatar.src}
                   type="button"
                   className={`avatar-option ${selectedAvatar === avatar.src ? "selected" : ""}`}
-                  onClick={() => setSelectedAvatar(avatar.src)}
+                  onClick={() => {
+                    playSfx("/sounds/click.wav");
+                    setSelectedAvatar(avatar.src);
+                  }}
                 >
                   <img src={avatar.src} alt={avatar.label} />
                 </button>
@@ -136,7 +144,11 @@ const RegisterForm = () => {
             </div>
           </div>
 
-          <Button className="register-submit-btn" type="submit">
+          <Button
+            className="register-submit-btn"
+            type="submit"
+            onClick={() => playSfx("/sounds/click.wav")}
+          >
             SIGN UP
           </Button>
         </form>

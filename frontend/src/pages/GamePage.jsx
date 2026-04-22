@@ -5,6 +5,7 @@ import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
@@ -24,7 +25,6 @@ import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar
 export default function GamePage() {
   const nav = useNavigate();
 
-  // Pull necessary global state for the main hub logic
   const {
     board,
     score,
@@ -37,38 +37,38 @@ export default function GamePage() {
   } = useContext(CurrentGameContext);
 
   const { highScore, longestWord } = useContext(UserContext);
+  const { startMusic, stopMusic, playSfx } = useContext(AudioContext);
 
   const [prevHighScore] = useState(() => highScore ?? 0);
   const [prevLongestWord] = useState(() => longestWord?.length ?? 0);
 
-  console.log("Current words found:" + foundWords); // NOTE: THIS IS JUST HERE TO PASS LINTING
+  useEffect(() => {
+    startMusic("/sounds/gameplay-music.mp3");
 
-/**
- * When the game timer hits 0,  we will send a request to the database to store the game information
- */
- useEffect(() => {
-     if (timeLeft === 0 && gameId) {
-        fetch("/api/game/finish", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}` // or wherever you store your JWT
-            },
-            body: JSON.stringify({ gameId, score, foundWords: [...foundWords] }),
-        })
-        .then(res => console.log("Game saved, status:", res.status))
-        .catch(err => console.error("Failed to save game result:", err));
-     }
- }, [timeLeft, gameId, score, foundWords]);
+    return () => {
+      stopMusic();
+    };
+  }, [startMusic, stopMusic]);
+
+  useEffect(() => {
+    if (timeLeft === 0 && gameId) {
+      fetch("/api/game/finish", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ gameId, score, foundWords: [...foundWords] }),
+      })
+        .then((res) => console.log("Game saved, status:", res.status))
+        .catch((err) => console.error("Failed to save game result:", err));
+    }
+  }, [timeLeft, gameId, score, foundWords]);
 
   const goHome = () => {
     nav("/");
   };
 
-  /**
-   * Callback to increase the user's score upon a valid guess.
-   * @param {number} points - The points to add to the current score.
-   */
   const updateScore = (points) => {
     setScore(score + points);
   };
@@ -76,8 +76,8 @@ export default function GamePage() {
   return (
     <div className="game-page-container">
       {timeLeft === 0 ? (
-        <GameFinished 
-          onGoHome={goHome} 
+        <GameFinished
+          onGoHome={goHome}
           prevHighScore={prevHighScore}
           prevLongestWord={prevLongestWord}
         />
@@ -86,34 +86,33 @@ export default function GamePage() {
           {isLoading ? (
             <LoadingIcon />
           ) : (
-                  <div className="game-layout-wrapper">
+            <div className="game-layout-wrapper">
+              <div className="game-center-column">
+                <p className="game-page-text title">
+                  DRAG OR TYPE LETTERS TO PLAY!
+                </p>
+                <Timer timeLeft={timeLeft} />
+                <CurrentScore score={score} />
+                <WordInput updateScore={updateScore} />
+                <GameBoard board={board} updateScore={updateScore} />
+                <button
+                  className="btn quit-btn"
+                  onClick={() => {
+                    playSfx("/sounds/click.wav");
+                    setTimeLeft(0);
+                  }}
+                >
+                  QUIT
+                </button>
+              </div>
 
-                    {/* Left Side: The Main Game Board & Input */}
-                    <div className="game-center-column">
-                      <p className="game-page-text title">
-                        DRAG OR TYPE LETTERS TO PLAY!
-                      </p>
-                      <Timer timeLeft={timeLeft} />
-                      <CurrentScore score={score} />
-                      <WordInput updateScore={updateScore} />
-                      <GameBoard board={board} updateScore={updateScore} />
-                      <button
-                          className="btn quit-btn"
-                          onClick={() => setTimeLeft(0)}
-                      >
-                        QUIT
-                      </button>
-                    </div>
-
-                    {/* Right Side: The Found Words Sidebar */}
-                    <div className="game-right-column">
-                      <FoundWordsSidebar />
-                    </div>
-
-                  </div>
-              )}
-            </>
-        )}
-      </div>
+              <div className="game-right-column">
+                <FoundWordsSidebar />
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }

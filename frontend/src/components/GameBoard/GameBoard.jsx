@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import LetterTile from "./LetterTile";
-import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
+import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 import "./GameBoard.css";
 import socketService from "../../websocket/WebSocketService.js";
 
@@ -15,14 +16,25 @@ import socketService from "../../websocket/WebSocketService.js";
  * @param {Function} props.updateScore - Callback function triggered when a valid word is submitted.
  * * @context {CurrentGameContext} Uses gameId for API submission, and currentGuess/setCurrentGuess to sync UI.
  */
-const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username }) => {
-  // Local state for the physical tiles currently highlighted
+const GameBoard = ({
+  board,
+  updateScore,
+  updatePlayerScores,
+  roomCode,
+  username,
+}) => {
   const [selectedTiles, setSelectedTiles] = useState([]);
   const [svgPoints, setSvgPoints] = useState(null);
 
-  // Global state synced with WordInput
-  const { gameId, setCurrentGuess, foundWords, setFoundWords, setInvalidWord } =
-    useContext(CurrentGameContext);
+  const {
+    gameId,
+    setCurrentGuess,
+    foundWords,
+    setFoundWords,
+    setInvalidWord,
+  } = useContext(CurrentGameContext);
+
+  const { playSfx } = useContext(AudioContext);
 
   const isDraggingRef = useRef(false);
   const selectedTilesRef = useRef([]);
@@ -37,14 +49,12 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
   const getSelectionIndex = (row, col) =>
     selectedTiles.findIndex((t) => t.row === row && t.col === col);
 
-  /**
-   * Helper function to calculate SVG lines.
-   */
   const updateSvgLines = (tiles) => {
     if (!boardRef.current || tiles.length < 2) {
       setSvgPoints(null);
       return;
     }
+
     const boardRect = boardRef.current.getBoundingClientRect();
     const points = tiles
       .map((t) => {
@@ -57,15 +67,14 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
         };
       })
       .filter(Boolean);
+
     setSvgPoints(points.length >= 2 ? points : null);
   };
 
-  /**
-   * Initializes the drag sequence when a user clicks on a tile.
-   */
   const handleTileMouseDown = (e, row, col, letter) => {
     e.preventDefault();
     const initial = [{ row, col, letter }];
+
     isDraggingRef.current = true;
     selectedTilesRef.current = initial;
     setSelectedTiles(initial);
@@ -74,14 +83,10 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
     updateSvgLines(initial);
   };
 
-  /**
-   * Continues the drag sequence as the mouse enters new tiles.
-   * Enforces rules: cannot revisit tiles, must be adjacent to the last tile.
-   */
   const handleTileMouseEnter = (row, col, letter) => {
     if (!isDraggingRef.current) return;
-    const current = selectedTilesRef.current;
 
+    const current = selectedTilesRef.current;
     if (current.some((t) => t.row === row && t.col === col)) return;
 
     const last = current[current.length - 1];
@@ -93,20 +98,11 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
       selectedTilesRef.current = updated;
       setSelectedTiles(updated);
 
-      setCurrentGuess(
-        updated
-          .map((t) => t.letter)
-          .join("")
-          .toUpperCase()
-      );
+      setCurrentGuess(updated.map((t) => t.letter).join("").toUpperCase());
       updateSvgLines(updated);
     }
   };
 
-  /**
-   * Global mouse up listener ensures the drag ends even if the user releases
-   * their mouse while outside the boundaries of the game board.
-   */
   useEffect(() => {
     const handleMouseUp = () => {
       if (!isDraggingRef.current) return;
@@ -127,13 +123,11 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
         .join("")
         .toLowerCase();
 
-      // Instantly clear the UI text box so it feels responsive
       setCurrentGuess("");
 
-      // Prevent submitting words already found
       if (foundWords.has(guess)) {
         setInvalidWord(guess.toUpperCase());
-        setCurrentGuess("");
+        playSfx("/sounds/invalid.wav");
         return;
       }
 
@@ -146,12 +140,18 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
         .then((data) => {
           if (data.valid) {
             updateScore(data.score);
-            updatePlayerScores(data.score);
-            socketService.broadcastPlayerScore(roomCode, username, data.score);
+
+            if (updatePlayerScores && roomCode && username) {
+              updatePlayerScores(data.score);
+              socketService.broadcastPlayerScore(roomCode, username, data.score);
+            }
+
             setFoundWords((prev) => new Set(prev).add(guess));
             setInvalidWord(null);
+            playSfx("/sounds/valid.wav");
           } else {
             setInvalidWord(guess.toUpperCase());
+            playSfx("/sounds/invalid.wav");
           }
         })
         .catch((err) => console.error("Error submitting guess:", err));
@@ -162,13 +162,14 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
   }, [
     gameId,
     updateScore,
+    updatePlayerScores,
+    roomCode,
+    username,
     setCurrentGuess,
     foundWords,
     setFoundWords,
     setInvalidWord,
-    roomCode,
-    username,
-    updatePlayerScores
+    playSfx,
   ]);
 
   return (
@@ -190,6 +191,7 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
             />
           </svg>
         )}
+
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className="gameboard-row">
             {row.map((letter, colIndex) => (
