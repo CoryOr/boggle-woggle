@@ -75,7 +75,6 @@ export default function MultiplayerGamePage({ initialPlayers }) {
           setScore(state.playerScores[username]);
         }
 
-        // Keep local found words in sync so FoundWordsSidebar is accurate
         // if (state.playerFoundWords?.[username]) {
         //   setFoundWords(new Set(state.playerFoundWords[username]));
         // }
@@ -123,6 +122,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
   };
 
   if (timeLeft === 0) {
+    console.log(playerFoundWords);
     return (
       <MultiplayerGameFinished
         playerScores={playerScores}

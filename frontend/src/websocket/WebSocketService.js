@@ -122,6 +122,10 @@ class WebSocketService {
         this._publish("/app/room.guess", { roomCode, guess });
     }
 
+    broadcastPlayerScore(roomCode, username, score) {
+        this._publish("/app/room.score", { roomCode, username, score });
+    }
+
     disconnect() {
         if (this.client) {
             this.client.deactivate();

@@ -36,10 +36,28 @@ export function AudioProvider({ children }) {
     }
   });
 
-  const [volume, setVolumeState] = useState(() => {
+  const [masterVolume, setMasterVolumeState] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(AUDIO_STORAGE_KEY));
-      return saved?.volume ?? 0.5;
+      return saved?.masterVolume ?? 0.5;
+    } catch {
+      return 0.5;
+    }
+  });
+
+  const [musicVolume, setMusicVolumeState] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(AUDIO_STORAGE_KEY));
+      return saved?.musicVolume ?? 0.5;
+    } catch {
+      return 0.5;
+    }
+  });
+
+  const [sfxVolume, setSfxVolumeState] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(AUDIO_STORAGE_KEY));
+      return saved?.sfxVolume ?? 0.5;
     } catch {
       return 0.5;
     }
@@ -53,25 +71,44 @@ export function AudioProvider({ children }) {
       AUDIO_STORAGE_KEY,
       JSON.stringify({
         muted,
-        volume,
+        masterVolume,
+        musicVolume,
+        sfxVolume,
       })
     );
-  }, [muted, volume]);
+  }, [muted, masterVolume, musicVolume, sfxVolume]);
 
   useEffect(() => {
     if (backgroundMusicRef.current) {
-      backgroundMusicRef.current.volume = muted ? 0 : volume;
+      backgroundMusicRef.current.volume = muted
+        ? 0
+        : masterVolume * musicVolume;
       backgroundMusicRef.current.muted = muted;
     }
-  }, [muted, volume]);
+  }, [muted, masterVolume, musicVolume]);
+
+  const clampVolume = (value) => {
+    const numericValue = Number(value);
+    if (Number.isNaN(numericValue)) return null;
+    return Math.min(1, Math.max(0, numericValue));
+  };
 
   const setVolume = useCallback((newVolume) => {
-    const numericVolume = Number(newVolume);
+    const clampedVolume = clampVolume(newVolume);
+    if (clampedVolume === null) return;
+    setMasterVolumeState(clampedVolume);
+  }, []);
 
-    if (Number.isNaN(numericVolume)) return;
+  const setMusicVolume = useCallback((newVolume) => {
+    const clampedVolume = clampVolume(newVolume);
+    if (clampedVolume === null) return;
+    setMusicVolumeState(clampedVolume);
+  }, []);
 
-    const clampedVolume = Math.min(1, Math.max(0, numericVolume));
-    setVolumeState(clampedVolume);
+  const setSfxVolume = useCallback((newVolume) => {
+    const clampedVolume = clampVolume(newVolume);
+    if (clampedVolume === null) return;
+    setSfxVolumeState(clampedVolume);
   }, []);
 
   const toggleMute = useCallback(() => {
@@ -85,7 +122,7 @@ export function AudioProvider({ children }) {
       try {
         const sound = new Audio(src);
         const clampedCustomVolume = Math.min(1, Math.max(0, customVolume));
-        sound.volume = volume * clampedCustomVolume;
+        sound.volume = masterVolume * sfxVolume * clampedCustomVolume;
         sound.play().catch((err) => {
           console.warn("Unable to play sound effect:", err);
         });
@@ -93,7 +130,7 @@ export function AudioProvider({ children }) {
         console.warn("Error creating sound effect:", err);
       }
     },
-    [muted, volume]
+    [muted, masterVolume, sfxVolume]
   );
 
   const startMusic = useCallback(
@@ -104,7 +141,7 @@ export function AudioProvider({ children }) {
         const currentMusic = backgroundMusicRef.current;
 
         if (currentMusic && currentMusicSrcRef.current === src) {
-          currentMusic.volume = muted ? 0 : volume;
+          currentMusic.volume = muted ? 0 : masterVolume * musicVolume;
           currentMusic.muted = muted;
 
           if (currentMusic.paused) {
@@ -123,7 +160,7 @@ export function AudioProvider({ children }) {
 
         const music = new Audio(src);
         music.loop = true;
-        music.volume = muted ? 0 : volume;
+        music.volume = muted ? 0 : masterVolume * musicVolume;
         music.muted = muted;
 
         backgroundMusicRef.current = music;
@@ -136,7 +173,7 @@ export function AudioProvider({ children }) {
         console.warn("Error starting background music:", err);
       }
     },
-    [muted, volume]
+    [muted, masterVolume, musicVolume]
   );
 
   const pauseMusic = useCallback(() => {
@@ -150,23 +187,43 @@ export function AudioProvider({ children }) {
       backgroundMusicRef.current.pause();
       backgroundMusicRef.current.currentTime = 0;
     }
-
     currentMusicSrcRef.current = null;
   }, []);
 
   const value = useMemo(
     () => ({
       muted,
-      volume,
-      setVolume,
       toggleMute,
       setMuted,
+
+      volume: masterVolume,
+      setVolume,
+
+      masterVolume,
+      musicVolume,
+      sfxVolume,
+      setMusicVolume,
+      setSfxVolume,
+
       playSfx,
       startMusic,
       pauseMusic,
       stopMusic,
     }),
-    [muted, volume, setVolume, toggleMute, playSfx, startMusic, pauseMusic, stopMusic]
+    [
+      muted,
+      toggleMute,
+      setVolume,
+      masterVolume,
+      musicVolume,
+      sfxVolume,
+      setMusicVolume,
+      setSfxVolume,
+      playSfx,
+      startMusic,
+      pauseMusic,
+      stopMusic,
+    ]
   );
 
   return (

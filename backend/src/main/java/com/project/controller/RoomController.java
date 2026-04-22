@@ -1,5 +1,7 @@
 package com.project.controller;
 
+import com.project.model.domain.LobbyUser;
+import com.project.model.domain.MultiplayerGameState;
 import com.project.model.dto.JoinRoomRequest;
 import com.project.model.dto.PlayersResponse;
 import com.project.service.RoomService;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class RoomController {
@@ -70,6 +72,34 @@ public class RoomController {
         }
         catch (Exception e) {
             log.error("Error with toggling ready state!", e);
+        }
+    }
+
+    @MessageMapping("/room.score")
+    public void updatePlayerScore(@Payload Map<String, String> payload) {
+        try {
+            String roomCode = payload.get("roomCode");
+            String username = payload.get("username");
+            int score = Integer.parseInt(payload.get("score"));
+
+            roomService.updatePlayerScore(roomCode, username, score);
+
+            List<LobbyUser> players = roomService.getPlayersInRoom(roomCode).players();
+            Map<String, Integer> playerScores = new HashMap<>();
+            Map<String, java.util.List<String>> playerFoundWords = new HashMap<>();
+
+            for (LobbyUser user : players) {
+                playerScores.put(user.getUsername(), user.getScore());
+                playerFoundWords.put(user.getUsername(), new ArrayList<>());
+            }
+
+            MultiplayerGameState gameState = new MultiplayerGameState(UUID.randomUUID(), new String[][]{});
+            gameState.getPlayerScores().putAll(playerScores);
+            gameState.getPlayerFoundWords().putAll(playerFoundWords);
+
+            messagingTemplate.convertAndSend("/room/" + roomCode + "/state", gameState);
+        } catch (Exception e) {
+            log.error("Error updating player score:", e);
         }
     }
 }

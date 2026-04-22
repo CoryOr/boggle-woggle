@@ -3,7 +3,6 @@ import "./MultiplayerStyles.css";
 import { FaCircleCheck, FaCircleH } from "react-icons/fa6";
 
 const PlayerCards = ({ players }) => {
-    console.log(players);
     return (
         <div className="player-cards-container">
             {players.map(player => (

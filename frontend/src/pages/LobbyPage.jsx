@@ -99,12 +99,14 @@ export default function LobbyPage() {
         <div className="stats-back-arrow">←</div>
         BACK
       </button>
+
       <div className="lobby-page">
         <Card className="lobby-page-container">
           <h1 className="title">Lobby</h1>
           <RoomCodeCard roomCode={roomCode} />
           <PlayerCards players={players} />
         </Card>
+
         <Card className="lobby-page-container lobby-buttons-container">
           <Button
             className="btn"
@@ -115,6 +117,7 @@ export default function LobbyPage() {
           >
             {!isReady ? "Ready" : "Not Ready"}
           </Button>
+
           {isHost ? (
             <Button
               className={
