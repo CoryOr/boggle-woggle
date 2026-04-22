@@ -10,8 +10,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function SettingsPage() {
   const { username } = useContext(UserContext);
-  const { muted, toggleMute, volume, setVolume, playSfx, startMusic } =
-    useContext(AudioContext);
+  const {
+    muted,
+    toggleMute,
+    volume,
+    setVolume,
+    musicVolume,
+    setMusicVolume,
+    sfxVolume,
+    setSfxVolume,
+    playSfx,
+    startMusic,
+  } = useContext(AudioContext);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -48,18 +58,50 @@ export default function SettingsPage() {
         </button>
 
         <div style={{ marginTop: "1rem" }}>
-          <label htmlFor="volume-slider">
-            Volume: {Math.round(volume * 100)}%
+          <label htmlFor="master-volume-slider">
+            Master Volume: {Math.round(volume * 100)}%
           </label>
           <br />
           <input
-            id="volume-slider"
+            id="master-volume-slider"
             type="range"
             min="0"
             max="1"
             step="0.01"
             value={volume}
             onChange={(e) => setVolume(e.target.value)}
+          />
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <label htmlFor="music-volume-slider">
+            Music Volume: {Math.round(musicVolume * 100)}%
+          </label>
+          <br />
+          <input
+            id="music-volume-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={musicVolume}
+            onChange={(e) => setMusicVolume(e.target.value)}
+          />
+        </div>
+
+        <div style={{ marginTop: "1rem" }}>
+          <label htmlFor="sfx-volume-slider">
+            SFX Volume: {Math.round(sfxVolume * 100)}%
+          </label>
+          <br />
+          <input
+            id="sfx-volume-slider"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={sfxVolume}
+            onChange={(e) => setSfxVolume(e.target.value)}
           />
         </div>
       </div>

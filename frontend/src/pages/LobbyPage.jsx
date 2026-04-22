@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RoomCodeCard from "../components/MultiplayerLobbyComponents/RoomCodeCard";
 import PlayerCards from "../components/MultiplayerLobbyComponents/PlayerCards";
@@ -28,18 +28,22 @@ export default function LobbyPage() {
   const { roomCode } = useParams();
   const { username, isLoggedIn } = useContext(UserContext);
   const { playSfx, startMusic } = useContext(AudioContext);
+  const playersRef = useRef(players);
 
   const currentUser = players.find((p) => p.username === username);
   const isHost = currentUser?.isHost || false;
   const isReady = currentUser?.isReady || false;
-  const allPlayersReady = players.length > 0 && players.every((p) => p.isReady);
+  const allPlayersReady =
+    players.length > 0 && players.every((p) => p.isReady);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    playersRef.current = players;
+  }, [players]);
+
   useEffect(() => {
     if (!isLoggedIn) nav("/login");
   }, [isLoggedIn, nav]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     startMusic("/sounds/menu-music.mp3");
 
@@ -51,7 +55,11 @@ export default function LobbyPage() {
       (data) => {
         if (data.gameId && data.board) {
           nav(`/lobby/${roomCode}/game`, {
-            state: { players, gameId: data.gameId, board: data.board },
+            state: {
+              players: playersRef.current,
+              gameId: data.gameId,
+              board: data.board,
+            },
           });
           return;
         }
@@ -63,7 +71,7 @@ export default function LobbyPage() {
     return () => {
       socketService.disconnect();
     };
-  }, [roomCode, username, nav, startMusic, players]);
+  }, [roomCode, username, nav, startMusic]);
 
   const handleStartGame = () => {
     if (!allPlayersReady || isStarting) return;
@@ -107,10 +115,11 @@ export default function LobbyPage() {
           >
             {!isReady ? "Ready" : "Not Ready"}
           </Button>
-
           {isHost ? (
             <Button
-              className={allPlayersReady && !isStarting ? "btn" : "btn btn-disabled"}
+              className={
+                allPlayersReady && !isStarting ? "btn" : "btn btn-disabled"
+              }
               onClick={handleStartGame}
               disabled={!allPlayersReady || isStarting}
             >

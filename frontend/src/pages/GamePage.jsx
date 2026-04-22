@@ -4,8 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
-import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";
 import WordInput from "../components/WordInput/WordInput";
@@ -14,7 +14,6 @@ import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
 import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar";
 
 /**
- * GamePage.jsx
  * A hub file for all of our game logic. Currently holds single player information,
  * but will be extended to multiplayer in the future. Coordinates the layout between
  * the game board, inputs, timers, and the sidebar.
@@ -22,6 +21,7 @@ import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar
  * @component
  * @returns {JSX.Element} The rendered GamePage UI.
  */
+
 export default function GamePage() {
   const nav = useNavigate();
 
@@ -36,19 +36,19 @@ export default function GamePage() {
     gameId,
   } = useContext(CurrentGameContext);
 
-  const { stopMusic, playSfx } = useContext(AudioContext);
   const { highScore, longestWord } = useContext(UserContext);
+  const { startMusic, stopMusic, playSfx } = useContext(AudioContext);
 
   const [prevHighScore] = useState(() => highScore ?? 0);
   const [prevLongestWord] = useState(() => longestWord?.length ?? 0);
 
-  console.log("Current words found:", [...foundWords]);
-
   useEffect(() => {
-    if (timeLeft === 0) {
+    startMusic("/sounds/gameplay-music.mp3");
+
+    return () => {
       stopMusic();
-    }
-  }, [timeLeft, stopMusic]);
+    };
+  }, [startMusic, stopMusic]);
 
   useEffect(() => {
     if (timeLeft === 0 && gameId) {
