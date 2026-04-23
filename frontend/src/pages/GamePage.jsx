@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import "../components/GameBoard/GameBoard.css";
-import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext";
+import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserContext } from "../contexts/UserContext/UserContext";
 import Timer from "../components/Timer/Timer";
 import GameFinished from "../components/GameFinished/GameFinished";

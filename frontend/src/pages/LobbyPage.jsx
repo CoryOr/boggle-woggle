@@ -38,12 +38,10 @@ export default function LobbyPage() {
     playersRef.current = players;
   }, [players]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isLoggedIn) nav("/login");
   }, [isLoggedIn, nav]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!roomCode || !username) return;
 

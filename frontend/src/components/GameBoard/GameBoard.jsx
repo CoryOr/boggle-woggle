@@ -146,8 +146,8 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
         .then((data) => {
           if (data.valid) {
             updateScore(data.score);
-            updatePlayerScores(data.score);
-            socketService.broadcastPlayerScore(roomCode, username, data.score);
+            if (updatePlayerScores) updatePlayerScores(data.score);
+            if (roomCode && username) socketService.broadcastPlayerScore(roomCode, username, data.score);
             setFoundWords((prev) => new Set(prev).add(guess));
             setInvalidWord(null);
           } else {
