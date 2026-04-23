@@ -10,7 +10,7 @@ export function CurrentGameProvider({
   const [gameId, setGameId] = useState(null);
   const [board, setBoard] = useState([]);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(null);
   const [foundWords, setFoundWords] = useState(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,11 +27,16 @@ export function CurrentGameProvider({
         setBoard(data.board);
         setScore(0);
         setTimeLeft(60);
+        setFoundWords(new Set());
         setGameId(data.gameId);
         setCurrentGuess("");
+        setInvalidWord(null);
         setIsLoading(false);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
   }, [skipAutoFetch]);
 
   // TIMER

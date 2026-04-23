@@ -1,18 +1,17 @@
-/** 
- * RegisterForm.jsx 
- * 
- * Registration form component for creating a new Boggle account. 
- * 
- * Features: 
- * - Accepts username, password, and confirm password input 
- * - Validates that both password fields match 
- * - Sends a POST request to the backend registration endpoint 
+/**
+ * RegisterForm.jsx
+ *
+ * Registration form component for creating a new Boggle account.
+ *
+ * Features:
+ * - Accepts username, password, and confirm password input
+ * - Validates that both password fields match
+ * - Sends a POST request to the backend registration endpoint
  * - Automatically logs the user in after successful registration via the returned auth response
- * - Clears input fields after submission 
- * 
- * Author(s): Alexander Ordonez / Boggle Woggle (t_3c) 
+ * - Clears input fields after submission
+ *
+ * Author(s): Alexander Ordonez / Boggle Woggle (t_3c)
  */
-
 
 import { useState, useContext } from "react";
 import "./RegisterForm.css";
@@ -20,6 +19,7 @@ import Input from "../Input/Input";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext/UserContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 
 const avatarOptions = [
   { label: "Assassin", src: "/Assassin_Avatar.png" },
@@ -35,9 +35,12 @@ const RegisterForm = () => {
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
+  const { playSfx } = useContext(AudioContext);
 
   const handleSubmitAsync = async (event) => {
     event.preventDefault();
+
+    playSfx("/sounds/click.wav");
 
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -79,14 +82,24 @@ const RegisterForm = () => {
     setPassword("");
     setConfirmPassword("");
     setSelectedAvatar("");
-    };
+  };
+
+  const goHome = () => {
+    playSfx("/sounds/click.wav");
+    navigate("/");
+  };
+
+  const handleAvatarSelect = (avatarSrc) => {
+    playSfx("/sounds/click.wav");
+    setSelectedAvatar(avatarSrc);
+  };
 
   return (
     <div id="register-page-wrapper">
       <button
         type="button"
         className="register-back-btn"
-        onClick={() => navigate("/")}
+        onClick={goHome}
       >
         <span className="register-back-arrow" aria-hidden="true">
           ←
@@ -128,7 +141,7 @@ const RegisterForm = () => {
                   key={avatar.src}
                   type="button"
                   className={`avatar-option ${selectedAvatar === avatar.src ? "selected" : ""}`}
-                  onClick={() => setSelectedAvatar(avatar.src)}
+                  onClick={() => handleAvatarSelect(avatar.src)}
                 >
                   <img src={avatar.src} alt={avatar.label} />
                 </button>

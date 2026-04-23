@@ -1,7 +1,7 @@
 import "./Pages.css";
 import "./MultiplayerGamePage.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import MultiplayerWordInput from "../components/MultiplayerWordInput/MultiplayerWordInput";
 import CurrentScore from "../components/CurrentScore/CurrentScore";
@@ -11,6 +11,7 @@ import FoundWordsSidebar from "../components/FoundWordsSidebar/FoundWordsSidebar
 import MultiplayerGameFinished from "../components/MultiplayerGameFinished/MultiplayerGameFinished";
 import { CurrentGameContext } from "../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext.jsx";
 import socketService from "../websocket/WebSocketService";
 
 /**
@@ -39,12 +40,16 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     timeLeft,
     setTimeLeft,
     foundWords,
-    setFoundWords,
+    //setFoundWords,
     isLoading,
     gameId,
   } = useContext(CurrentGameContext);
 
   const { username } = useContext(UserContext);
+  const { playSfx } = useContext(AudioContext);
+
+  // Makes sure game-over sound only plays once.
+  const gameOverPlayedRef = useRef(false);
 
   // playerScores: { username: number } — matches MultiplayerGameFinished prop shape
   const [playerScores, setPlayerScores] = useState(() => {
@@ -56,7 +61,11 @@ export default function MultiplayerGamePage({ initialPlayers }) {
   });
 
   const updateScore = (points) => {
-    setScore(score + points);
+    if (points > 0) {
+      playSfx("/sounds/valid.wav");
+    }
+
+    setScore((prev) => prev + points);
   };
 
   const updatePlayerScores = (points) => {
@@ -92,7 +101,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [roomCode, username, setFoundWords, setScore, version]);
+  }, [roomCode, username, setScore, version]);
 
   useEffect(() => {
     if (timeLeft === 0 && gameId) {
@@ -115,11 +124,23 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }
   }, [timeLeft, gameId, score, foundWords]);
 
+  useEffect(() => {
+    if (timeLeft === 0 && !gameOverPlayedRef.current) {
+      playSfx("/sounds/Winner.mp3");
+      gameOverPlayedRef.current = true;
+    }
+  }, [timeLeft, playSfx]);
+
   const goHome = () => {
     socketService.disconnect();
     nav("/");
   };
 
+  const handleQuit = () => {
+    playSfx("/sounds/click.wav");
+    socketService.disconnect();
+    setTimeLeft(0);
+  };
 
   if (timeLeft === 0) {
     console.log(playerFoundWords);
@@ -128,6 +149,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
         playerScores={playerScores}
         playerFoundWords={playerFoundWords}
         currentUsername={username}
+        currentUserWords={[...foundWords]}
         onGoHome={goHome}
       />
     );
@@ -187,7 +209,12 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             </p>
             <Timer timeLeft={timeLeft} />
             <CurrentScore score={score} />
-            <MultiplayerWordInput roomCode={roomCode} />
+            <MultiplayerWordInput 
+              roomCode={roomCode}
+              username={username}
+              updateScore={updateScore}
+              updatePlayerScores={updatePlayerScores} 
+            />
             <GameBoard
               board={board}
               updateScore={updateScore}
@@ -197,10 +224,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             />
             <button
               className="btn quit-btn"
-              onClick={() => {
-                socketService.disconnect();
-                setTimeLeft(0);
-              }}
+              onClick={handleQuit}
             >
               QUIT
             </button>

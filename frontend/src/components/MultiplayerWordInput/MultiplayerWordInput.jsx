@@ -10,17 +10,20 @@
  *
  * Author(s): Boggle Woggle (t_3c)
  */
-
 import { useContext } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext.jsx";
 import socketService from "../../websocket/WebSocketService";
 import "../WordInput/WordInput.css";
 
-/**
- * @param {string} roomCode - The active room code, needed for the WebSocket publish.
- */
-export default function MultiplayerWordInput({ roomCode }) {
+export default function MultiplayerWordInput({
+    roomCode,
+    username,
+    updateScore,
+    updatePlayerScores,
+}) {
     const {
+        gameId,
         foundWords,
         setFoundWords,
         currentGuess,
@@ -29,25 +32,45 @@ export default function MultiplayerWordInput({ roomCode }) {
         setInvalidWord,
     } = useContext(CurrentGameContext);
 
+    const { playSfx } = useContext(AudioContext);
+
     const handleKeyPress = (e) => {
         if (e.key !== "Enter") return;
 
         const guess = currentGuess.toLowerCase();
 
+        if (!guess.trim()) return;
+
         if (foundWords.has(guess)) {
+            playSfx("/sounds/invalid.wav");
             setInvalidWord(currentGuess);
             setCurrentGuess("");
             return;
         }
 
-        socketService.submitGuess(roomCode, guess);
+        fetch("/api/game/guess", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ gameId, guess }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.valid) {
+                    updateScore(data.score);
+                    if (updatePlayerScores) updatePlayerScores(data.score);
+                    if (roomCode && username) {
+                        socketService.broadcastPlayerScore(roomCode, username, data.score);
+                    }
+                    setFoundWords((prev) => new Set(prev).add(guess));
+                    setInvalidWord(null);
+                } else {
+                    playSfx("/sounds/invalid.wav");
+                    setInvalidWord(currentGuess);
+                }
+            })
+            .catch((err) => console.error("Error submitting guess:", err));
 
         setCurrentGuess("");
-        setInvalidWord(null);
-
-        // Optimistically add the word to foundWords so the sidebar updates
-        // immediately without waiting for the server broadcast
-        setFoundWords((prev) => new Set(prev).add(guess));
     };
 
     return (
@@ -62,7 +85,10 @@ export default function MultiplayerWordInput({ roomCode }) {
                     onChange={(e) => {
                         const lettersOnly = e.target.value.replace(/[^a-zA-Z]/g, "");
                         setCurrentGuess(lettersOnly.toUpperCase());
-                        if (lettersOnly.length > 0) setInvalidWord(null);
+
+                        if (lettersOnly.length > 0) {
+                            setInvalidWord(null);
+                        }
                     }}
                     onKeyDown={handleKeyPress}
                     spellCheck={false}

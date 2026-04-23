@@ -5,22 +5,27 @@
   *   - Full ranked leaderboard with scores & word counts
   *   - The current user's own found-words list
   * Props:
-  *   playerScores     {Object}   { username: score }
-  *   playerFoundWords {Object}   { username: string[] }
-  *   currentUsername  {string}
-  *   onGoHome         {Function}
+  *   playerScores      {Object}   { username: score }
+  *   playerFoundWords  {Object}   { username: string[] }
+  *   currentUsername   {string}
+  *   currentUserWords  {string[]}
+  *   onGoHome          {Function}
   * @author Nicholas DiCristo
   */
 
-
+import { useContext } from "react";
 import "./MultiplayerGameFinished.css";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext.jsx";
 
 export default function MultiplayerGameFinished({
     playerScores = {},
     playerFoundWords = {},
     currentUsername,
+    currentUserWords = [],
     onGoHome,
 }) {
+    const { playSfx } = useContext(AudioContext);
+
     // Build a sorted leaderboard array
     const leaderboard = Object.entries(playerScores)
         .map(([username, score]) => ({
@@ -31,18 +36,26 @@ export default function MultiplayerGameFinished({
         .sort((a, b) => b.score - a.score);
 
     const topScore = leaderboard[0]?.score ?? 0;
-    const winners  = leaderboard.filter((p) => p.score === topScore).map((p) => p.username);
-    const isTie    = winners.length > 1;
+    const winners = leaderboard
+        .filter((p) => p.score === topScore)
+        .map((p) => p.username);
 
-    const myWords  = [...(playerFoundWords[currentUsername] ?? [])].sort();
-    const myRank   = leaderboard.findIndex((p) => p.username === currentUsername) + 1;
+    const isTie = winners.length > 1;
+
+    const myWords = [...currentUserWords].sort();
+    const myRank = leaderboard.findIndex((p) => p.username === currentUsername) + 1;
 
     const MEDAL = ["🥇", "🥈", "🥉"];
 
+    const handleGoHome = () => {
+        playSfx("/sounds/click.wav");
+        setTimeout(() => {
+            onGoHome();
+        }, 120);
+    };
+
     return (
         <div className="mpgf-container">
-
-            {/* ── Winner Banner ── */}
             <div className="mpgf-winner-banner">
                 <span className="mpgf-trophy">🏆</span>
                 <h1 className="mpgf-winner-text">
@@ -53,7 +66,6 @@ export default function MultiplayerGameFinished({
                 <span className="mpgf-trophy">🏆</span>
             </div>
 
-            {/* ── Leaderboard ── */}
             <div className="mpgf-leaderboard">
                 <h2 className="mpgf-section-title">Leaderboard</h2>
                 <ol className="mpgf-board-list">
@@ -79,7 +91,6 @@ export default function MultiplayerGameFinished({
                 </ol>
             </div>
 
-            {/* ── My stats strip ── */}
             {currentUsername && (
                 <div className="mpgf-my-stats">
                     <span>Your rank: <strong>#{myRank}</strong></span>
@@ -88,7 +99,6 @@ export default function MultiplayerGameFinished({
                 </div>
             )}
 
-            {/* ── My found words ── */}
             {currentUsername && (
                 <div className="mpgf-words-card">
                     <p className="mpgf-words-card-title">Your words</p>
@@ -104,7 +114,7 @@ export default function MultiplayerGameFinished({
                 </div>
             )}
 
-            <button className="mpgf-home-button" onClick={onGoHome}>
+            <button className="mpgf-home-button" onClick={handleGoHome}>
                 Go Home
             </button>
         </div>
