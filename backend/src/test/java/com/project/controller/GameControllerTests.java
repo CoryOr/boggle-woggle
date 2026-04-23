@@ -92,4 +92,18 @@ public class GameControllerTests {
                 .andExpect(jsonPath("$.players").isArray())
                 .andExpect(jsonPath("$.players.length()").value(0));
     }
+
+    @Test
+    void testFinishGameEndpoint() throws Exception {
+        String jsonBody = "{\"gameId\":\"" + java.util.UUID.randomUUID() + "\", \"score\":100, \"foundWords\":[\"APPLE\"]}";
+
+        org.springframework.security.authentication.UsernamePasswordAuthenticationToken mockAuth =
+                new org.springframework.security.authentication.UsernamePasswordAuthenticationToken("player1", null);
+
+        mockMvc.perform(post("/api/game/finish")
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+                        .principal(mockAuth))
+                .andExpect(status().isOk());
+    }
 }

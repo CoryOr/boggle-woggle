@@ -67,4 +67,47 @@ class AuthServiceTest {
         verify(passwordEncoder, times(1)).encode("password123");
         verify(jwtService, times(1)).generateToken("testuser");
     }
+
+    @Test
+    void register_DuplicateUsername_ThrowsException() {
+        RegisterRequest req = org.mockito.Mockito.mock(RegisterRequest.class);
+        when(req.username()).thenReturn("testuser");
+        when(userRepository.findByUsername("testuser")).thenReturn(new User());
+
+        org.junit.jupiter.api.Assertions.assertThrows(
+                org.springframework.web.server.ResponseStatusException.class,
+                () -> authService.register(req)
+        );
+    }
+
+    @Test
+    void register_InvalidAvatar_ThrowsException() {
+        RegisterRequest req = org.mockito.Mockito.mock(RegisterRequest.class);
+        when(req.username()).thenReturn("testuser");
+        when(req.avatar()).thenReturn("/Hacker_Avatar.png"); // Not in allowed list
+        when(userRepository.findByUsername("testuser")).thenReturn(null);
+
+        org.junit.jupiter.api.Assertions.assertThrows(
+                org.springframework.web.server.ResponseStatusException.class,
+                () -> authService.register(req)
+        );
+    }
+
+    @Test
+    void login_ValidRequest_ReturnsAuthResponse() {
+        com.project.model.dto.LoginRequest req = org.mockito.Mockito.mock(com.project.model.dto.LoginRequest.class);
+        when(req.username()).thenReturn("testuser");
+        when(req.password()).thenReturn("password123");
+
+        User mockUser = org.mockito.Mockito.mock(User.class);
+        when(mockUser.getUsername()).thenReturn("testuser");
+
+        when(userRepository.findByUsername("testuser")).thenReturn(mockUser);
+        when(jwtService.generateToken("testuser")).thenReturn("mock-jwt-token");
+
+        AuthResponse response = authService.login(req);
+
+        assertNotNull(response);
+        verify(authenticationManager, times(1)).authenticate(any());
+    }
 }
