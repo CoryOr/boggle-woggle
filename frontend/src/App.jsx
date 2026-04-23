@@ -65,7 +65,7 @@ function MultiplayerGamePageWrapper() {
       setBoard(board);
       setGameId(gameId);
       setScore(0);
-      setTimeLeft(5);
+      setTimeLeft(60);
       setTimeout(() => setIsLoading(false), 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
