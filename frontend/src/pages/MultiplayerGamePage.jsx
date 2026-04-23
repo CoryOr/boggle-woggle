@@ -1,7 +1,7 @@
 import "./Pages.css";
 import "./MultiplayerGamePage.css";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import GameBoard from "../components/GameBoard/GameBoard";
 import MultiplayerWordInput from "../components/MultiplayerWordInput/MultiplayerWordInput";
 import CurrentScore from "../components/CurrentScore/CurrentScore";
@@ -30,7 +30,7 @@ import socketService from "../websocket/WebSocketService";
 export default function MultiplayerGamePage({ initialPlayers }) {
   const nav = useNavigate();
   const { roomCode } = useParams();
-  const [version, setVersion] = useState(0);
+  const [version] = useState(0);
 
   const {
     board,
