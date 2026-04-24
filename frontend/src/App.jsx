@@ -3,6 +3,8 @@ import { useContext, useEffect } from 'react';
 
 import { CurrentGameProvider, CurrentGameContext } from "./contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserProvider } from "./contexts/UserContext/UserContext.jsx";
+import { AudioProvider } from "./contexts/AudioContext/AudioContext.jsx";
+import { AudioContext } from "./contexts/AudioContext/AudioContextContext.jsx";
 
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
@@ -17,34 +19,67 @@ import MultiplayerGamePage from './pages/MultiplayerGamePage.jsx';
 
 import "./App.css";
 
+const MENU_MUSIC = "/sounds/menu-music.mp3";
+const GAMEPLAY_MUSIC = "/sounds/gameplay-music.mp3";
+
 const App = () => {
   return (
-    <UserProvider>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/game" element={
-          <CurrentGameProvider>
-            <GamePage />
-          </CurrentGameProvider>
-        } />
-        <Route path="/stats" element={<StatsPage />} />
-        <Route path="/store" element={<StorePage />} />
-        <Route path="/game-select" element={<GameModeSelectionPage />} />
-        <Route path="/lobby/:roomCode" element={
-          <CurrentGameProvider skipAutoFetch={true}>
-            <LobbyPage />
-          </CurrentGameProvider>
-        } />
-        <Route path="/lobby/:roomCode/game" element={
-          <MultiplayerGamePageRoute />
-        } />
-      </Routes>
-    </UserProvider>
+    <AudioProvider>
+      <UserProvider>
+        <AudioRouteController />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route
+            path="/game"
+            element={
+              <CurrentGameProvider>
+                <GamePage />
+              </CurrentGameProvider>
+            }
+          />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/store" element={<StorePage />} />
+          <Route path="/game-select" element={<GameModeSelectionPage />} />
+          <Route
+            path="/lobby/:roomCode"
+            element={
+              <CurrentGameProvider skipAutoFetch={true}>
+                <LobbyPage />
+              </CurrentGameProvider>
+            }
+          />
+          <Route
+            path="/lobby/:roomCode/game"
+            element={<MultiplayerGamePageRoute />}
+          />
+        </Routes>
+      </UserProvider>
+    </AudioProvider>
   );
 };
+
+function AudioRouteController() {
+  const location = useLocation();
+  const { playMusic } = useContext(AudioContext);
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    const isGameplayRoute =
+      path === "/game" || path.endsWith("/game");
+
+    if (isGameplayRoute) {
+      playMusic(GAMEPLAY_MUSIC);
+    } else {
+      playMusic(MENU_MUSIC);
+    }
+  }, [location.pathname, playMusic]);
+
+  return null;
+}
 
 function MultiplayerGamePageRoute() {
   return (
@@ -57,8 +92,15 @@ function MultiplayerGamePageRoute() {
 function MultiplayerGamePageWrapper() {
   const location = useLocation();
   const { players = [], gameId, board } = location.state ?? {};
-  const { setBoard, setGameId, setScore, setTimeLeft, setIsLoading, isLoading } =
-    useContext(CurrentGameContext);
+
+  const {
+    setBoard,
+    setGameId,
+    setScore,
+    setTimeLeft,
+    setIsLoading,
+    isLoading,
+  } = useContext(CurrentGameContext);
 
   useEffect(() => {
     if (board && gameId) {

@@ -79,6 +79,12 @@
 .VolumeImage {
   width: clamp(4.5rem, 5vw, 5.5rem);
   height: auto;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.VolumeImage.muted {
+  opacity: 0.35;
 }
 
 .SettingImage {

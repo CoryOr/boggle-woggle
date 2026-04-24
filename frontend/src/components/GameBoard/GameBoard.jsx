@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import LetterTile from "./LetterTile";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext.jsx";
 import "./GameBoard.css";
 import socketService from "../../websocket/WebSocketService.js";
 
@@ -16,13 +17,13 @@ import socketService from "../../websocket/WebSocketService.js";
  * * @context {CurrentGameContext} Uses gameId for API submission, and currentGuess/setCurrentGuess to sync UI.
  */
 const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username }) => {
-  // Local state for the physical tiles currently highlighted
   const [selectedTiles, setSelectedTiles] = useState([]);
   const [svgPoints, setSvgPoints] = useState(null);
 
-  // Global state synced with WordInput
   const { gameId, setCurrentGuess, foundWords, setFoundWords, setInvalidWord } =
     useContext(CurrentGameContext);
+
+  const { playSfx } = useContext(AudioContext);
 
   const isDraggingRef = useRef(false);
   const selectedTilesRef = useRef([]);
@@ -37,9 +38,6 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
   const getSelectionIndex = (row, col) =>
     selectedTiles.findIndex((t) => t.row === row && t.col === col);
 
-  /**
-   * Helper function to calculate SVG lines.
-   */
   const updateSvgLines = (tiles) => {
     if (!boardRef.current || tiles.length < 2) {
       setSvgPoints(null);
@@ -60,9 +58,6 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
     setSvgPoints(points.length >= 2 ? points : null);
   };
 
-  /**
-   * Initializes the drag sequence when a user clicks on a tile.
-   */
   const handleTileMouseDown = (e, row, col, letter) => {
     e.preventDefault();
     const initial = [{ row, col, letter }];
@@ -74,10 +69,6 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
     updateSvgLines(initial);
   };
 
-  /**
-   * Continues the drag sequence as the mouse enters new tiles.
-   * Enforces rules: cannot revisit tiles, must be adjacent to the last tile.
-   */
   const handleTileMouseEnter = (row, col, letter) => {
     if (!isDraggingRef.current) return;
     const current = selectedTilesRef.current;
@@ -103,10 +94,6 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
     }
   };
 
-  /**
-   * Global mouse up listener ensures the drag ends even if the user releases
-   * their mouse while outside the boundaries of the game board.
-   */
   useEffect(() => {
     const handleMouseUp = () => {
       if (!isDraggingRef.current) return;
@@ -127,13 +114,11 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
         .join("")
         .toLowerCase();
 
-      // Instantly clear the UI text box so it feels responsive
       setCurrentGuess("");
 
-      // Prevent submitting words already found
       if (foundWords.has(guess)) {
+        playSfx("/sounds/invalid.wav");
         setInvalidWord(guess.toUpperCase());
-        setCurrentGuess("");
         return;
       }
 
@@ -147,10 +132,13 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
           if (data.valid) {
             updateScore(data.score);
             if (updatePlayerScores) updatePlayerScores(data.score);
-            if (roomCode && username) socketService.broadcastPlayerScore(roomCode, username, data.score);
+            if (roomCode && username) {
+              socketService.broadcastPlayerScore(roomCode, username, data.score);
+            }
             setFoundWords((prev) => new Set(prev).add(guess));
             setInvalidWord(null);
           } else {
+            playSfx("/sounds/invalid.wav");
             setInvalidWord(guess.toUpperCase());
           }
         })
@@ -168,7 +156,8 @@ const GameBoard = ({ board, updateScore, updatePlayerScores, roomCode, username 
     setInvalidWord,
     roomCode,
     username,
-    updatePlayerScores
+    updatePlayerScores,
+    playSfx,
   ]);
 
   return (

@@ -10,6 +10,7 @@
 
 import { useContext } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext.jsx";
 import "./WordInput.css";
 
 /**
@@ -32,6 +33,8 @@ export default function WordInput({ updateScore }) {
         setInvalidWord
     } = useContext(CurrentGameContext);
 
+    const { playSfx } = useContext(AudioContext);
+
     /**
      * Handles keyboard events inside the input field.
      * Listens specifically for the "Enter" key to submit the current guess to the backend API.
@@ -42,8 +45,12 @@ export default function WordInput({ updateScore }) {
         if (e.key === "Enter") {
             const guess = currentGuess.toLowerCase();
 
+            // Optional: ignore empty submit
+            if (!guess.trim()) return;
+
             // Check if the word was already found before asking the server
             if (foundWords.has(guess)) {
+                playSfx("/sounds/invalid.wav");
                 setInvalidWord(currentGuess);
                 setCurrentGuess("");
                 return;
@@ -62,6 +69,7 @@ export default function WordInput({ updateScore }) {
                         setFoundWords((prev) => new Set(prev).add(guess));
                         setInvalidWord(null); // Clear any existing error messages on a successful guess
                     } else {
+                        playSfx("/sounds/invalid.wav");
                         setInvalidWord(currentGuess); // Display the invalid word to the user
                     }
                 })
@@ -98,9 +106,6 @@ export default function WordInput({ updateScore }) {
                 />
             </div>
 
-            {/* This container has a fixed height in WordInput.css.
-        It prevents the GameBoard from jumping down when an error message appears. 
-      */}
             <div className="invalid-word-container">
                 {invalidWord && <p className="invalid-word-text">{invalidWord} not found or already guessed</p>}
             </div>

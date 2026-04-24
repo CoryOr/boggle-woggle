@@ -1,19 +1,22 @@
-//LoginForm.jsx
 import { useState, useContext } from "react";
 import Input from "../Input/Input";
 import "./LoginForm.css";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext/UserContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext";
 
 const LoginForm = () => {
     const [usernameInput, setUsernameInput] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const { login } = useContext(UserContext);
+    const { playSfx } = useContext(AudioContext);
 
     const handleSubmitAsync = async (event) => {
         event.preventDefault();
+
+        playSfx("/sounds/click.wav");
 
         const userData = {
             username: usernameInput,
@@ -39,6 +42,17 @@ const LoginForm = () => {
         setPassword("");
     };
 
+    const goToRegister = (e) => {
+        e.preventDefault();
+        playSfx("/sounds/click.wav");
+        navigate("/register");
+    };
+
+    const handleForgotPassword = (e) => {
+        e.preventDefault();
+        playSfx("/sounds/click.wav");
+    };
+
     return (
         <div id="login-form-container">
             <img id="app-logo" src="/LOGO.png" alt="Boggle Logo" />
@@ -61,7 +75,11 @@ const LoginForm = () => {
                 </Button>
             </form>
 
-            <a id="forgot-password-link" href="#">
+            <a
+                id="forgot-password-link"
+                href="#"
+                onClick={handleForgotPassword}
+            >
                 Forgot password?
             </a>
 
@@ -69,10 +87,7 @@ const LoginForm = () => {
                 <p>New Here?</p>
                 <a
                     href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        navigate("/register");
-                    }}
+                    onClick={goToRegister}
                 >
                     Click Here to Sign Up!
                 </a>

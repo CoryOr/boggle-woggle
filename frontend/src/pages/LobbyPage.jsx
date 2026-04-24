@@ -5,6 +5,7 @@ import PlayerCards from "../components/MultiplayerLobbyComponents/PlayerCards";
 import { Card, Button } from "react-bootstrap";
 import socketService from "../websocket/WebSocketService";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import "./Pages.css";
 
 /**
@@ -26,6 +27,7 @@ export default function LobbyPage() {
   const [isStarting, setIsStarting] = useState(false);
   const { roomCode } = useParams();
   const { username, isLoggedIn } = useContext(UserContext);
+  const { playSfx } = useContext(AudioContext);
   const playersRef = useRef(players);
 
   // Derived state
@@ -65,9 +67,22 @@ export default function LobbyPage() {
     };
   }, [roomCode, username, nav]);
 
+  const goBack = () => {
+    playSfx("/sounds/click.wav");
+    nav("/game-select");
+  };
+
+  const handleToggleReady = () => {
+    playSfx("/sounds/click.wav");
+    socketService.toggleReady(roomCode, username);
+  };
+
   const handleStartGame = () => {
     if (!allPlayersReady || isStarting) return;
+
+    playSfx("/sounds/click.wav");
     setIsStarting(true);
+
     try {
       socketService._publish("/app/room.start", { roomCode });
     } catch (err) {
@@ -80,23 +95,26 @@ export default function LobbyPage() {
 
   return (
     <>
-      <button className="stats-back-btn" onClick={() => nav("/game-select")}>
+      <button className="stats-back-btn" onClick={goBack}>
         <div className="stats-back-arrow">←</div>
         BACK
       </button>
+
       <div className="lobby-page">
         <Card className="lobby-page-container">
           <h1 className="title">Lobby</h1>
           <RoomCodeCard roomCode={roomCode} />
           <PlayerCards players={players} />
         </Card>
+
         <Card className="lobby-page-container lobby-buttons-container">
           <Button
             className="btn"
-            onClick={() => socketService.toggleReady(roomCode, username)}
+            onClick={handleToggleReady}
           >
             {!isReady ? "Ready" : "Not Ready"}
           </Button>
+
           {isHost ? (
             <Button
               className={

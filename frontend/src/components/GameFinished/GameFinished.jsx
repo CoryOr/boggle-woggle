@@ -7,25 +7,47 @@
  */
 
 import "./GameFinished.css";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { CurrentGameContext } from "../../contexts/CurrentGameContext/CurrentGameContext.jsx";
 import { UserContext } from "../../contexts/UserContext/UserContext";
+import { AudioContext } from "../../contexts/AudioContext/AudioContextContext.jsx";
 
 export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord }) {
     const { foundWords, score } = useContext(CurrentGameContext);
     const { isLoggedIn } = useContext(UserContext);
+    const { playSfx } = useContext(AudioContext);
+
     const wordList = [...foundWords].sort();
 
-    const longestThisGame = [...foundWords].reduce((longest, word) =>
-        word.length > longest.length ? word : longest, "");
+    const longestThisGame = [...foundWords].reduce(
+        (longest, word) => (word.length > longest.length ? word : longest),
+        ""
+    );
 
-    const newHighScore = isLoggedIn 
-        && prevHighScore !== undefined 
-        && score > prevHighScore;
+    const newHighScore =
+        isLoggedIn &&
+        prevHighScore !== undefined &&
+        score > prevHighScore;
 
-    const newLongestWord = isLoggedIn 
-        && prevLongestWord !== undefined 
-        && longestThisGame.length > prevLongestWord;
+    const newLongestWord =
+        isLoggedIn &&
+        prevLongestWord !== undefined &&
+        longestThisGame.length > prevLongestWord;
+
+    // Makes sure the winner sound only plays once.
+    const winnerPlayedRef = useRef(false);
+
+    useEffect(() => {
+        if ((newHighScore || newLongestWord) && !winnerPlayedRef.current) {
+            playSfx("/sounds/Winner.mp3");
+            winnerPlayedRef.current = true;
+        }
+    }, [newHighScore, newLongestWord, playSfx]);
+
+    const handleGoHome = () => {
+        playSfx("/sounds/click.wav");
+        onGoHome();
+    };
 
     return (
         <div className="game-finished-container">
@@ -55,7 +77,9 @@ export default function GameFinished({ onGoHome, prevHighScore, prevLongestWord 
                 )}
             </div>
 
-            <button className="gf-home-button" onClick={onGoHome}>Go Home</button>
+            <button className="gf-home-button" onClick={handleGoHome}>
+                Go Home
+            </button>
         </div>
     );
 }

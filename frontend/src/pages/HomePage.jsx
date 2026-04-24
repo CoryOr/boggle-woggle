@@ -17,29 +17,58 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import { useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext/UserContext";
+import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 
 export default function HomePage() {
   const nav = useNavigate();
   const { avatar, username, isLoggedIn, logout } = useContext(UserContext);
+  const { playSfx, toggleMute, muted } = useContext(AudioContext);
 
-  const gameSelect = () => nav("/game-select");
-  const login = () => nav("/login");
-  const stats = () => nav("/stats");
-  const store = () => nav("/store");
+  const playClick = () => playSfx("/sounds/click.wav");
+
+  const gameSelect = () => {
+    playClick();
+    nav("/game-select");
+  };
+
+  const login = () => {
+    playClick();
+    nav("/login");
+  };
+
+  const stats = () => {
+    playClick();
+    nav("/stats");
+  };
+
+  const store = () => {
+    playClick();
+    nav("/store");
+  };
+
+  const settings = () => {
+    playClick();
+    nav("/settings");
+  };
+
   const handleLogout = () => {
+    playClick();
     logout();
     nav("/login");
   };
 
+  const handleToggleMute = () => {
+    toggleMute();
+  };
 
   const navCards = [
     { title: "STORE", action: store },
     { title: "PLAY GAME", action: gameSelect },
     { title: "STATISTICS", action: stats },
     isLoggedIn
-        ? { title: "LOG OUT", action: handleLogout }
-        : { title: "LOGIN", action: login },
-    ];
+      ? { title: "LOG OUT", action: handleLogout }
+      : { title: "LOGIN", action: login },
+  ];
 
   useEffect(() => {
     localStorage.removeItem("currentGame");
@@ -67,12 +96,18 @@ export default function HomePage() {
               />
             )}
 
-            <img src="/Volume.png" alt="volume" className="VolumeImage" />
+            <img
+              src="/Volume.png"
+              alt="volume"
+              className={`VolumeImage ${muted ? "muted" : ""}`}
+              onClick={handleToggleMute}
+            />
+
             <img
               src="/SettingBox.png"
               alt="settings"
               className="SettingImage"
-              onClick={() => nav("/settings")}
+              onClick={settings}
             />
           </div>
         </div>
