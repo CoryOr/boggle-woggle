@@ -184,7 +184,7 @@ public class GameServiceTests {
         com.project.model.entity.User user = new com.project.model.entity.User("alice", "hashedpw", "avatar.png");
         when(userRepository.findByUsername("alice")).thenReturn(user);
 
-        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 3, java.util.List.of("ten"));
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 3, java.util.List.of("ten"), Optional.empty());
         gameService.saveGameResult(request, "alice");
 
         assert(user.getGamesPlayed() == 1);
@@ -199,7 +199,7 @@ public class GameServiceTests {
         user.setHighScore(5);
         when(userRepository.findByUsername("alice")).thenReturn(user);
 
-        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 99, java.util.List.of("ten"));
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 99, java.util.List.of("ten"), Optional.empty());
         gameService.saveGameResult(request, "alice");
 
         assert(user.getHighScore() == 99);
@@ -214,7 +214,7 @@ public class GameServiceTests {
         user.setLongestWord("cat");
         when(userRepository.findByUsername("alice")).thenReturn(user);
 
-        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 11, java.util.List.of("cat", "restates"));
+        com.project.model.dto.GameResultRequest request = new com.project.model.dto.GameResultRequest(UUID.randomUUID(), 11, java.util.List.of("cat", "restates"), Optional.empty());
         gameService.saveGameResult(request, "alice");
 
         assert(user.getLongestWord().equals("restates"));

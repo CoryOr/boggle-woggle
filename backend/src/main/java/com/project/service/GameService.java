@@ -14,6 +14,8 @@ import com.project.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -212,6 +214,12 @@ public class GameService {
 
         if (request.score() > user.getHighScore()) {
             user.setHighScore(request.score());
+        }
+
+        Optional<List<String>> winnerUsernames = request.winnerUsernames();
+
+        if (winnerUsernames.isEmpty() || winnerUsernames.get().contains(user.getUsername())) {
+            user.setGamesWon(user.getGamesWon() + 1);
         }
 
         request.foundWords().stream()
