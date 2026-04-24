@@ -36,6 +36,7 @@ class UserTest {
         user.setLongestWord("hello");
         user.setGamesPlayed(10);
         user.setAvatar("avatar");
+        user.setGamesWon(10);
 
         assert(user.getUsername().equals("username"));
         assert(user.getHighScore() == 150);
@@ -44,6 +45,7 @@ class UserTest {
         assert(user.getAvatar().equals("avatar"));
         assert(user.getPassword() != null);
         assert(user.getPasswordHash() != null);
+        assert(user.getGamesWon() == 10);
     }
 
     @Test

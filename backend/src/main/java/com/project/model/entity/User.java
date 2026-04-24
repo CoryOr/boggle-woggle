@@ -106,4 +106,8 @@ public class User {
     }
 
     public int getGamesWon() { return gamesWon; }
+
+    public void setGamesWon(int gamesWon) {
+        this.gamesWon = gamesWon;
+    }
 }

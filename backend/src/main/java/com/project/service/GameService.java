@@ -214,6 +214,10 @@ public class GameService {
             user.setHighScore(request.score());
         }
 
+        if (request.winnerUsername().isPresent() && request.winnerUsername().get().equals(username)) {
+            user.setGamesWon(user.getGamesWon() + 1);
+        }
+
         request.foundWords().stream()
                 .max(Comparator.comparingInt(String::length))
                 .ifPresent(longest -> {

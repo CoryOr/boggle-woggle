@@ -75,6 +75,20 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }));
   };
 
+  const getWinner = () => {
+    const leaderboard = Object.entries(playerScores)
+      .map(([username, score]) => ({
+        username,
+        score,
+        wordCount: (playerFoundWords[username] ?? []).length,
+      }))
+      .sort((a, b) => b.score - a.score);
+
+    const topScoreUsername = leaderboard[0]?.username ?? 0;
+
+    return topScoreUsername;
+  };
+
   // playerFoundWords: { username: string[] } — matches MultiplayerGameFinished prop shape
   const [playerFoundWords, setPlayerFoundWords] = useState({});
 
@@ -105,6 +119,8 @@ export default function MultiplayerGamePage({ initialPlayers }) {
 
   useEffect(() => {
     if (timeLeft === 0 && gameId) {
+      const winner = getWinner();
+
       fetch("/api/game/finish", {
         method: "POST",
         headers: {
@@ -115,6 +131,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
           gameId,
           score,
           foundWords: [...foundWords],
+          winnerUsername: winner,
         }),
       })
         .then((res) =>
@@ -209,11 +226,11 @@ export default function MultiplayerGamePage({ initialPlayers }) {
             </p>
             <Timer timeLeft={timeLeft} />
             <CurrentScore score={score} />
-            <MultiplayerWordInput 
+            <MultiplayerWordInput
               roomCode={roomCode}
               username={username}
               updateScore={updateScore}
-              updatePlayerScores={updatePlayerScores} 
+              updatePlayerScores={updatePlayerScores}
             />
             <GameBoard
               board={board}
@@ -222,10 +239,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
               roomCode={roomCode}
               username={username}
             />
-            <button
-              className="btn quit-btn"
-              onClick={handleQuit}
-            >
+            <button className="btn quit-btn" onClick={handleQuit}>
               QUIT
             </button>
           </div>
