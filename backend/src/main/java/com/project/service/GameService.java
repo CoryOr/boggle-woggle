@@ -14,6 +14,8 @@ import com.project.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -214,7 +216,9 @@ public class GameService {
             user.setHighScore(request.score());
         }
 
-        if (request.winnerUsername().isPresent() && request.winnerUsername().get().equals(username)) {
+        Optional<List<String>> winnerUsernames = request.winnerUsernames();
+
+        if (winnerUsernames.isEmpty() || winnerUsernames.get().contains(user.getUsername())) {
             user.setGamesWon(user.getGamesWon() + 1);
         }
 

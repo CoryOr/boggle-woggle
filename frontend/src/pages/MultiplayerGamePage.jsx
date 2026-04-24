@@ -75,7 +75,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
     }));
   };
 
-  const getWinner = () => {
+  const getWinners = () => {
     const leaderboard = Object.entries(playerScores)
       .map(([username, score]) => ({
         username,
@@ -84,9 +84,11 @@ export default function MultiplayerGamePage({ initialPlayers }) {
       }))
       .sort((a, b) => b.score - a.score);
 
-    const topScoreUsername = leaderboard[0]?.username ?? 0;
+    const topScore = leaderboard[0]?.score ?? 0;
 
-    return topScoreUsername;
+    return leaderboard
+        .filter(player => player.score === topScore)
+        .map(player => player.username);
   };
 
   // playerFoundWords: { username: string[] } — matches MultiplayerGameFinished prop shape
@@ -119,7 +121,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
 
   useEffect(() => {
     if (timeLeft === 0 && gameId) {
-      const winner = getWinner();
+      const winners = getWinners();
 
       fetch("/api/game/finish", {
         method: "POST",
@@ -131,7 +133,7 @@ export default function MultiplayerGamePage({ initialPlayers }) {
           gameId,
           score,
           foundWords: [...foundWords],
-          winnerUsername: winner,
+          winnerUsernames: winners,
         }),
       })
         .then((res) =>

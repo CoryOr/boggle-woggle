@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
-public record GameResultRequest(UUID gameId, int score, List<String> foundWords, Optional<String> winnerUsername) {
+public record GameResultRequest(UUID gameId, int score, List<String> foundWords, Optional<List<String>> winnerUsernames) {
 
 }
