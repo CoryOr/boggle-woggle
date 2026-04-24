@@ -104,7 +104,7 @@ const RegisterForm = () => {
         <span className="register-back-arrow" aria-hidden="true">
           ←
         </span>
-        <span className="register-back-text">BACK TO HOME</span>
+        <span className="register-back-text">BACK</span>
       </button>
 
       <div id="register-form-shell">
