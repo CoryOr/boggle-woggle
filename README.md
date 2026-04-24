@@ -80,7 +80,7 @@ erDiagram
     }
 ```
 
-#### Class Diagram (Not fully thought out yet)
+#### Class Diagram
 
 ```mermaid
 ---
