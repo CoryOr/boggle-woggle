@@ -1,0 +1,94 @@
+/* Settings Page */
+
+.settings-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat", sans-serif;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.settings-title {
+  font-size: clamp(2.25rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  color: white;
+}
+
+.settings-card {
+  width: min(90%, 42rem);
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 2rem;
+  padding: 2.5rem 3rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.12);
+  animation: flyOut 0.4s ease-out;
+}
+
+.settings-username {
+  color: white;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+}
+
+.settings-mute-btn,
+.settings-logout-btn {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  padding: 0.8rem 2.2rem;
+}
+
+.settings-slider-group {
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.settings-slider-group label {
+  display: block;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.settings-slider-group input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+  accent-color: #ffd400;
+}
+
+.settings-logout-btn {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+/* Keeps the back button clickable above the settings layout */
+.settings-back-btn {
+  position: fixed;
+  top: 0.25rem;
+  left: 0.25rem;
+  z-index: 1000;
+}
+
+/* Mobile cleanup */
+@media (max-width: 44rem) {
+  .settings-card {
+    width: 95%;
+    padding: 2rem 1.5rem;
+  }
+
+  .settings-title {
+    font-size: 3rem;
+  }
+
+  .settings-username {
+    font-size: 1.25rem;
+  }
+}

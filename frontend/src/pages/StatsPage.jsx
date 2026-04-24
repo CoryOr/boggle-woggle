@@ -1,7 +1,7 @@
 import "./Pages.css";
-import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
-import { UserContext } from '../contexts/UserContext/UserContext';
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext/UserContext";
 import { AudioContext } from "../contexts/AudioContext/AudioContextContext";
 import StatsComponent from "../components/StatsPage/StatsComponent";
 
@@ -10,32 +10,42 @@ export default function StatsPage() {
   const { isLoggedIn } = useContext(UserContext);
   const { playSfx } = useContext(AudioContext);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      nav("/login");
-    }
-  }, [isLoggedIn, nav]);
-
   const goHome = () => {
     playSfx("/sounds/click.wav");
     nav("/");
   };
 
-  const titleStyle = {
-    fontFamily: 'Montserrat, sans-serif',
-    fontWeight: '600'
+  const goLogin = () => {
+    playSfx("/sounds/click.wav");
+    nav("/login");
   };
 
-  if (!isLoggedIn) return null;
+  const titleStyle = {
+    fontFamily: "Montserrat, sans-serif",
+    fontWeight: "600",
+    color: 'white'
+  };
 
   return (
     <>
       <button className="stats-back-btn" onClick={goHome}>
         <div className="stats-back-arrow">←</div>
-        BACK TO HOME
+        BACK
       </button>
+
       <h1 style={titleStyle}>STATISTICS</h1>
-      <StatsComponent />
+
+      {!isLoggedIn ? (
+        <div className="guest-stats-message">
+          <h2>Statistics are unavailable for guests</h2>
+          <p>Please log in to view your game statistics.</p>
+          <button className="btn" onClick={goLogin}>
+            Log In
+          </button>
+        </div>
+      ) : (
+        <StatsComponent />
+      )}
     </>
   );
 }

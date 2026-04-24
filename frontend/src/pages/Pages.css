@@ -799,3 +799,27 @@ Gamemode selection screen specific styles
 .game-right-column {
   margin-top: 100px;
 }
+
+/* Guest Stats Message */
+.guest-stats-message {
+  background-color: rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 40%;
+  margin: 3rem auto;
+  text-align: center;
+  color: white;
+  animation: flyOut 0.4s ease-out;
+}
+
+.guest-stats-message h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.guest-stats-message p {
+  font-size: 1.2rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+}
