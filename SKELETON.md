@@ -15,8 +15,11 @@ project-root/
 |   +-- public/
 |   +-- src/
 |   |   +-- components/
+|   |   +-- contexts/
+|   |   +-- websocket/
 |   |   +-- pages/
 |   |   +-- App.js
+|   |   +-- App.test.jsx
 |   |   +-- App.css
 |   +-- package.json
 |
@@ -24,8 +27,14 @@ project-root/
 |   +-- src/
 |   |   +-- main/
 |   |   |   +-- java/com/cs506/team3c/boggle/
+|   |   |   |   +-- auth/
+|   |   |   |   +-- config/
 |   |   |   |   +-- controller/
 |   |   |   |   +-- model/
+|   |   |   |   |   +-- model/
+|   |   |   |   |   +-- dto/
+|   |   |   |   |   +-- entity/
+|   |   |   |   +-- repository/
 |   |   |   |   +-- service/
 |   |   |   |   +-- BoggleApplication.java
 |   |   |   +-- resources/

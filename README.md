@@ -50,7 +50,7 @@ B <--> C
 title: Word Game Database ERD
 ---
 erDiagram
-    Users ||--o{ GameResult : "has"
+    Users ||--o{ Game : "plays"
     Game ||--o{ GameResult : "generates"
  
     Users {
@@ -84,107 +84,170 @@ erDiagram
 
 ```mermaid
 ---
-title: Sample Class Diagram for Animal Program
+title: Backend Objects
 ---
 classDiagram
-    class Animal {
-        - String name
-        + Animal(String name)
-        + void setName(String name)
-        + String getName()
-        + void makeSound()
+    class Board {
+        - String[][] board
+        + Board(random)
+        + String[][] getBoard()
     }
-    class Dog {
-        + Dog(String name)
-        + void makeSound()
+    class LobbyUser {
+        - String username
+        - String avatar
+        - boolean isReady
+        - boolean isHost
+        + LobbyUser(String username, String avatar, boolean isReady, boolean isHost)
+        + String getUsername()
+        + String getAvatar()
+        + boolean getIsReady()
+        + boolean getIsHost()
     }
-    class Cat {
-        + Cat(String name)
-        + void makeSound()
-    }
-    class Bird {
-        + Bird(String name)
-        + void makeSound()
-    }
-    Animal <|-- Dog
-    Animal <|-- Cat
-    Animal <|-- Bird
 ```
-
-#### Flowchart
 
 ```mermaid
 ---
-title: Authentication & Authorization Flow (Spring Boot + JWT)
+title: Backend Transfer Objects
 ---
-graph TD;
-
-    Start([Start]) --> Login_Request[/User Submits Login (React)/];
-
-    Login_Request --> Send_To_Backend[Send Credentials to Spring Boot];
-    Send_To_Backend --> Load_User[Load User from Database];
-
-    Load_User --> Validate_Credentials{Credentials Valid?};
-
-    Validate_Credentials -->|No| Return_401[/Return 401 Unauthorized/];
-    
-    Validate_Credentials -->|Yes| Generate_JWT[Generate JWT Token];
-    Generate_JWT --> Return_Token[/Return JWT to Frontend/];
-
-    Return_Token --> Protected_Request[/User Requests Protected Endpoint (Bearer Token)/];
-    Protected_Request --> Validate_JWT{JWT Valid?};
-
-    Validate_JWT -->|No| Reject_Request[/Return 401 Unauthorized/];
-    
-    Validate_JWT -->|Yes| Check_Roles{Has Required Role?};
-
-    Check_Roles -->|No| Return_403[/Return 403 Forbidden/];
-    Check_Roles -->|Yes| Access_Resource[Access Protected Resource];
-
-    Access_Resource --> Send_Response[/Return Protected Data/];
-    Send_Response --> End([End]);
-
-    Return_401 --> End;
-    Reject_Request --> End;
-    Return_403 --> End;
+classDiagram
+    class Records {
+        - All records contain a required structure that the frontend must send to a controller
+        + AuthResponse(String accessToken, String tokenType, UUID id, String username, String avatar, int highScore, String longestWord, int gamesPlayed)
+        + GameResponse(UUID gameId, String[][] board)
+        + GameResultRequest(UUID gameId, int score, List<String> foundWords)
+        + GuessRequest(UUID gameId, String guess)
+        + GuessResponse(int score, boolean valid)
+        + JoinRoomRequest(String roomCode, String username)
+        + LoginRequest(String username, String password)
+        + MeResponse(UUID id, String username, String avatar, int highScore, String longestWord, int gamesPlayed, int gamesWon)
+        + PlayersRequest(String roomCode)
+        + PlayersResponse(List<LobbyUser> players)
+        + RegisterRequest(String username, String password, String avatar)
+    }
 ```
-
-#### Behavior (Not fully thought out yet)
 
 ```mermaid
 ---
-title: Sample State Diagram For Coffee Application
+title: Database Entities
+---
+classDiagram
+    class Game {
+        - UUID gameId
+        - int boardSize
+        - String letters
+        + Game()
+        + Game(int boardSize, String letters)
+        + UUID getGameId()
+        + int getBoardSize()
+        + String getLetters()
+        + void setGameId(UUID gameId) // Only used by tests
+    }
+    class GameResult {
+        - UUID id
+        - String username
+        - UUID gameId
+        - int score
+        - boolean won
+        - String foundWords
+        + GameResult()
+        + GameResult(String username, UUID gameId, int score, String foundWords, boolean won)
+    }
+    class User {
+        - UUID id
+        - String username
+        - String password // hashed version, not actual
+        - int gamePlayed
+        - int gamesWon
+        - int highScore
+        - String longestWord
+        - String avatar
+        + User()
+        + User(String username, String password, String avatar)
+        + UUID getId()
+        + String getUsername()
+        + void setUsername()
+        + String getPassword()
+        + void setPassword()
+        + String getPasswordHash()
+        + int getHighScore()
+        + void setHighScore()
+        + String getLongestWord()
+        + void setLongestWord()
+        + int getGamesPlayed()
+        + void setGamesPlayed()
+        + String getAvatar()
+        + void setAvatar()
+        + int getGamesWon()
+    }
+```
+
+
+#### Behavior
+
+```mermaid
+---
+title: Flow of Users Playing A Game
 ---
 stateDiagram
-    [*] --> Ready
-    Ready --> Brewing : Start Brewing
-    Brewing --> Ready : Brew Complete
-    Brewing --> WaterLowError : Water Low
-    WaterLowError --> Ready : Refill Water
-    Brewing --> BeansLowError : Beans Low
-    BeansLowError --> Ready : Refill Beans
+    [*] --> Home
+    GameSelectPage --> GamePage : Selects Single Player
+    GamePage --> GameGenerated : Initialize Board/Timer/Found Words/Score
+    GameGenerated --> ScoreAndFoundWordsUpdated : User Guesses a Valid Word
+    GameGenerated --> ScoreAndFoundWordsNotUpdated : User Guesses an Invalid Word
+    GameGenerated --> GameFinishedPage : Timer Runs Out
+    GameFinishedPage --> Home : User Clicks Go Home Button
+    GameFinishedPage --> StateUpdate : Game Results Stored in DB
+    Home --> GameSelectPage : User Selects Play Game
 ```
 
-#### Sequence Diagram (Not fully thought out yet)
+#### Sequence Diagram for Most of App
 
 ```mermaid
 sequenceDiagram
 
 participant ReactFrontend
-participant DjangoBackend
+participant SpringBootBackend
 participant MySQLDatabase
 
-ReactFrontend ->> DjangoBackend: HTTP Request (e.g., GET /api/data)
-activate DjangoBackend
+ReactFrontend ->> SpringBootBackend: HTTP Request (e.g., GET /api/users)
+activate SpringBootBackend
 
-DjangoBackend ->> MySQLDatabase: Query (e.g., SELECT * FROM data_table)
+SpringBootBackend ->> MySQLDatabase: SQL Query (e.g., SELECT * FROM users)
 activate MySQLDatabase
 
-MySQLDatabase -->> DjangoBackend: Result Set
+MySQLDatabase -->> SpringBootBackend: ResultSet
 deactivate MySQLDatabase
 
-DjangoBackend -->> ReactFrontend: JSON Response
-deactivate DjangoBackend
+SpringBootBackend -->> ReactFrontend: JSON Response
+deactivate SpringBootBackend
+```
+
+#### Sequence Diagram for Multiplayer
+
+```mermaid
+sequenceDiagram
+    participant React as React Frontend
+    participant Spring as Spring Boot (WebSocket Server)
+    participant MySQL as MySQL Database
+
+    Note over React, Spring: WebSocket Handshake (HTTP Upgrade)
+    React->>Spring: Connect to /app
+    Spring-->>React: Connection Established
+
+    Note over React, Spring: User Joins Lobby
+    React->>Spring: SEND /api/room/new (New Room Created)
+    activate Spring
+    
+    Spring->>MySQL: Update Lobby State (INSERT/UPDATE)
+    activate MySQL
+    MySQL-->>Spring: Success
+    deactivate MySQL
+
+    Note right of Spring: Broadcast to all lobby members
+    Spring-->>React: MESSAGE /app/room.join (JoinRoomRequest)
+    deactivate Spring
+
+    Spring-->>React: MESSAGE /app/room/{id} (Game Start / State Change)
 ```
 
 ### Standards & Conventions
