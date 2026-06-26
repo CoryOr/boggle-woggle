@@ -8,7 +8,8 @@ Boggle Woggle is a real-time word game where users can play singleplayer or comp
 
 ## Notable Contributions
 
-- Lead UI/UX designer in Pre-Production/Concept Art
+- Led UI/UX design during project planning and pre-production
+- Created early UI mockups, concept art, and user experience workflows
 - Implemented a global audio system using React Context
 - Added menu music, gameplay music, and sound effects
 - Implemented separate master, music, and SFX volume controls
@@ -38,7 +39,8 @@ Boggle Woggle is a real-time word game where users can play singleplayer or comp
 
 ## Demo
 
-Video walkthrough: [YouTube Link]
+🎥 Video Walkthrough:
+https://youtu.be/3pKGg-b7wqA
 
 ## Tech Stack
 
