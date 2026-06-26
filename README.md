@@ -1,29 +1,71 @@
-## Boggle Game (Project_3c)
-<!--The name of your team.-->
+# Boggle Woggle
 
-[![pipeline status](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2026/team/t_3c/Project_3c/badges/main/pipeline.svg)](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2026/team/t_3c/Project_3c/-/commits/main)
+A full-stack multiplayer Boggle game built with React, Spring Boot, MySQL, and WebSockets.
 
-### Project Abstract
+## Overview
 
-This project is a team-based effort to develop a real-time multiplayer Boggle application where users can compete against each other online. Our team is building a system that randomly shuffles and lays out letter dice to generate a unique board for each round, provides an interactive interface for players to submit words, and automatically validates and scores entries using a shared dictionary. At the end of each game, the app will display all players’ word lists, calculate scores, and highlight unique words. Beyond the core gameplay, we plan to explore additional features such as customizable game settings, user accounts with tracked statistics, AI opponents, and the ability to design and share custom boards.
+Boggle Woggle is a real-time word game where users can play singleplayer or compete against others in multiplayer lobbies. The app generates randomized Boggle boards, validates submitted words, tracks player statistics, and supports real-time multiplayer gameplay through WebSockets. Built as part of a five-person software engineering team using Agile development practices, Git workflows, code reviews, and CI/CD pipelines.
 
-<!--A one paragraph summary of what the software will do.-->
+## Notable Contributions
 
-### Customer
+- Lead UI/UX designer in Pre-Production/Concept Art
+- Implemented a global audio system using React Context
+- Added menu music, gameplay music, and sound effects
+- Implemented separate master, music, and SFX volume controls
+- Added winner/loser multiplayer audio feedback
+- Integrated audio throughout the application UI
+- Resolved merge conflicts and integrated multiplayer updates
 
-Generally, the customer for this software is a casual gamer that, in specific, likes to play word games/puzzles.
+## Screenshots
 
-<!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
+### Home Screen
+![Home](docs/screenshots/HomeScreenWithUser.png)
 
-### Specification
+### Login Screen
+![Login](docs/screenshots/LoginScreen.png)
 
-<!--A detailed specification of the system. UML, or other diagrams, such as finite automata, or other appropriate specification formalisms, are encouraged over natural language.-->
+### Multiplayer Lobby
+![Lobby](docs/screenshots/LobbyScreen.png)
 
-<!--Include sections, for example, illustrating the database architecture (with, for example, an ERD).-->
+### Gameplay
+![Gameplay](docs/screenshots/SinglePlayerGameplay.png)
 
-<!--Included below are some sample diagrams, including some example tech stack diagrams.-->
+### Player Statistics
+![Stats](docs/screenshots/StatsWithUser.png)
 
-#### Technology Stack (Finalized)
+### Audio Settings
+![Settings](docs/screenshots/SettingsPageGuest.png)
+
+## Demo
+
+Video walkthrough: [YouTube Link]
+
+## Tech Stack
+
+- React
+- Spring Boot
+- MySQL
+- WebSockets
+- JWT Authentication
+
+## Running Locally
+
+### Backend
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Technical Documentation
 
 ```mermaid
 flowchart RL
@@ -250,7 +292,6 @@ sequenceDiagram
     Spring-->>React: MESSAGE /app/room/{id} (Game Start / State Change)
 ```
 
-### Standards & Conventions
+### Additional Documentation
 
-<!--This is a link to a seperate coding conventions document / style guide-->
 [Style Guide & Conventions](STYLE.md)
